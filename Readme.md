@@ -1,7 +1,7 @@
 # Личный проект «Киноман» [![Build status][travis-image]][travis-url]
 
-* Студент: [Дмитрий Барабанов](https://up.htmlacademy.ru/ecmascript/11/user/83701).
-* Наставник: `Неизвестно`.
+* Студент: [Дмитрий Барабанов](https://htmlacademy.ru/profile/id83701).
+* Наставник: [Артём Рудов](https://htmlacademy.ru/profile/artrudov).
 
 ---
 
