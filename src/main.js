@@ -1,5 +1,3 @@
-`use strict`;
-
 const COUNT_FILM_CARDS_COMMON = 5;
 const COUNT_FILM_CARDS_TOP_RATED = 2;
 const COUNT_FILM_CARDS_MOST_COMMENTED = 2;
@@ -374,7 +372,7 @@ function mainRender() {
   const blockScript = document.querySelector(`script`);
   render(blockScript, doTemplatePopUp(), `beforebegin`);
 
-};
+}
 
 mainRender();
 
