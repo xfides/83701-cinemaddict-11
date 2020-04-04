@@ -358,7 +358,7 @@ function doTemplatePopUp() {
   );
 }
 
-(function mainRender() {
+function mainRender() {
 
   const blockHeader = document.querySelector(`.header`);
   render(blockHeader, doTemplateUserRank());
@@ -374,5 +374,7 @@ function doTemplatePopUp() {
   const blockScript = document.querySelector(`script`);
   render(blockScript, doTemplatePopUp(), `beforebegin`);
 
-}());
+};
+
+mainRender();
 
