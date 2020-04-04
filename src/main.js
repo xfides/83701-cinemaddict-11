@@ -1,3 +1,5 @@
+`use strict`;
+
 const COUNT_FILM_CARDS_COMMON = 5;
 const COUNT_FILM_CARDS_TOP_RATED = 2;
 const COUNT_FILM_CARDS_MOST_COMMENTED = 2;
@@ -131,7 +133,7 @@ function doTemplateContent() {
             All movies. Upcoming
           </h2>
           <div class="films-list__container">
-            ${commonFilmCards.join('\r\n')}
+            ${commonFilmCards.join(`\r\n`)}
           </div>
 
           ${doTemplateBtnShowMore()}
@@ -140,14 +142,14 @@ function doTemplateContent() {
         <section class="films-list--extra">
           <h2 class="films-list__title">Top rated</h2>
           <div class="films-list__container">
-            ${topRatedFilmCards.join('\r\n')}
+            ${topRatedFilmCards.join(`\r\n`)}
           </div>
         </section>
         
         <section class="films-list--extra">
           <h2 class="films-list__title">Most commented</h2>
           <div class="films-list__container">
-            ${mostCommentedFilmCards.join('\r\n')}
+            ${mostCommentedFilmCards.join(`\r\n`)}
           </div>
         </section>
       </section>
@@ -370,7 +372,7 @@ function doTemplatePopUp() {
   render(blockStatistics, doTemplateStatistics());
 
   const blockScript = document.querySelector(`script`);
-  render(blockScript, doTemplatePopUp(), 'beforebegin');
+  render(blockScript, doTemplatePopUp(), `beforebegin`);
 
 }());
 
