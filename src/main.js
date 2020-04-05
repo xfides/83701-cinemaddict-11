@@ -390,10 +390,3 @@ const init = () => {
 };
 
 init();
-
-
-const z = (someParam) => {
-};
-z(
-  'sometext'
-);
