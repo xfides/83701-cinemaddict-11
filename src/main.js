@@ -111,14 +111,12 @@ const createTemplateBtnShowMore = () => {
 };
 
 const createTemplateFilmCardBlock = (numberOfCards, contentData) => {
-  const {title:{text, isHidden}, isShowMore, isExtraBlock} = contentData;
+  const {title: {text, isHidden}, isShowMore, isExtraBlock} = contentData;
 
   const TEXT_TITLE = typeof text === `string` ? text : ``;
-  const CLASS_HIDDEN_TITLE = Boolean(isHidden) ? `visually-hidden` : ``;
-  const TEMPLATE_SHOW_MORE =
-    Boolean(isShowMore) ? createTemplateBtnShowMore() : ``;
-  const CLASS_EXTRA_BLOCK =
-    Boolean(isExtraBlock) ? `films-list--extra` : `films-list`;
+  const CLASS_HIDDEN_TITLE = isHidden ? `visually-hidden` : ``;
+  const TEMPLATE_SHOW_MORE = isShowMore ? createTemplateBtnShowMore() : ``;
+  const CLASS_EXTRA_BLOCK = isExtraBlock ? `films-list--extra` : `films-list`;
 
   return `
     <section class="${CLASS_EXTRA_BLOCK}">
@@ -141,12 +139,12 @@ const createTemplateContent = () => {
   const BLOCK_FILM_CARD_COMMON = createTemplateFilmCardBlock(
     CountFilmCards.COMMON,
     {
-      title: {
-        text: TITLE_FILM_CARD_COMMON,
-        isHidden: true
-      },
-      isShowMore: true,
-      isExtraBlock: false
+        title: {
+          text: TITLE_FILM_CARD_COMMON,
+          isHidden: true
+        },
+        isShowMore: true,
+        isExtraBlock: false
     }
   );
   const BLOCK_FILM_CARD_TOP_RATED = createTemplateFilmCardBlock(
@@ -161,7 +159,8 @@ const createTemplateContent = () => {
     }
   );
   const BLOCK_FILM_CARD_MOST_COMMENTED = createTemplateFilmCardBlock(
-    CountFilmCards.MOST_COMMENTED, {
+    CountFilmCards.MOST_COMMENTED,
+    {
       title: {
         text: TITLE_FILM_CARD_MOST_COMMENTED,
         isHidden: false
@@ -391,7 +390,3 @@ const init = () => {
 };
 
 init();
-
-
-
-
