@@ -113,56 +113,56 @@ const createTemplateBtnShowMore = () => {
 const createTemplateFilmCardBlock = (numberOfCards, contentData) => {
   const {title: {text, isHidden}, isShowMore, isExtraBlock} = contentData;
 
-  const TEXT_TITLE = typeof text === `string` ? text : ``;
-  const CLASS_HIDDEN_TITLE = isHidden ? `visually-hidden` : ``;
-  const TEMPLATE_SHOW_MORE = isShowMore ? createTemplateBtnShowMore() : ``;
-  const CLASS_EXTRA_BLOCK = isExtraBlock ? `films-list--extra` : `films-list`;
+  const textTitle = typeof text === `string` ? text : ``;
+  const classHiddenTitle = isHidden ? `visually-hidden` : ``;
+  const templateShowMore = isShowMore ? createTemplateBtnShowMore() : ``;
+  const classExtraBlock = isExtraBlock ? `films-list--extra` : `films-list`;
 
   return `
-    <section class="${CLASS_EXTRA_BLOCK}">
-      <h2 class="films-list__title ${CLASS_HIDDEN_TITLE}">
-        ${TEXT_TITLE}
+    <section class="${classExtraBlock}">
+      <h2 class="films-list__title ${classHiddenTitle}">
+        ${textTitle}
       </h2>
       <div class="films-list__container">
         ${new Array(numberOfCards).fill(createTemplateFilmCard()).join(``)}
       </div>
-      ${TEMPLATE_SHOW_MORE}
+      ${templateShowMore}
     </section>
   `;
 };
 
 const createTemplateContent = () => {
-  const TITLE_FILM_CARD_COMMON = `All movies. Upcoming`;
-  const TITLE_FILM_CARD_TOP_RATED = `Top rated`;
-  const TITLE_FILM_CARD_MOST_COMMENTED = `Most commented`;
+  const titleFilmCardCommon = `All movies. Upcoming`;
+  const titleFilmCardTopRated = `Top rated`;
+  const titleFilmCardMostCommented = `Most commented`;
 
-  const BLOCK_FILM_CARD_COMMON = createTemplateFilmCardBlock(
+  const blockFilmCardCommon = createTemplateFilmCardBlock(
     CountFilmCards.COMMON,
     {
       title: {
-        text: TITLE_FILM_CARD_COMMON,
+        text: titleFilmCardCommon,
         isHidden: true
       },
       isShowMore: true,
       isExtraBlock: false
     }
   );
-  const BLOCK_FILM_CARD_TOP_RATED = createTemplateFilmCardBlock(
+  const blockFilmCardTopRated = createTemplateFilmCardBlock(
     CountFilmCards.TOP_RATED,
     {
       title: {
-        text: TITLE_FILM_CARD_TOP_RATED,
+        text: titleFilmCardTopRated,
         isHidden: false
       },
       isShowMore: false,
       isExtraBlock: true
     }
   );
-  const BLOCK_FILM_CARD_MOST_COMMENTED = createTemplateFilmCardBlock(
+  const blockFilmCardMostCommented = createTemplateFilmCardBlock(
     CountFilmCards.MOST_COMMENTED,
     {
       title: {
-        text: TITLE_FILM_CARD_MOST_COMMENTED,
+        text: titleFilmCardMostCommented,
         isHidden: false
       },
       isShowMore: false,
@@ -172,9 +172,9 @@ const createTemplateContent = () => {
 
   return `
     <section class="films">
-      ${BLOCK_FILM_CARD_COMMON}
-      ${BLOCK_FILM_CARD_TOP_RATED}
-      ${BLOCK_FILM_CARD_MOST_COMMENTED}
+      ${blockFilmCardCommon}
+      ${blockFilmCardTopRated}
+      ${blockFilmCardMostCommented}
     </section>
   `;
 
