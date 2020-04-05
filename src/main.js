@@ -137,37 +137,37 @@ const createTemplateContent = () => {
   const TITLE_FILM_CARD_MOST_COMMENTED = `Most commented`;
 
   const BLOCK_FILM_CARD_COMMON = createTemplateFilmCardBlock(
-      CountFilmCards.COMMON,
-      {
-        title: {
-          text: TITLE_FILM_CARD_COMMON,
-          isHidden: true
-        },
-        isShowMore: true,
-        isExtraBlock: false
-      }
+    CountFilmCards.COMMON,
+    {
+      title: {
+        text: TITLE_FILM_CARD_COMMON,
+        isHidden: true
+      },
+      isShowMore: true,
+      isExtraBlock: false
+    }
   );
   const BLOCK_FILM_CARD_TOP_RATED = createTemplateFilmCardBlock(
-      CountFilmCards.TOP_RATED,
-      {
-        title: {
-          text: TITLE_FILM_CARD_TOP_RATED,
-          isHidden: false
-        },
-        isShowMore: false,
-        isExtraBlock: true
-      }
+    CountFilmCards.TOP_RATED,
+    {
+      title: {
+        text: TITLE_FILM_CARD_TOP_RATED,
+        isHidden: false
+      },
+      isShowMore: false,
+      isExtraBlock: true
+    }
   );
   const BLOCK_FILM_CARD_MOST_COMMENTED = createTemplateFilmCardBlock(
-      CountFilmCards.MOST_COMMENTED,
-      {
-        title: {
-          text: TITLE_FILM_CARD_MOST_COMMENTED,
-          isHidden: false
-        },
-        isShowMore: false,
-        isExtraBlock: true
-      }
+    CountFilmCards.MOST_COMMENTED,
+    {
+      title: {
+        text: TITLE_FILM_CARD_MOST_COMMENTED,
+        isHidden: false
+      },
+      isShowMore: false,
+      isExtraBlock: true
+    }
   );
 
   return `
@@ -390,3 +390,10 @@ const init = () => {
 };
 
 init();
+
+
+const z = (someParam) => {
+};
+z(
+  'sometext'
+);
