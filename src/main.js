@@ -137,15 +137,15 @@ const createTemplateContent = () => {
   const TITLE_FILM_CARD_MOST_COMMENTED = `Most commented`;
 
   const BLOCK_FILM_CARD_COMMON = createTemplateFilmCardBlock(
-    CountFilmCards.COMMON,
-    {
+      CountFilmCards.COMMON,
+      {
         title: {
           text: TITLE_FILM_CARD_COMMON,
           isHidden: true
         },
         isShowMore: true,
         isExtraBlock: false
-    }
+      }
   );
   const BLOCK_FILM_CARD_TOP_RATED = createTemplateFilmCardBlock(
     CountFilmCards.TOP_RATED,
