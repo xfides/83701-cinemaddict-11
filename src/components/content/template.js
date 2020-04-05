@@ -1,10 +1,5 @@
-import {createTemplateFilmCardBlock} from './film-card-block.js';
-
-const CountFilmCards = {
-  COMMON: 5,
-  TOP_RATED: 2,
-  MOST_COMMENTED: 2
-};
+import {createTemplateFilmCardBlock} from '../film-card-block/template.js';
+import {CountFilmCards} from '../../consts/index.js';
 
 export const createTemplateContent = () => {
   const titleFilmCardCommon = `All movies. Upcoming`;

@@ -1,18 +1,12 @@
-import {createTemplateUserRank} from './components/templates/user-rank.js';
-import {createTemplateNav} from './components/templates/nav.js';
-import {createTemplateSort} from './components/templates/sort.js';
-import {createTemplateContent} from './components/templates/content.js';
-import {createTemplateStatistics} from './components/templates/statistics.js';
-import {createTemplatePopUp} from './components/templates/pop-up.js';
+import {createTemplateUserRank} from './components/user-rank/template.js';
+import {createTemplateNav} from './components/nav/template.js';
+import {createTemplateSort} from './components/sort/template.js';
+import {createTemplateContent} from './components/content/template.js';
+import {createTemplateStatistics} from './components/statistics/template.js';
+import {createTemplatePopUp} from './components/pop-up/template.js';
+import {render} from './utils/index.js';
+import {PosRender} from './consts/index.js';
 
-const PosRender = {
-  BEFORE_END: `beforeend`,
-  BEFORE_BEGIN: `beforebegin`
-};
-
-const render = (container, template, place = PosRender.BEFORE_END) => {
-  container.insertAdjacentHTML(place, template);
-};
 
 const init = () => {
   const blockHeader = document.querySelector(`.header`);
