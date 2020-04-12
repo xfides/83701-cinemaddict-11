@@ -1,7 +1,7 @@
-export const templateUserRank = (data) => {
+export const templateUserRank = (userRankStatus) => {
   return `
     <section class="header__profile profile">
-      <p class="profile__rating">${data.userRankStatus}</p>
+      <p class="profile__rating">${userRankStatus}</p>
       <img class="profile__avatar" 
            src="images/bitmap@2x.png" 
            alt="Avatar" 

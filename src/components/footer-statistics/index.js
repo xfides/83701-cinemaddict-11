@@ -1,9 +1,8 @@
 import {templateFooterStatistics} from './template.js';
-import {fakeCountFilmsInDB} from '../../utils/fakeData.js';
+import {formatNumberWithSpaces} from '../../utils/common.js';
 
-const countFilmsInDBFormatted =
-  new Intl.NumberFormat(`ru`).format(fakeCountFilmsInDB);
+export const footerStatistics = (films) => {
+  const countFilmsFormatted = formatNumberWithSpaces(films.length);
 
-export const footerStatistics = templateFooterStatistics({
-  countFilmsInDBFormatted
-});
+  return templateFooterStatistics(countFilmsFormatted);
+};

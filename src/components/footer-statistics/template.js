@@ -1,3 +1,3 @@
-export const templateFooterStatistics = (data) => {
-  return `<p>${data.countFilmsInDBFormatted} movies inside</p>`;
+export const templateFooterStatistics = (countFilmsFormatted) => {
+  return `<p>${countFilmsFormatted} movies inside</p>`;
 };

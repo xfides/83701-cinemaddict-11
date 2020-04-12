@@ -1,4 +1,4 @@
-export const createTemplateSort = () => {
+export const templateSort = () => {
   return `
     <ul class="sort">
       <li>

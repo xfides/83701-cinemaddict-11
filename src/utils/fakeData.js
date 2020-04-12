@@ -1,29 +1,90 @@
 import {default as faker} from 'faker';
-import {createObjectByStructure} from './index';
+import {FilmFilters} from '../consts/index.js';
+
+const createObjectByStructure = (structure, dataFactory) => {
+  const structureKeys = Object.getOwnPropertyNames(structure);
+  const newObj = {};
+
+  try {
+    structureKeys.forEach((structureKey) => {
+      newObj[structureKey] = dataFactory[structureKey]();
+    });
+  } catch (err) {
+    throw new Error(
+      `Structure is not corresponds to dataFactory. Please check if
+      object fields are strictly equal dataFactory fields!`
+    );
+  }
+
+  return newObj;
+};
+
+const structureComment = {
+  text: `string`,
+  pathToEmotion: `string`,
+  author: `string`,
+  date: `object date`
+};
+
+const structureFilm = {
+  pathToPosterImg: `string`,
+  title: `string`,
+  titleOrig: `string`,
+  rate: `number`,
+  director: `string`,
+  scenarists: `array of strings`,
+  actors: `array of strings`,
+  prodDate: `object date`,
+  duration: `number (minutes)`,
+  country: `string`,
+  genres: `array of strings`,
+  description: `string`,
+  ageRating: `string`,
+  comments: `array of objects`,
+  [FilmFilters.SCHEDULED]: `bool`,
+  [FilmFilters.WATCHED]: `bool`,
+  [FilmFilters.FAVORITE]: `bool`
+};
 
 const dataFactory = {
-  countFilmsInDB() {
-    return faker.random.number({min: 99999, max: 999999});
+  human() {
+    return faker.name.findName();
   },
-  countWatchedFilms() {
-    return faker.random.number({min: 0, max: 31});
+  randomPathToSmth(relativePartOfPath, endNames = []){
+    const randomIndexOfEndName = faker.random.number({
+      min: 0, max: endNames.length - 1
+    });
+
+    return `${relativePartOfPath}${endNames[randomIndexOfEndName]}`;
+  }
+};
+
+dataFactory.comment = {
+  __proto__: dataFactory,
+  text() {
+    return faker.lorem.sentences();
   },
-  filteredFilms() {
-    return {
-      history: faker.random.number({min: 0, max: 2}),
-      favorites: faker.random.number({min: 0, max: 10}),
-      watchList: faker.random.number({min: 0, max: 20})
-    };
+  pathToEmotion() {
+    const relativePart = `./images/emoji/`;
+    const emotionNames = [
+      `angry.png`,
+      `puke.png`,
+      `sleeping.png`,
+      `smile.png`
+    ];
+
+    return this.randomPathToSmth(relativePart, emotionNames);
   },
-  title() {
-    return faker.lorem.sentence();
+  author() {
+    return this.human();
   },
-  rate() {
-    return faker.random.number({min: 11, max: 100}) / 10;
-  },
-  prodDate() {
-    return faker.date.between(`1989-01-01`, `2020-01-01`);
-  },
+  date() {
+    return faker.date.between(`2010-01-01`, new Date());
+  }
+};
+
+dataFactory.film = {
+  __proto__: dataFactory,
   pathToPosterImg() {
     const relativePart = `./images/posters/`;
     const posterNames = [
@@ -35,17 +96,39 @@ const dataFactory = {
       `the-great-flamarion.jpg`,
       `the-man-with-the-golden-arm.jpg`,
     ];
-    const randomPosterNumber = faker.random.number({
-      min: 0, max: posterNames.length - 1
-    });
 
-    return `${relativePart}${posterNames[randomPosterNumber]}`;
+    return this.randomPathToSmth(relativePart, posterNames);
+  },
+  title() {
+    return faker.lorem.sentence();
+  },
+  titleOrig(){
+    return `~ORIGINAL~ ${faker.lorem.sentence()} ~ORIGINAL~`;
+  },
+  rate() {
+    return faker.random.number({min: 11, max: 100}) / 10;
+  },
+  director(){
+    return this.human();
+  },
+  scenarists() {
+    const numberOfScenarists = faker.random.number({min: 2, max: 5});
+
+    return new Array(numberOfScenarists).fill(this.human());
+  },
+  actors() {
+    const numberOfActors = faker.random.number({min: 3, max: 10});
+
+    return new Array(numberOfActors).fill(this.human());
+  },
+  prodDate() {
+    return faker.date.between(`1989-01-01`, `2020-01-01`);
   },
   duration() {
     return faker.random.number({min: 80, max: 180});
   },
-  description() {
-    return faker.lorem.sentences(faker.random.number({min: 1, max: 6}));
+  country() {
+    return faker.address.country();
   },
   genres() {
     const allGenres = [
@@ -77,92 +160,56 @@ const dataFactory = {
 
     return selectedGenres;
   },
-  pathToEmotion() {
-    const relativePart = `./images/emoji/`;
-    const emotionNames = [
-      `angry.png`,
-      `puke.png`,
-      `sleeping.png`,
-      `smile.png`
-    ];
-    const randomEmotionNumber = faker.random.number({
-      min: 0, max: emotionNames.length - 1
-    });
-
-    return `${relativePart}${emotionNames[randomEmotionNumber]}`;
-  },
-  human() {
-    return faker.name.findName();
-  },
-  author() {
-    return super.human();
-  },
-  date() {
-    return faker.date.between(`2010-01-01`, new Date());
-  },
-  text() {
-    const randomNumberParagraphs = faker.random.number({
-      min: 1,
-      max: 3
-    });
-
-    return faker.lorem.paragraphs(randomNumberParagraphs, `<br/>`);
-  },
-  scenarists() {
-  },
-  actors() {
-  },
-  country() {
+  description() {
+    return faker.lorem.sentences(faker.random.number({min: 1, max: 6}));
   },
   ageRating() {
+    const ageRatings = [
+      `0+`,
+      `6+`,
+      `12+`,
+      `16+`,
+      `18+`,
+    ];
+
+    const randomIndexOfAgeRatings = faker.random.number({
+      min: 0, max: ageRatings.length - 1
+    });
+
+    return ageRatings[randomIndexOfAgeRatings];
   },
+  comments(){
+    const commentsToFilm =
+      new Array(faker.random.number({min: 0, max: 4})).fill(null);
+
+    return commentsToFilm.map(
+      () => createObjectByStructure(structureComment, this.comment)
+    );
+
+  },
+  [FilmFilters.SCHEDULED](){
+    return faker.random.boolean() && faker.random.boolean();
+  },
+  [FilmFilters.WATCHED](){
+    return faker.random.boolean();
+  },
+  [FilmFilters.FAVORITE](){
+    return faker.random.boolean() && faker.random.boolean();
+  }
 };
 
-const structureComment = {
-  text: `string`,
-  pathToEmotion: `string`,
-  author: `string`,
-  date: `object date`
+export const createFakeFilms = () => {
+  const countFakeFilms = faker.random.number({min: 7, max: 27});
+  const fakeFilms = [];
+
+  for (let indexFakeFilm = 0; indexFakeFilm < countFakeFilms; indexFakeFilm++) {
+    fakeFilms.push(createObjectByStructure(structureFilm, dataFactory.film));
+  }
+
+  if (faker.random.boolean() && faker.random.boolean()) {
+    return [];
+  }
+
+  return fakeFilms;
 };
 
-const structureFilm = {
-  pathToPosterImg: `string`,
-  title: `string`,
-  rate: `number`,
-  prodDate: `object date`,
-  duration: `number (minutes)`,
-  genres: `array of strings`,
-  description: `string`,
-  comments: `array of objects`,
-  director: `string`,
-  scenarist: `array of strings`,
-  actors: `array of strings`,
-  country: `string`,
-  ageRating: `string`
-};
-
-
-export const fakeCountWatchedFilms = dataFactory.countWatchedFilms();
-
-export const fakeCountFilmsInDB = dataFactory.countFilmsInDB();
-
-export const fakeFilteredFilms = dataFactory.filteredFilms();
-
-
-/*
- let popUp = {
- pathToPosterImg:``,
- titleFilm:``,
- titleFilmOrig:``,
- rate:``,
- producer:``,
- scenarists:``,
- actors:``,
- prodDate:``,
- duration:``,
- country:``,
- genres:``,
- description:``,
- ageRating:``
- };
- */

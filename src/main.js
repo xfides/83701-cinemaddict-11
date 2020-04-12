@@ -1,26 +1,30 @@
 import {userRank} from './components/user-rank/index.js';
 import {nav} from './components/nav/index.js';
-import {createTemplateSort} from './components/sort/template.js';
-import {createTemplateContent} from './components/content/template.js';
+import {templateSort} from './components/sort/index.js';
+import {content} from './components/content/index.js';
 import {footerStatistics} from './components/footer-statistics/index.js';
-import {createTemplatePopUp} from './components/pop-up/template.js';
-import {render} from './utils/index.js';
+import {templatePopUp} from './components/pop-up/index.js';
+import {render} from './utils/common.js';
 import {PosRender} from './consts/index.js';
+import {createFakeFilms} from './utils/fakeData.js';
+
+const fakeFilms = createFakeFilms();
+console.log(fakeFilms);
 
 const init = () => {
   const blockHeader = document.querySelector(`.header`);
-  render(blockHeader, userRank);
+  render(blockHeader, userRank(fakeFilms));
 
   const blockMain = document.querySelector(`.main`);
-  render(blockMain, nav);
-  render(blockMain, createTemplateSort());
-  render(blockMain, createTemplateContent());
+  render(blockMain, nav(fakeFilms));
+  render(blockMain, templateSort());
+  render(blockMain, content(fakeFilms));
 
   const blockStatistics = document.querySelector(`.footer__statistics`);
-  render(blockStatistics, footerStatistics);
+  render(blockStatistics, footerStatistics(fakeFilms));
 
   const blockScript = document.querySelector(`script`);
-  render(blockScript, createTemplatePopUp(), PosRender.BEFORE_BEGIN);
+  render(blockScript, templatePopUp(), PosRender.BEFORE_BEGIN);
 };
 
 init();
