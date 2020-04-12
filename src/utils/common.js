@@ -1,16 +1,20 @@
 import {PosRender, UserRanks} from '../consts/index.js';
 
-export const cloneObj = (obj) => {
+const cloneObj = (obj) => {
 
   const target = Array.isArray(obj) ? [] : {};
 
   for (let key in obj) {
     if (obj.hasOwnProperty(key)) {
-      if (typeof (obj[key]) === `object`) {
+
+      if (obj[key] instanceof Date) {
+        target[key] = new Date().setTime(obj[key].getTime());
+      } else if (typeof (obj[key]) === `object`) {
         target[key] = cloneObj(obj[key]);
       } else {
         target[key] = obj[key];
       }
+
     }
   }
 
@@ -82,8 +86,10 @@ export const getUserRank = (countFilmsWatched) => {
   return ``;
 };
 
-
-
-
-
-
+export const formatDurationMinutes = (numberOfMinutes) => {
+  return numberOfMinutes >= 60 ? (
+      `${(numberOfMinutes / 60 ^ 0)}h ${(numberOfMinutes % 60)}m`
+    ) : (
+      `${numberOfMinutes}m`
+    )
+};

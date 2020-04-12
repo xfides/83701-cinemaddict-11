@@ -3,8 +3,6 @@ export const PosRender = {
   BEFORE_BEGIN: `beforebegin`
 };
 
-export const MSG_NO_FILMS = `There are no movies in our database`;
-
 export const ScreenMsgs = {
   NO_FILMS: `There are no movies in our database`,
   LOADING: `Loading...`
@@ -68,4 +66,9 @@ export const CssClasses = {
   HIDDEN_BLOCK: `visually-hidden`,
   FILM_SECTION: `films-list`,
   FILM_SECTION_EXTRA: `films-list--extra`
+};
+
+export const shortDescParams = {
+  COUNT_SYMBOLS: 140,
+  END_SYMBOL: `...`
 };

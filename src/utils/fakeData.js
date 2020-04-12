@@ -122,7 +122,7 @@ dataFactory.film = {
     return new Array(numberOfActors).fill(this.human());
   },
   prodDate() {
-    return faker.date.between(`1989-01-01`, `2020-01-01`);
+    return faker.date.between(`1989-01-01`, `2020-01-01`).getTime();
   },
   duration() {
     return faker.random.number({min: 80, max: 180});
@@ -180,7 +180,7 @@ dataFactory.film = {
   },
   comments(){
     const commentsToFilm =
-      new Array(faker.random.number({min: 0, max: 4})).fill(null);
+      new Array(faker.random.number({min: 0, max: 17})).fill(null);
 
     return commentsToFilm.map(
       () => createObjectByStructure(structureComment, this.comment)
@@ -207,7 +207,10 @@ export const createFakeFilms = () => {
   }
 
   if (faker.random.boolean() && faker.random.boolean()) {
-    return [];
+    if (faker.random.boolean()) {
+      return [];
+    }
+    return undefined;
   }
 
   return fakeFilms;

@@ -6,6 +6,7 @@ import {CssClasses, ScreenMsgs} from '../../consts/index.js';
 export const filmCardBlock = (typeSection, films) => {
   const {
     title: {
+      text,
       isHidden
     },
     countFilmsToShow,
@@ -13,22 +14,33 @@ export const filmCardBlock = (typeSection, films) => {
     isExtraBlock
   } = typeSection;
 
-
-
-  const classHiddenTitle = isHidden ? CssClasses.HIDDEN_BLOCK : ``;
-  const classExtraBlock =
-    isExtraBlock ? CssClasses.FILM_SECTION_EXTRA : CssClasses.FILM_SECTION;
+  const classExtraBlock = isExtraBlock ? (
+      CssClasses.FILM_SECTION_EXTRA
+    ) : (
+      CssClasses.FILM_SECTION
+    );
   const templateShowMoreBlock = isShowMore ? templateShowMore() : ``;
 
-  const templateFilmCards = films
-    .slice(0, countFilmsToShow)
-    .map((oneFilm) => {
-      return filmCard(oneFilm);
-    })
-    .join(``);
+  let
+    titleText = ScreenMsgs.LOADING,
+    classHiddenTitle = ``,
+    templateFilmCards = ``;
+
+  if (films && films.length === 0) {
+    titleText = ScreenMsgs.NO_FILMS;
+  }
+
+  if (films && films.length > 0) {
+    titleText = text;
+    classHiddenTitle = isHidden ? CssClasses.HIDDEN_BLOCK : ``;
+    templateFilmCards = films
+      .slice(0, countFilmsToShow)
+      .map(oneFilm => filmCard(oneFilm))
+      .join(``);
+  }
 
   return templateFilmCardBlock({
-    text,
+    titleText,
     classHiddenTitle,
     classExtraBlock,
     templateFilmCards,

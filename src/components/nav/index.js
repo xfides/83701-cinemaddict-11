@@ -4,6 +4,8 @@ import {FilmFilters} from '../../consts/index.js'
 import {filterFilmsByField} from '../../utils/common.js';
 
 export const nav = (films) => {
+  films = !films ? [] : films;
+
   const categories = Object.keys(FilmFilters);
 
   const categoriesTemplate = categories

@@ -2,7 +2,7 @@ export const templateFilmCardBlock = (filmBlock) => {
   return `
     <section class="${filmBlock.classExtraBlock}">
       <h2 class="films-list__title ${filmBlock.classHiddenTitle}">
-        ${filmBlock.text}
+        ${filmBlock.titleText}
       </h2>
       <div class="films-list__container">
         ${filmBlock.templateFilmCards}
