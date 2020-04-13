@@ -21,10 +21,9 @@ export const filmCardBlock = (typeSection, films) => {
     );
   const templateShowMoreBlock = isShowMore ? templateShowMore() : ``;
 
-  let
-    titleText = ScreenMsgs.LOADING,
-    classHiddenTitle = ``,
-    templateFilmCards = ``;
+  let titleText = ScreenMsgs.LOADING;
+  let classHiddenTitle = ``;
+  let templateFilmCards = ``;
 
   if (films && films.length === 0) {
     titleText = ScreenMsgs.NO_FILMS;
@@ -35,7 +34,7 @@ export const filmCardBlock = (typeSection, films) => {
     classHiddenTitle = isHidden ? CssClasses.HIDDEN_BLOCK : ``;
     templateFilmCards = films
       .slice(0, countFilmsToShow)
-      .map(oneFilm => filmCard(oneFilm))
+      .map((oneFilm) => filmCard(oneFilm))
       .join(``);
   }
 

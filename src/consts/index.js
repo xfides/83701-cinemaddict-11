@@ -5,7 +5,8 @@ export const PosRender = {
 
 export const ScreenMsgs = {
   NO_FILMS: `There are no movies in our database`,
-  LOADING: `Loading...`
+  LOADING: `Loading...`,
+  NO_FILM_FULL_INFO: `Sorry. Not found such movie`
 };
 
 export const FilmFilters = {
@@ -71,4 +72,8 @@ export const CssClasses = {
 export const shortDescParams = {
   COUNT_SYMBOLS: 140,
   END_SYMBOL: `...`
+};
+
+export const PLURALS = {
+  Genre: `Genres`
 };

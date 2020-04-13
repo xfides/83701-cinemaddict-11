@@ -23,7 +23,7 @@ const structureComment = {
   text: `string`,
   pathToEmotion: `string`,
   author: `string`,
-  date: `object date`
+  date: `number ms`
 };
 
 const structureFilm = {
@@ -34,7 +34,7 @@ const structureFilm = {
   director: `string`,
   scenarists: `array of strings`,
   actors: `array of strings`,
-  prodDate: `object date`,
+  prodDate: `number ms`,
   duration: `number (minutes)`,
   country: `string`,
   genres: `array of strings`,
@@ -50,7 +50,7 @@ const dataFactory = {
   human() {
     return faker.name.findName();
   },
-  randomPathToSmth(relativePartOfPath, endNames = []){
+  randomPathToSmth(relativePartOfPath, endNames = []) {
     const randomIndexOfEndName = faker.random.number({
       min: 0, max: endNames.length - 1
     });
@@ -79,7 +79,7 @@ dataFactory.comment = {
     return this.human();
   },
   date() {
-    return faker.date.between(`2010-01-01`, new Date());
+    return faker.date.between(`2010-01-01`, new Date()).getTime();
   }
 };
 
@@ -102,24 +102,24 @@ dataFactory.film = {
   title() {
     return faker.lorem.sentence();
   },
-  titleOrig(){
+  titleOrig() {
     return `~ORIGINAL~ ${faker.lorem.sentence()} ~ORIGINAL~`;
   },
   rate() {
     return faker.random.number({min: 11, max: 100}) / 10;
   },
-  director(){
+  director() {
     return this.human();
   },
   scenarists() {
     const numberOfScenarists = faker.random.number({min: 2, max: 5});
 
-    return new Array(numberOfScenarists).fill(this.human());
+    return new Array(numberOfScenarists).fill(null).map(this.human);
   },
   actors() {
     const numberOfActors = faker.random.number({min: 3, max: 10});
 
-    return new Array(numberOfActors).fill(this.human());
+    return new Array(numberOfActors).fill(null).map(this.human);
   },
   prodDate() {
     return faker.date.between(`1989-01-01`, `2020-01-01`).getTime();
@@ -178,7 +178,7 @@ dataFactory.film = {
 
     return ageRatings[randomIndexOfAgeRatings];
   },
-  comments(){
+  comments() {
     const commentsToFilm =
       new Array(faker.random.number({min: 0, max: 17})).fill(null);
 
@@ -187,13 +187,13 @@ dataFactory.film = {
     );
 
   },
-  [FilmFilters.SCHEDULED](){
+  [FilmFilters.SCHEDULED]() {
     return faker.random.boolean() && faker.random.boolean();
   },
-  [FilmFilters.WATCHED](){
+  [FilmFilters.WATCHED]() {
     return faker.random.boolean();
   },
-  [FilmFilters.FAVORITE](){
+  [FilmFilters.FAVORITE]() {
     return faker.random.boolean() && faker.random.boolean();
   }
 };

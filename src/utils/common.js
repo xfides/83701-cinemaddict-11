@@ -7,9 +7,7 @@ const cloneObj = (obj) => {
   for (let key in obj) {
     if (obj.hasOwnProperty(key)) {
 
-      if (obj[key] instanceof Date) {
-        target[key] = new Date().setTime(obj[key].getTime());
-      } else if (typeof (obj[key]) === `object`) {
+      if (typeof (obj[key]) === `object`) {
         target[key] = cloneObj(obj[key]);
       } else {
         target[key] = obj[key];
@@ -30,7 +28,6 @@ export const truncateStr = (str, newLength, endSymbol) => {
 };
 
 export const sortFilmsByField = (films, field) => {
-
   if (films.length === 0) {
     return [];
   }
@@ -44,6 +41,8 @@ export const sortFilmsByField = (films, field) => {
       return anotherFilm[field] - oneFilm[field];
     });
   }
+
+  return films;
 };
 
 export const sortFilmsByFieldWithClone = (films, field) => {
@@ -58,10 +57,6 @@ export const filterFilmsByField = (films, field) => {
   return films.filter((oneFilm) => {
     return !!oneFilm[field];
   });
-};
-
-export const formatNumberWithSpaces = (number) => {
-  return new Intl.NumberFormat(`ru`).format(number);
 };
 
 export const getUserRank = (countFilmsWatched) => {
@@ -86,10 +81,41 @@ export const getUserRank = (countFilmsWatched) => {
   return ``;
 };
 
+export const formatNumberWithSpaces = (number) => {
+  return new Intl.NumberFormat(`ru`).format(number);
+};
+
 export const formatDurationMinutes = (numberOfMinutes) => {
   return numberOfMinutes >= 60 ? (
       `${(numberOfMinutes / 60 ^ 0)}h ${(numberOfMinutes % 60)}m`
     ) : (
       `${numberOfMinutes}m`
-    )
+    );
 };
+
+export const formatMsToCommentDate = (milliseconds) => {
+  const formatter = new Intl.DateTimeFormat(`en-GB`, {
+    year: `numeric`,
+    month: `2-digit`,
+    day: `2-digit`,
+    hour: `2-digit`,
+    minute: `2-digit`,
+  });
+
+  const [ymd, hm] = formatter.format(new Date(milliseconds)).split(`, `);
+  const [y, m, d] = ymd.split(`/`);
+
+  return `${d}/${m}/${y} ${hm}`;
+};
+
+export const formatMsToFilmFullDate = (milliseconds) => {
+  const formatter = new Intl.DateTimeFormat(`en-GB`, {
+    year: `numeric`,
+    month: `long`,
+    day: `2-digit`,
+  });
+
+  return formatter.format(new Date(milliseconds));
+};
+
+

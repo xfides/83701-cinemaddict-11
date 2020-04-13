@@ -1,6 +1,6 @@
 import {templateNavItem} from '../nav-item/index.js';
 import {templateNav} from './template.js';
-import {FilmFilters} from '../../consts/index.js'
+import {FilmFilters} from '../../consts/index.js';
 import {filterFilmsByField} from '../../utils/common.js';
 
 export const nav = (films) => {
@@ -14,7 +14,7 @@ export const nav = (films) => {
         name: FilmFilters[oneCategory],
         id: FilmFilters[oneCategory].toLowerCase(),
         count: filterFilmsByField(films, FilmFilters[oneCategory]).length
-      })
+      });
     })
     .join(``);
 

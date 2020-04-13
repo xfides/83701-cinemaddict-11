@@ -1,6 +1,6 @@
 import {templateFilmCard} from './template.js';
 import {truncateStr, formatDurationMinutes} from '../../utils/common.js';
-import {shortDescParams} from '../../consts/index.js'
+import {shortDescParams} from '../../consts/index.js';
 
 export const filmCard = (film) => {
   const shortFilm = {

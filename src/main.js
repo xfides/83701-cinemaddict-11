@@ -3,7 +3,7 @@ import {nav} from './components/nav/index.js';
 import {templateSort} from './components/sort/index.js';
 import {content} from './components/content/index.js';
 import {footerStatistics} from './components/footer-statistics/index.js';
-import {templatePopUp} from './components/pop-up/index.js';
+import {popUp} from './components/pop-up/index.js';
 import {render} from './utils/common.js';
 import {PosRender} from './consts/index.js';
 import {createFakeFilms} from './utils/fakeData.js';
@@ -24,7 +24,11 @@ const init = () => {
   render(blockStatistics, footerStatistics(fakeFilms));
 
   const blockScript = document.querySelector(`script`);
-  render(blockScript, templatePopUp(), PosRender.BEFORE_BEGIN);
+  render(
+    blockScript,
+    popUp(Array.isArray(fakeFilms) ? fakeFilms[0] : undefined),
+    PosRender.BEFORE_BEGIN
+  );
 };
 
 init();
