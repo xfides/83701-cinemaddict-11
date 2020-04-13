@@ -1,5 +1,5 @@
 import {default as faker} from 'faker';
-import {FilmFilters} from '../consts/index.js';
+import {FilmFilters, Emojis, Posters} from '../consts/index.js';
 
 const createObjectByStructure = (structure, dataFactory) => {
   const structureKeys = Object.getOwnPropertyNames(structure);
@@ -65,15 +65,7 @@ dataFactory.comment = {
     return faker.lorem.sentences();
   },
   pathToEmotion() {
-    const relativePart = `./images/emoji/`;
-    const emotionNames = [
-      `angry.png`,
-      `puke.png`,
-      `sleeping.png`,
-      `smile.png`
-    ];
-
-    return this.randomPathToSmth(relativePart, emotionNames);
+    return this.randomPathToSmth(Emojis.RELATIVE_PATH, Emojis.IMGS);
   },
   author() {
     return this.human();
@@ -86,18 +78,7 @@ dataFactory.comment = {
 dataFactory.film = {
   __proto__: dataFactory,
   pathToPosterImg() {
-    const relativePart = `./images/posters/`;
-    const posterNames = [
-      `made-for-each-other.png`,
-      `popeye-meets-sinbad.png`,
-      `sagebrush-trail.jpg`,
-      `santa-claus-conquers-the-martians.jpg`,
-      `the-dance-of-life.jpg`,
-      `the-great-flamarion.jpg`,
-      `the-man-with-the-golden-arm.jpg`,
-    ];
-
-    return this.randomPathToSmth(relativePart, posterNames);
+    return this.randomPathToSmth(Posters.RELATIVE_PATH, Posters.IMGS);
   },
   title() {
     return faker.lorem.sentence();

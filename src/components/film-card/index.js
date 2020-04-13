@@ -1,6 +1,6 @@
 import {templateFilmCard} from './template.js';
 import {truncateStr, formatDurationMinutes} from '../../utils/common.js';
-import {shortDescParams} from '../../consts/index.js';
+import {ShortDescParams} from '../../consts/index.js';
 
 export const filmCard = (film) => {
   const shortFilm = {
@@ -13,8 +13,8 @@ export const filmCard = (film) => {
     genre: film.genres[0],
     description: truncateStr(
       film.description,
-      shortDescParams.COUNT_SYMBOLS,
-      shortDescParams.END_SYMBOL
+      ShortDescParams.COUNT_SYMBOLS,
+      ShortDescParams.END_SYMBOL
     ),
   };
 

@@ -3,13 +3,13 @@ export const templateCommentAddEmoji = (emoji) => {
     <input class="film-details__emoji-item visually-hidden"
            name="comment-emoji"
            type="radio"
-           id="emoji-${emoji.type}"
-           value="${emoji.type}">
-    <label class="film-details__emoji-label" for="emoji-${emoji.type}">
+           id="emoji-${emoji.name}"
+           value="${emoji.name}">
+    <label class="film-details__emoji-label" for="emoji-${emoji.name}">
       <img src="${emoji.pathToEmotion}"
            width="30"
            height="30"
-           alt="emoji-${emoji.type}">
+           alt="emoji-${emoji.name}">
     </label>
   `;
 };

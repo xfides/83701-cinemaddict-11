@@ -12,7 +12,7 @@ export const commentsBlock = (comments) => {
   return templateCommentsBlock(
     {
       comments: templateComments,
-      commentAddNew: commentAddNew()
+      commentAddNew: commentAddNew(comments.length)
     },
     comments.length
   );

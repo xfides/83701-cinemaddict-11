@@ -9,7 +9,7 @@ const templateGenres = (genres) => {
 };
 
 const titleGenre = (genres) => {
-  return genres === 1 ? `Genre` : PLURALS.genre;
+  return genres.length === 1 ? `Genre` : PLURALS.Genre;
 };
 
 export const templateFilmFullInfo = (filmFull) => {

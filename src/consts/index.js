@@ -6,7 +6,9 @@ export const PosRender = {
 export const ScreenMsgs = {
   NO_FILMS: `There are no movies in our database`,
   LOADING: `Loading...`,
-  NO_FILM_FULL_INFO: `Sorry. Not found such movie`
+  NO_FILM_FULL_INFO: `Sorry. Not found such movie`,
+  STUB_ADD_COMMENT: `Select reaction below and write comment here`,
+  STUB_ADD_COMMENT_ZERO: `Great movie!`
 };
 
 export const FilmFilters = {
@@ -69,11 +71,35 @@ export const CssClasses = {
   FILM_SECTION_EXTRA: `films-list--extra`
 };
 
-export const shortDescParams = {
+export const ShortDescParams = {
   COUNT_SYMBOLS: 140,
   END_SYMBOL: `...`
 };
 
 export const PLURALS = {
   Genre: `Genres`
+};
+
+export const Emojis = {
+  RELATIVE_PATH: `./images/emoji/`,
+  IMGS: [
+    `angry.png`,
+    `puke.png`,
+    `sleeping.png`,
+    `smile.png`
+  ],
+  DEFAULT_IMG_COMMENT_ZERO: `smile.png`
+};
+
+export const Posters = {
+  RELATIVE_PATH: `./images/posters/`,
+  IMGS: [
+    `made-for-each-other.png`,
+    `popeye-meets-sinbad.png`,
+    `sagebrush-trail.jpg`,
+    `santa-claus-conquers-the-martians.jpg`,
+    `the-dance-of-life.jpg`,
+    `the-great-flamarion.jpg`,
+    `the-man-with-the-golden-arm.jpg`,
+  ]
 };
