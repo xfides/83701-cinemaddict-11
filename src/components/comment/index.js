@@ -1,8 +1,8 @@
 import {templateComment} from './template.js';
 import {formatMsToCommentDate} from '../../utils/common.js';
 
-export const comment = (comment) => {
-  comment.date = formatMsToCommentDate(comment.date);
+export const comment = (commentInfo) => {
+  commentInfo.date = formatMsToCommentDate(commentInfo.date);
 
-  return templateComment(comment);
+  return templateComment(commentInfo);
 };

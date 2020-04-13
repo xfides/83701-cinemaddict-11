@@ -10,39 +10,37 @@ export const filmCardBlock = (typeSection, films) => {
       isHidden
     },
     countFilmsToShow,
-    isShowMore,
     isExtraBlock
   } = typeSection;
 
-  const classExtraBlock = isExtraBlock ? (
-      CssClasses.FILM_SECTION_EXTRA
-    ) : (
-      CssClasses.FILM_SECTION
-    );
-  const templateShowMoreBlock = isShowMore ? templateShowMore() : ``;
+  const configFilmCardBlock = {
+    titleText: ScreenMsgs.LOADING,
+    classHiddenTitle: ``,
+    templateFilmCards: ``,
+    templateShowMoreBlock: ``,
+    classExtraBlock: isExtraBlock
+      ? CssClasses.FILM_SECTION_EXTRA
+      : CssClasses.FILM_SECTION,
+  };
 
-  let titleText = ScreenMsgs.LOADING;
-  let classHiddenTitle = ``;
-  let templateFilmCards = ``;
 
   if (films && films.length === 0) {
-    titleText = ScreenMsgs.NO_FILMS;
+    configFilmCardBlock.titleText = ScreenMsgs.NO_FILMS;
   }
 
   if (films && films.length > 0) {
-    titleText = text;
-    classHiddenTitle = isHidden ? CssClasses.HIDDEN_BLOCK : ``;
-    templateFilmCards = films
+    configFilmCardBlock.titleText = text;
+    configFilmCardBlock.classHiddenTitle =
+      isHidden ? CssClasses.HIDDEN_BLOCK : ``;
+    configFilmCardBlock.templateFilmCards = films
       .slice(0, countFilmsToShow)
       .map((oneFilm) => filmCard(oneFilm))
       .join(``);
   }
 
-  return templateFilmCardBlock({
-    titleText,
-    classHiddenTitle,
-    classExtraBlock,
-    templateFilmCards,
-    templateShowMoreBlock
-  });
+  if (!isExtraBlock && films && films.length > countFilmsToShow) {
+    configFilmCardBlock.templateShowMoreBlock = templateShowMore();
+  }
+
+  return templateFilmCardBlock(configFilmCardBlock);
 };

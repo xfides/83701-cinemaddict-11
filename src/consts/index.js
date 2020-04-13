@@ -41,7 +41,6 @@ export const FilmSections = {
       isHidden: true
     },
     countFilmsToShow: 5,
-    isShowMore: true,
     isExtraBlock: false
   },
   TOP_RATED: {
@@ -50,7 +49,6 @@ export const FilmSections = {
       isHidden: false
     },
     countFilmsToShow: 2,
-    isShowMore: false,
     isExtraBlock: true
   },
   MOST_COMMENTED: {
@@ -59,16 +57,16 @@ export const FilmSections = {
       isHidden: false
     },
     countFilmsToShow: 2,
-    isShowMore: false,
     isExtraBlock: true
   }
-
 };
 
 export const CssClasses = {
   HIDDEN_BLOCK: `visually-hidden`,
+  SECTION_FILMS_ALL: `films`,
   FILM_SECTION: `films-list`,
-  FILM_SECTION_EXTRA: `films-list--extra`
+  FILM_SECTION_EXTRA: `films-list--extra`,
+  SHOW_MORE: `films-list__show-more`
 };
 
 export const ShortDescParams = {
