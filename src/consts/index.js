@@ -81,7 +81,7 @@ export const Emoji = {
 };
 
 export const Poster = {
-  RELATIVE_PATH: `./images/Poster/`,
+  RELATIVE_PATH: `./images/posters/`,
   IMAGES: [
     `made-for-each-other.png`,
     `popeye-meets-sinbad.png`,
