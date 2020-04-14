@@ -31,7 +31,7 @@ showMoreFilmCards.increment = FilmSections.COMMON.countFilmsToShow;
 
 const showMoreHandler = () => {
   const showMoreDomNode = document.querySelector(
-    `.${CssClasses.SHOW_MORE}`
+      `.${CssClasses.SHOW_MORE}`
   );
 
   if (!showMoreDomNode) {
@@ -45,7 +45,7 @@ const init = () => {
   domNodes.blockHeader = document.querySelector(`.header`);
   domNodes.blockMain = document.querySelector(`.main`);
   domNodes.blockFooterStatistics = document.querySelector(
-    `.footer__statistics`
+      `.footer__statistics`
   );
   domNodes.blockScript = document.querySelector(`script`);
 
@@ -55,9 +55,9 @@ const init = () => {
   render(domNodes.blockMain, content(fakeFilms));
   render(domNodes.blockFooterStatistics, footerStatistics(fakeFilms));
   render(
-    domNodes.blockScript,
-    popUp(Array.isArray(fakeFilms) ? fakeFilms[0] : undefined),
-    PosRender.BEFORE_BEGIN
+      domNodes.blockScript,
+      popUp(Array.isArray(fakeFilms) ? fakeFilms[0] : undefined),
+      PosRender.BEFORE_BEGIN
   );
 
   showMoreHandler();

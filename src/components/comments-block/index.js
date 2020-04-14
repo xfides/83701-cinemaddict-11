@@ -10,10 +10,10 @@ export const commentsBlock = (comments) => {
     }).join(``);
 
   return templateCommentsBlock(
-    {
-      comments: templateComments,
-      commentAddNew: commentAddNew(comments.length)
-    },
-    comments.length
+      {
+        comments: templateComments,
+        commentAddNew: commentAddNew(comments.length)
+      },
+      comments.length
   );
 };

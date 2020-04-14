@@ -11,7 +11,7 @@ const createObjectByStructure = (structure, dataFactory) => {
     });
   } catch (err) {
     throw new Error(
-      `Structure is not corresponds to dataFactory. Please check if
+        `Structure is not corresponds to dataFactory. Please check if
       object fields are strictly equal dataFactory fields!`
     );
   }
@@ -164,7 +164,7 @@ dataFactory.film = {
       new Array(faker.random.number({min: 0, max: 17})).fill(null);
 
     return commentsToFilm.map(
-      () => createObjectByStructure(structureComment, this.comment)
+        () => createObjectByStructure(structureComment, this.comment)
     );
 
   },

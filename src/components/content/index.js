@@ -11,15 +11,15 @@ export const content = (films) => {
 
   const templateCommon = filmCardBlock(FilmSections.COMMON, films);
   const templateTopRated = !allFilms.length ? (
-      ``
-    ) : (
-      filmCardBlock(FilmSections.TOP_RATED, filmsTopRated)
-    );
+    ``
+  ) : (
+    filmCardBlock(FilmSections.TOP_RATED, filmsTopRated)
+  );
   const templateMostCommented = !allFilms.length ? (
-      ``
-    ) : (
-      filmCardBlock(FilmSections.MOST_COMMENTED, filmsMostCommented)
-    );
+    ``
+  ) : (
+    filmCardBlock(FilmSections.MOST_COMMENTED, filmsMostCommented)
+  );
 
   return templateContent({
     templateCommon,

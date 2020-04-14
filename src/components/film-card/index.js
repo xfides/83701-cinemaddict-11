@@ -12,9 +12,9 @@ export const filmCard = (film) => {
     duration: formatDurationMinutes(film.duration),
     genre: film.genres[0],
     description: truncateStr(
-      film.description,
-      ShortDescParams.COUNT_SYMBOLS,
-      ShortDescParams.END_SYMBOL
+        film.description,
+        ShortDescParams.COUNT_SYMBOLS,
+        ShortDescParams.END_SYMBOL
     ),
   };
 

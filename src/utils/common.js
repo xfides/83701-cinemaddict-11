@@ -87,10 +87,10 @@ export const formatNumberWithSpaces = (number) => {
 
 export const formatDurationMinutes = (numberOfMinutes) => {
   return numberOfMinutes >= 60 ? (
-      `${(numberOfMinutes / 60 ^ 0)}h ${(numberOfMinutes % 60)}m`
-    ) : (
-      `${numberOfMinutes}m`
-    );
+    `${(numberOfMinutes / 60 ^ 0)}h ${(numberOfMinutes % 60)}m`
+  ) : (
+    `${numberOfMinutes}m`
+  );
 };
 
 export const formatMsToCommentDate = (milliseconds) => {

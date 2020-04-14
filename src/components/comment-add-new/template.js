@@ -2,20 +2,20 @@ import {ScreenMsgs, Emojis} from '../../consts/index.js';
 
 const handleZeroComments = (countComments) => {
   return countComments === 0 ? (
-      {
-        emojiTemplateImg: `
+    {
+      emojiTemplateImg: `
           <img src="${Emojis.RELATIVE_PATH}${Emojis.DEFAULT_IMG_COMMENT_ZERO}" 
                width="55" 
                height="55" 
                alt="emoji-smile">`,
-        textNewComment: ScreenMsgs.STUB_ADD_COMMENT_ZERO
-      }
-    ) : (
-      {
-        emojiTemplateImg: ``,
-        textNewComment: ``
-      }
-    );
+      textNewComment: ScreenMsgs.STUB_ADD_COMMENT_ZERO
+    }
+  ) : (
+    {
+      emojiTemplateImg: ``,
+      textNewComment: ``
+    }
+  );
 };
 
 export const templateCommentAddNew = (templateEmojis, countComments) => {
