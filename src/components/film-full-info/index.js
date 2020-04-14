@@ -3,11 +3,11 @@ import {
   formatMsToFilmFullDate,
   formatDurationMinutes
 } from '../../utils/common.js';
-import {ScreenMsgs} from '../../consts/index.js';
+import {ScreenMsg} from '../../consts/index.js';
 
 export const filmFullInfo = (film) => {
   if (!film) {
-    return ScreenMsgs.NO_FILM_FULL_INFO;
+    return ScreenMsg.NO_FILM_FULL_INFO;
   }
 
   film.prodDate = formatMsToFilmFullDate(film.prodDate);

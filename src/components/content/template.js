@@ -1,9 +1,9 @@
-export const templateContent = (sections) => {
-  return `
+export const templateContent = (templatesOfSections) => {
+  return (`
     <section class="films">
-      ${sections.templateCommon}
-      ${sections.templateTopRated}
-      ${sections.templateMostCommented}
+      ${templatesOfSections.common}
+      ${templatesOfSections.topRated}
+      ${templatesOfSections.mostCommented}
     </section>
-  `;
+  `);
 };

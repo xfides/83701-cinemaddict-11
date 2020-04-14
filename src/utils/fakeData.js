@@ -1,5 +1,5 @@
 import {default as faker} from 'faker';
-import {FilmFilters, Emojis, Posters} from '../consts/index.js';
+import {FilmFilter, Emoji, Poster} from '../consts/index.js';
 
 const createObjectByStructure = (structure, dataFactory) => {
   const structureKeys = Object.getOwnPropertyNames(structure);
@@ -10,10 +10,10 @@ const createObjectByStructure = (structure, dataFactory) => {
       newObj[structureKey] = dataFactory[structureKey]();
     });
   } catch (err) {
-    throw new Error(
-        `Structure is not corresponds to dataFactory. Please check if
-      object fields are strictly equal dataFactory fields!`
-    );
+    throw new Error(`
+      Structure is not corresponds to dataFactory. Please check if
+      object fields are strictly equal dataFactory fields!
+    `);
   }
 
   return newObj;
@@ -41,9 +41,9 @@ const structureFilm = {
   description: `string`,
   ageRating: `string`,
   comments: `array of objects`,
-  [FilmFilters.SCHEDULED]: `bool`,
-  [FilmFilters.WATCHED]: `bool`,
-  [FilmFilters.FAVORITE]: `bool`
+  [FilmFilter.SCHEDULED]: `bool`,
+  [FilmFilter.WATCHED]: `bool`,
+  [FilmFilter.FAVORITE]: `bool`
 };
 
 const dataFactory = {
@@ -65,7 +65,7 @@ dataFactory.comment = {
     return faker.lorem.sentences();
   },
   pathToEmotion() {
-    return this.randomPathToSmth(Emojis.RELATIVE_PATH, Emojis.IMGS);
+    return this.randomPathToSmth(Emoji.RELATIVE_PATH, Emoji.IMAGES);
   },
   author() {
     return this.human();
@@ -78,7 +78,7 @@ dataFactory.comment = {
 dataFactory.film = {
   __proto__: dataFactory,
   pathToPosterImg() {
-    return this.randomPathToSmth(Posters.RELATIVE_PATH, Posters.IMGS);
+    return this.randomPathToSmth(Poster.RELATIVE_PATH, Poster.IMAGES);
   },
   title() {
     return faker.lorem.sentence();
@@ -164,28 +164,27 @@ dataFactory.film = {
       new Array(faker.random.number({min: 0, max: 17})).fill(null);
 
     return commentsToFilm.map(
-        () => createObjectByStructure(structureComment, this.comment)
+      () => createObjectByStructure(structureComment, this.comment)
     );
 
   },
-  [FilmFilters.SCHEDULED]() {
+  [FilmFilter.SCHEDULED]() {
     return faker.random.boolean() && faker.random.boolean();
   },
-  [FilmFilters.WATCHED]() {
+  [FilmFilter.WATCHED]() {
     return faker.random.boolean();
   },
-  [FilmFilters.FAVORITE]() {
+  [FilmFilter.FAVORITE]() {
     return faker.random.boolean() && faker.random.boolean();
   }
 };
 
 export const createFakeFilms = () => {
-  const countFakeFilms = faker.random.number({min: 7, max: 27});
-  const fakeFilms = [];
-
-  for (let indexFakeFilm = 0; indexFakeFilm < countFakeFilms; indexFakeFilm++) {
-    fakeFilms.push(createObjectByStructure(structureFilm, dataFactory.film));
-  }
+  const fakeFilms = new Array(faker.random.number({min: 7, max: 27}))
+    .fill(null)
+    .map(() => {
+      return createObjectByStructure(structureFilm, dataFactory.film);
+    });
 
   if (faker.random.boolean() && faker.random.boolean()) {
     if (faker.random.boolean()) {

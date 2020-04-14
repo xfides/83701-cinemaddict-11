@@ -3,7 +3,7 @@ export const PosRender = {
   BEFORE_BEGIN: `beforebegin`
 };
 
-export const ScreenMsgs = {
+export const ScreenMsg = {
   NO_FILMS: `There are no movies in our database`,
   LOADING: `Loading...`,
   NO_FILM_FULL_INFO: `Sorry. Not found such movie`,
@@ -11,13 +11,13 @@ export const ScreenMsgs = {
   STUB_ADD_COMMENT_ZERO: `Great movie!`
 };
 
-export const FilmFilters = {
+export const FilmFilter = {
   SCHEDULED: `Watchlist`,
   WATCHED: `History`,
   FAVORITE: `Favorites`
 };
 
-export const UserRanks = {
+export const UserRank = {
   NOVICE: {
     text: `Novice`,
     from: 1,
@@ -34,7 +34,7 @@ export const UserRanks = {
   }
 };
 
-export const FilmSections = {
+export const FilmSection = {
   COMMON: {
     title: {
       text: `All movies. Upcoming`,
@@ -61,7 +61,7 @@ export const FilmSections = {
   }
 };
 
-export const CssClasses = {
+export const CssClass = {
   HIDDEN_BLOCK: `visually-hidden`,
   SECTION_FILMS_ALL: `films`,
   FILM_SECTION: `films-list`,
@@ -69,18 +69,9 @@ export const CssClasses = {
   SHOW_MORE: `films-list__show-more`
 };
 
-export const ShortDescParams = {
-  COUNT_SYMBOLS: 140,
-  END_SYMBOL: `...`
-};
-
-export const PLURALS = {
-  Genre: `Genres`
-};
-
-export const Emojis = {
+export const Emoji = {
   RELATIVE_PATH: `./images/emoji/`,
-  IMGS: [
+  IMAGES: [
     `angry.png`,
     `puke.png`,
     `sleeping.png`,
@@ -89,9 +80,9 @@ export const Emojis = {
   DEFAULT_IMG_COMMENT_ZERO: `smile.png`
 };
 
-export const Posters = {
-  RELATIVE_PATH: `./images/posters/`,
-  IMGS: [
+export const Poster = {
+  RELATIVE_PATH: `./images/Poster/`,
+  IMAGES: [
     `made-for-each-other.png`,
     `popeye-meets-sinbad.png`,
     `sagebrush-trail.jpg`,

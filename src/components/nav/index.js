@@ -1,19 +1,19 @@
 import {templateNavItem} from '../nav-item/index.js';
 import {templateNav} from './template.js';
-import {FilmFilters} from '../../consts/index.js';
+import {FilmFilter} from '../../consts/index.js';
 import {filterFilmsByField} from '../../utils/common.js';
 
 export const nav = (films) => {
   films = !films ? [] : films;
 
-  const categories = Object.keys(FilmFilters);
+  const categories = Object.keys(FilmFilter);
 
   const categoriesTemplate = categories
     .map((oneCategory) => {
       return templateNavItem({
-        name: FilmFilters[oneCategory],
-        id: FilmFilters[oneCategory].toLowerCase(),
-        count: filterFilmsByField(films, FilmFilters[oneCategory]).length
+        name: FilmFilter[oneCategory],
+        id: FilmFilter[oneCategory].toLowerCase(),
+        count: filterFilmsByField(films, FilmFilter[oneCategory]).length
       });
     })
     .join(``);

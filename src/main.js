@@ -5,7 +5,7 @@ import {content} from './components/content/index.js';
 import {footerStatistics} from './components/footer-statistics/index.js';
 import {popUp} from './components/pop-up/index.js';
 import {render} from './utils/common.js';
-import {PosRender, CssClasses, FilmSections} from './consts/index.js';
+import {PosRender, CssClass, FilmSection} from './consts/index.js';
 import {createFakeFilms} from './utils/fakeData.js';
 
 const fakeFilms = createFakeFilms();
@@ -17,21 +17,21 @@ const domNodes = {
 };
 
 const showMoreFilmCards = () => {
-  FilmSections.COMMON.countFilmsToShow =
-    FilmSections.COMMON.countFilmsToShow + showMoreFilmCards.increment;
+  FilmSection.COMMON.countFilmsToShow =
+    FilmSection.COMMON.countFilmsToShow + showMoreFilmCards.increment;
 
   domNodes.blockMain
-    .querySelector(`.${CssClasses.SECTION_FILMS_ALL}`)
+    .querySelector(`.${CssClass.SECTION_FILMS_ALL}`)
     .remove();
   render(domNodes.blockMain, content(fakeFilms));
 
   showMoreHandler();
 };
-showMoreFilmCards.increment = FilmSections.COMMON.countFilmsToShow;
+showMoreFilmCards.increment = FilmSection.COMMON.countFilmsToShow;
 
 const showMoreHandler = () => {
   const showMoreDomNode = document.querySelector(
-      `.${CssClasses.SHOW_MORE}`
+      `.${CssClass.SHOW_MORE}`
   );
 
   if (!showMoreDomNode) {

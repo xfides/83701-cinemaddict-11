@@ -1,4 +1,4 @@
-import {PosRender, UserRanks} from '../consts/index.js';
+import {PosRender, UserRank} from '../consts/index.js';
 
 const cloneObj = (obj) => {
 
@@ -23,7 +23,7 @@ export const render = (container, component, place = PosRender.BEFORE_END) => {
   container.insertAdjacentHTML(place, component);
 };
 
-export const truncateStr = (str, newLength, endSymbol) => {
+export const truncateStr = (str, newLength = 140, endSymbol = `...`) => {
   return `${str.slice(0, newLength)}${endSymbol}`;
 };
 
@@ -61,21 +61,21 @@ export const filterFilmsByField = (films, field) => {
 
 export const getUserRank = (countFilmsWatched) => {
   if (
-    countFilmsWatched >= UserRanks.NOVICE.from
-    && countFilmsWatched <= UserRanks.NOVICE.to
+    countFilmsWatched >= UserRank.NOVICE.from
+    && countFilmsWatched <= UserRank.NOVICE.to
   ) {
-    return UserRanks.NOVICE.text;
+    return UserRank.NOVICE.text;
   }
 
   if (
-    countFilmsWatched >= UserRanks.FAN.from
-    && countFilmsWatched <= UserRanks.FAN.to
+    countFilmsWatched >= UserRank.FAN.from
+    && countFilmsWatched <= UserRank.FAN.to
   ) {
-    return UserRanks.FAN.text;
+    return UserRank.FAN.text;
   }
 
-  if (countFilmsWatched >= UserRanks.MOVIE_BUFF.from) {
-    return UserRanks.MOVIE_BUFF.text;
+  if (countFilmsWatched >= UserRank.MOVIE_BUFF.from) {
+    return UserRank.MOVIE_BUFF.text;
   }
 
   return ``;

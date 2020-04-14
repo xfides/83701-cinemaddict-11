@@ -1,13 +1,9 @@
 import {commentAddEmoji} from '../comment-add-emoji/index.js';
 import {templateCommentAddNew} from './template.js';
-import {Emojis} from '../../consts/index.js';
+import {Emoji} from '../../consts/index.js';
 
 export const commentAddNew = (countComments) => {
-  const templateEmojis = Emojis.IMGS
-    .map((oneEmojiImg) => {
-      return commentAddEmoji(oneEmojiImg);
-    })
-    .join(``);
+  const templateEmojis = Emoji.IMAGES.map(commentAddEmoji).join(``);
 
   return templateCommentAddNew(templateEmojis, countComments);
 };
