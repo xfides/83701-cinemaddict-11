@@ -9,6 +9,7 @@ import {PosRender, CssClass, FilmSection} from './consts/index.js';
 import {createFakeFilms} from './utils/fakeData.js';
 
 const fakeFilms = createFakeFilms();
+
 const domNodes = {
   blockHeader: null,
   blockMain: null,
@@ -16,9 +17,11 @@ const domNodes = {
   blockScript: null
 };
 
+let showMoreFilmsInc = FilmSection.COMMON.countFilmsToShow;
+
 const showMoreFilmCards = () => {
   FilmSection.COMMON.countFilmsToShow =
-    FilmSection.COMMON.countFilmsToShow + showMoreFilmCards.increment;
+    FilmSection.COMMON.countFilmsToShow + showMoreFilmsInc;
 
   domNodes.blockMain
     .querySelector(`.${CssClass.SECTION_FILMS_ALL}`)
@@ -27,7 +30,6 @@ const showMoreFilmCards = () => {
 
   showMoreHandler();
 };
-showMoreFilmCards.increment = FilmSection.COMMON.countFilmsToShow;
 
 const showMoreHandler = () => {
   const showMoreDomNode = document.querySelector(

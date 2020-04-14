@@ -3,7 +3,10 @@ import {templateCommentAddNew} from './template.js';
 import {Emoji} from '../../consts/index.js';
 
 export const commentAddNew = (countComments) => {
-  const templateEmojis = Emoji.IMAGES.map(commentAddEmoji).join(``);
+  const commentAddNewData = {
+    templateEmojis: Emoji.IMAGES.map(commentAddEmoji).join(``),
+    countComments
+  };
 
-  return templateCommentAddNew(templateEmojis, countComments);
+  return templateCommentAddNew(commentAddNewData);
 };

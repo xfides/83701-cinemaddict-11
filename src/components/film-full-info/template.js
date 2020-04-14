@@ -1,24 +1,25 @@
-import {PLURALS} from '../../consts/index.js';
+import {wordsPlural} from '../../consts/locals/en.js';
 
-const templateGenres = (genres) => {
-  return genres
-    .map((genre) => {
-      return `<span class="film-details__genre">${genre}</span>`;
-    })
-    .join(``);
+const getOneGenreTemplate = (genre) => {
+  return `<span class="film-details__genre">${genre}</span>`;
 };
 
-const titleGenre = (genres) => {
-  return genres.length === 1 ? `Genre` : PLURALS.Genre;
+const getGenresTemplate = (genres) => {
+  return genres.map(getOneGenreTemplate).join(``);
+};
+
+const getGenreTitleWord = (genres) => {
+  return genres.length === 1 ? `Genre` : wordsPlural.Genre;
 };
 
 export const templateFilmFullInfo = (filmFull) => {
-  return `
+  return (`
     <div class="film-details__info-wrap">
       <div class="film-details__poster">
-        <img class="film-details__poster-img" 
-             src="${filmFull.pathToPosterImg}" 
-             alt="">
+        <img 
+          class="film-details__poster-img" 
+          src="${filmFull.pathToPosterImg}" 
+          alt="">
         <p class="film-details__age">
           ${filmFull.ageRating}
         </p>
@@ -49,51 +50,44 @@ export const templateFilmFullInfo = (filmFull) => {
                ${filmFull.director}
             </td>
           </tr>
-          
           <tr class="film-details__row">
             <td class="film-details__term">Writers</td>
             <td class="film-details__cell">
               ${filmFull.scenarists}
             </td>
           </tr>
-            
           <tr class="film-details__row">
             <td class="film-details__term">Actors</td>
             <td class="film-details__cell">
                ${filmFull.actors}
             </td>
           </tr>
-            
           <tr class="film-details__row">
             <td class="film-details__term">Release Date</td>
             <td class="film-details__cell">
               ${filmFull.prodDate}
             </td>
           </tr>
-            
           <tr class="film-details__row">
             <td class="film-details__term">Runtime</td>
             <td class="film-details__cell">
               ${filmFull.duration}
             </td>
           </tr>
-            
           <tr class="film-details__row">
             <td class="film-details__term">Country</td>
             <td class="film-details__cell">
               ${filmFull.country}
             </td>
           </tr>
-            
           <tr class="film-details__row">
             <td class="film-details__term">
-              ${titleGenre(filmFull.genres)} 
+              ${getGenreTitleWord(filmFull.genres)} 
             </td>
             <td class="film-details__cell">
-              ${templateGenres(filmFull.genres)}
+              ${getGenresTemplate(filmFull.genres)}
             </td>
           </tr>
-            
         </table>
 
         <p class="film-details__film-description">
@@ -101,5 +95,5 @@ export const templateFilmFullInfo = (filmFull) => {
         </p>
       </div>
     </div>
-  `;
+  `);
 };

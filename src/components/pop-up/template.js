@@ -1,14 +1,10 @@
 export const templatePopUp = (templates) => {
-  return `
+  return (`
     <section class="film-details visually-hidden">
-      <form class="film-details__inner" 
-            action="" 
-            method="get">
-            
+      <form class="film-details__inner" action="" method="get">
         <div class="form-details__top-container">
           <div class="film-details__close">
-            <button class="film-details__close-btn" 
-                    type="button">
+            <button class="film-details__close-btn" type="button">
               close
             </button>
           </div>  
@@ -21,5 +17,5 @@ export const templatePopUp = (templates) => {
         </div>
       </form>
     </section>
-  `;
+  `);
 };

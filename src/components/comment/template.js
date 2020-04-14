@@ -1,11 +1,12 @@
 export const templateComment = (comment) => {
-  return `
+  return (`
     <li class="film-details__comment">
       <span class="film-details__comment-emoji">
-        <img src="${comment.pathToEmotion}" 
-             width="55" 
-             height="55" 
-             alt="emoji-smile">
+        <img 
+          src="${comment.pathToEmotion}" 
+          width="55" 
+          height="55" 
+          alt="emoji-smile">
       </span>
       <div>
         <p class="film-details__comment-text">
@@ -24,5 +25,5 @@ export const templateComment = (comment) => {
         </p>
       </div>
     </li>
-  `;
+  `);
 };

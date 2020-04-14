@@ -1,5 +1,5 @@
 export const templateFilmCardBlock = (filmBlock) => {
-  return `
+  return (`
     <section class="${filmBlock.classExtraBlock}">
       <h2 class="films-list__title ${filmBlock.classHiddenTitle}">
         ${filmBlock.titleText}
@@ -9,5 +9,5 @@ export const templateFilmCardBlock = (filmBlock) => {
       </div>
       ${filmBlock.templateShowMoreBlock}
     </section>
-  `;
+  `);
 };

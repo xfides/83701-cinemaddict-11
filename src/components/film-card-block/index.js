@@ -13,34 +13,31 @@ export const filmCardBlock = (typeSection, films) => {
     isExtraBlock
   } = typeSection;
 
-  const configFilmCardBlock = {
+  const configCardBlock = {
     titleText: ScreenMsg.LOADING,
     classHiddenTitle: ``,
     templateFilmCards: ``,
     templateShowMoreBlock: ``,
     classExtraBlock: isExtraBlock
-      ? CssClass.FILM_SECTION_EXTRA
-      : CssClass.FILM_SECTION,
+      ? CssClass.FILM_SECTION_EXTRA : CssClass.FILM_SECTION
   };
 
-
   if (films && films.length === 0) {
-    configFilmCardBlock.titleText = ScreenMsg.NO_FILMS;
+    configCardBlock.titleText = ScreenMsg.NO_FILMS;
   }
 
   if (films && films.length > 0) {
-    configFilmCardBlock.titleText = text;
-    configFilmCardBlock.classHiddenTitle =
-      isHidden ? CssClass.HIDDEN_BLOCK : ``;
-    configFilmCardBlock.templateFilmCards = films
+    configCardBlock.titleText = text;
+    configCardBlock.classHiddenTitle = isHidden ? CssClass.HIDDEN_BLOCK : ``;
+    configCardBlock.templateFilmCards = films
       .slice(0, countFilmsToShow)
-      .map((oneFilm) => filmCard(oneFilm))
+      .map(filmCard)
       .join(``);
   }
 
   if (!isExtraBlock && films && films.length > countFilmsToShow) {
-    configFilmCardBlock.templateShowMoreBlock = templateShowMore();
+    configCardBlock.templateShowMoreBlock = templateShowMore();
   }
 
-  return templateFilmCardBlock(configFilmCardBlock);
+  return templateFilmCardBlock(configCardBlock);
 };

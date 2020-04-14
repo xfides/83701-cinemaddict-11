@@ -1,5 +1,5 @@
 export const templateSort = () => {
-  return `
+  return (`
     <ul class="sort">
       <li>
         <a href="#" class="sort__button sort__button--active">
@@ -9,5 +9,5 @@ export const templateSort = () => {
       <li><a href="#" class="sort__button">Sort by date</a></li>
       <li><a href="#" class="sort__button">Sort by rating</a></li>
     </ul>
-  `;
+  `);
 };

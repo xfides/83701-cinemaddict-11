@@ -1,5 +1,5 @@
 export const templateCommentsBlock = (commentsBlockData) => {
-  return `
+  return (`
     <section class="film-details__comments-wrap">
       <h3 class="film-details__comments-title">
         Comments 
@@ -12,5 +12,5 @@ export const templateCommentsBlock = (commentsBlockData) => {
       </ul>
       ${commentsBlockData.templateCommentAddNew}
     </section>
-  `;
+  `);
 };

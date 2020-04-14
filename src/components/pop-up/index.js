@@ -4,14 +4,11 @@ import {templateFilmFullInfoControl} from '../film-full-info-control';
 import {commentsBlock} from '../comments-block/index.js';
 
 export const popUp = (film) => {
-  const templateFilmFullInfo = filmFullInfo(film);
-  const templateCommentsBlock = film ? commentsBlock(film.comments) : ``;
-  const templateFilmFullInfoControlBlock =
-    film ? templateFilmFullInfoControl() : ``;
+  const templates = {
+    filmFullInfo: filmFullInfo(film),
+    commentsBlock: film ? commentsBlock(film.comments) : ``,
+    filmFullInfoControl: film ? templateFilmFullInfoControl() : ``
+  };
 
-  return templatePopUp({
-    filmFullInfo: templateFilmFullInfo,
-    commentsBlock: templateCommentsBlock,
-    filmFullInfoControl: templateFilmFullInfoControlBlock
-  });
+  return templatePopUp(templates);
 };

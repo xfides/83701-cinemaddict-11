@@ -1,5 +1,5 @@
 export const templateCommentAddEmoji = (emoji) => {
-  return `
+  return (`
     <input 
       class="film-details__emoji-item visually-hidden"
       name="comment-emoji"
@@ -15,5 +15,5 @@ export const templateCommentAddEmoji = (emoji) => {
         height="30"
         alt="emoji-${emoji.name}">
     </label>
-  `;
+  `);
 };

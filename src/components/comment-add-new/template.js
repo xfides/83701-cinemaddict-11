@@ -24,11 +24,10 @@ const handleZeroComments = (countComments) => {
   return countComments === 0 ? getDefaultEmojiData() : getNoEmojiData();
 };
 
-export const templateCommentAddNew = (templateEmojis, countComments) => {
+export const templateCommentAddNew = (commentAddNewData) => {
+  const defaultDataEmoji = handleZeroComments(commentAddNewData.countComments);
 
-  const defaultDataEmoji = handleZeroComments(countComments);
-
-  return `
+  return (`
     <div class="film-details__new-comment">
       <div 
         for="add-emoji" 
@@ -42,8 +41,8 @@ export const templateCommentAddNew = (templateEmojis, countComments) => {
           name="comment">${defaultDataEmoji.textNewComment}</textarea>
       </label>
       <div class="film-details__emoji-list">
-        ${templateEmojis}
+        ${commentAddNewData.templateEmojis}
       </div>
     </div>
-  `;
+  `);
 };
