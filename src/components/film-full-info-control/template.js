@@ -1,4 +1,4 @@
-export const templateFilmFullInfoControl = () => {
+export const createFilmFullInfoControlTemplate = () => {
   return (`
     <section class="film-details__controls">
       <input 

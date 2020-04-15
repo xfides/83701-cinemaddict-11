@@ -1,4 +1,4 @@
-export const templatePopUp = (templates) => {
+export const createPopUpTemplate = (templates) => {
   return (`
     <section class="film-details visually-hidden">
       <form class="film-details__inner" action="" method="get">

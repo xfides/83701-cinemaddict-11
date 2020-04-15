@@ -1,3 +1,3 @@
-export const templateFooterStatistics = (countFilmsFormatted) => {
+export const createFooterStatisticsTemplate = (countFilmsFormatted) => {
   return `<p>${countFilmsFormatted} movies inside</p>`;
 };

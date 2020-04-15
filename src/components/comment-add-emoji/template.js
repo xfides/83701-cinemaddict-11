@@ -1,4 +1,4 @@
-export const templateCommentAddEmoji = (emoji) => {
+export const createCommentAddEmojiTemplate = (emoji) => {
   return (`
     <input 
       class="film-details__emoji-item visually-hidden"

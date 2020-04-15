@@ -24,7 +24,7 @@ const handleZeroComments = (countComments) => {
   return countComments === 0 ? getDefaultEmojiData() : getNoEmojiData();
 };
 
-export const templateCommentAddNew = (commentAddNewData) => {
+export const createCommentAddNewTemplate = (commentAddNewData) => {
   const defaultDataEmoji = handleZeroComments(commentAddNewData.countComments);
 
   return (`

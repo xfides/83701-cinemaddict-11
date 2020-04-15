@@ -1,7 +1,7 @@
-import {templateFilmCard} from './template.js';
+import {createFilmCardTemplate} from './template.js';
 import {truncateStr, formatDurationMinutes} from '../../utils/common.js';
 
-export const filmCard = (film) => {
+export const createFilmCardComponent = (film) => {
   const shortFilm = {
     title: film.title,
     rate: film.rate,
@@ -13,5 +13,5 @@ export const filmCard = (film) => {
     description: truncateStr(film.description)
   };
 
-  return templateFilmCard(shortFilm);
+  return createFilmCardTemplate(shortFilm);
 };

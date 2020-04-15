@@ -1,4 +1,4 @@
-export const templateNav = (categoriesTemplate) => {
+export const createNavTemplate = (categoriesTemplate) => {
   return (`
     <nav class="main-navigation">
       <div class="main-navigation__items">

@@ -1,11 +1,11 @@
-import {templateFilmFullInfo} from './template.js';
+import {createFilmFullInfoTemplate} from './template.js';
 import {
   formatMsToFilmFullDate,
   formatDurationMinutes
 } from '../../utils/common.js';
 import {ScreenMsg} from '../../consts/index.js';
 
-export const filmFullInfo = (film) => {
+export const createFilmFullInfoComponent = (film) => {
   if (!film) {
     return ScreenMsg.NO_FILM_FULL_INFO;
   }
@@ -15,5 +15,5 @@ export const filmFullInfo = (film) => {
   film.scenarists = film.scenarists.join(`, <br/>`);
   film.actors = film.actors.join(`, <br/>`);
 
-  return templateFilmFullInfo(film);
+  return createFilmFullInfoTemplate(film);
 };

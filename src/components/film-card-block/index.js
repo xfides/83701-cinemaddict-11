@@ -1,9 +1,9 @@
-import {templateFilmCardBlock} from './template.js';
-import {filmCard} from '../film-card/index.js';
-import {templateShowMore} from '../show-more/index.js';
+import {createFilmCardBlockTemplate} from './template.js';
+import {createFilmCardComponent} from '../film-card/index.js';
+import {createShowMoreTemplate} from '../show-more/index.js';
 import {CssClass, ScreenMsg} from '../../consts/index.js';
 
-export const filmCardBlock = (typeSection, films) => {
+export const createFilmCardBlockComponent = (typeSection, films, countCommonFilms) => {
   const {
     title: {
       text,
@@ -30,14 +30,14 @@ export const filmCardBlock = (typeSection, films) => {
     configCardBlock.titleText = text;
     configCardBlock.classHiddenTitle = isHidden ? CssClass.HIDDEN_BLOCK : ``;
     configCardBlock.templateFilmCards = films
-      .slice(0, countFilmsToShow)
-      .map(filmCard)
+      .slice(0, isExtraBlock ? countFilmsToShow : countCommonFilms)
+      .map(createFilmCardComponent)
       .join(``);
   }
 
-  if (!isExtraBlock && films && films.length > countFilmsToShow) {
-    configCardBlock.templateShowMoreBlock = templateShowMore();
+  if (!isExtraBlock && films && films.length > countCommonFilms) {
+    configCardBlock.templateShowMoreBlock = createShowMoreTemplate();
   }
 
-  return templateFilmCardBlock(configCardBlock);
+  return createFilmCardBlockTemplate(configCardBlock);
 };

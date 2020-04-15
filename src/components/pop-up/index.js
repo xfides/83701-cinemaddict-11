@@ -1,14 +1,14 @@
-import {templatePopUp} from './template.js';
-import {filmFullInfo} from '../film-full-info/index.js';
-import {templateFilmFullInfoControl} from '../film-full-info-control';
-import {commentsBlock} from '../comments-block/index.js';
+import {createPopUpTemplate} from './template.js';
+import {createFilmFullInfoComponent} from '../film-full-info/index.js';
+import {createFilmFullInfoControlTemplate} from '../film-full-info-control';
+import {createCommentsBlockComponent} from '../comments-block/index.js';
 
-export const popUp = (film) => {
+export const createPopUpComponent = (film) => {
   const templates = {
-    filmFullInfo: filmFullInfo(film),
-    commentsBlock: film ? commentsBlock(film.comments) : ``,
-    filmFullInfoControl: film ? templateFilmFullInfoControl() : ``
+    filmFullInfo: createFilmFullInfoComponent(film),
+    commentsBlock: film ? createCommentsBlockComponent(film.comments) : ``,
+    filmFullInfoControl: film ? createFilmFullInfoControlTemplate() : ``
   };
 
-  return templatePopUp(templates);
+  return createPopUpTemplate(templates);
 };

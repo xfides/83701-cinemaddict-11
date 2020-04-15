@@ -1,10 +1,10 @@
-import {templateUserRank} from './template.js';
+import {createUserRankTemplate} from './template.js';
 import {getUserRank, filterFilmsByField} from '../../utils/common.js';
 import {FilmFilter} from '../../consts/index.js';
 
-export const userRank = (films = []) => {
+export const createUserRankComponent = (films = []) => {
   const filmsWatched = filterFilmsByField(films, FilmFilter.WATCHED);
   const userRankStatus = getUserRank(filmsWatched.length);
 
-  return templateUserRank(userRankStatus);
+  return createUserRankTemplate(userRankStatus);
 };

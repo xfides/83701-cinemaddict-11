@@ -1,13 +1,13 @@
-import {templateCommentsBlock} from './template.js';
-import {commentAddNew} from '../comment-add-new/index.js';
-import {comment as createComment} from '../comment/index.js';
+import {createCommentsBlockTemplate} from './template.js';
+import {createCommentAddNewComponent} from '../comment-add-new/index.js';
+import {createCommentComponent} from '../comment/index.js';
 
-export const commentsBlock = (comments) => {
+export const createCommentsBlockComponent = (comments) => {
   const commentsBlockData = {
-    templateComments: comments.map(createComment).join(``),
-    templateCommentAddNew: commentAddNew(comments.length),
+    templateComments: comments.map(createCommentComponent).join(``),
+    templateCommentAddNew: createCommentAddNewComponent(comments.length),
     countComments: comments.length
   };
 
-  return templateCommentsBlock(commentsBlockData);
+  return createCommentsBlockTemplate(commentsBlockData);
 };

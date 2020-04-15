@@ -1,4 +1,4 @@
-export const templateContent = (templatesOfSections) => {
+export const createContentTemplate = (templatesOfSections) => {
   return (`
     <section class="films">
       ${templatesOfSections.common}

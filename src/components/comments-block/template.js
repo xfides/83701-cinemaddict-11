@@ -1,4 +1,4 @@
-export const templateCommentsBlock = (commentsBlockData) => {
+export const createCommentsBlockTemplate = (commentsBlockData) => {
   return (`
     <section class="film-details__comments-wrap">
       <h3 class="film-details__comments-title">

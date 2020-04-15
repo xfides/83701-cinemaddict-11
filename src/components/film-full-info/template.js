@@ -12,7 +12,7 @@ const getGenreTitleWord = (genres) => {
   return genres.length === 1 ? `Genre` : wordsPlural.Genre;
 };
 
-export const templateFilmFullInfo = (filmFull) => {
+export const createFilmFullInfoTemplate = (filmFull) => {
   return (`
     <div class="film-details__info-wrap">
       <div class="film-details__poster">

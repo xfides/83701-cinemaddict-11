@@ -1,4 +1,4 @@
-export const templateComment = (comment) => {
+export const createCommentTemplate = (comment) => {
   return (`
     <li class="film-details__comment">
       <span class="film-details__comment-emoji">

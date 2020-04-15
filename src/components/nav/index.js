@@ -1,12 +1,12 @@
-import {templateNavItem} from '../nav-item/index.js';
-import {templateNav} from './template.js';
+import {createNavItemTemplate} from '../nav-item/index.js';
+import {createNavTemplate} from './template.js';
 import {FilmFilter} from '../../consts/index.js';
 import {filterFilmsByField} from '../../utils/common.js';
 
-export const nav = (films = []) => {
+export const createNavComponent = (films = []) => {
   const categoriesTemplate = Object.keys(FilmFilter)
     .map((oneCategory) => {
-      return templateNavItem({
+      return createNavItemTemplate({
         name: FilmFilter[oneCategory],
         id: FilmFilter[oneCategory].toLowerCase(),
         count: filterFilmsByField(films, FilmFilter[oneCategory]).length
@@ -14,5 +14,5 @@ export const nav = (films = []) => {
     })
     .join(``);
 
-  return templateNav(categoriesTemplate);
+  return createNavTemplate(categoriesTemplate);
 };

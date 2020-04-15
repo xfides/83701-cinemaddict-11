@@ -24,7 +24,7 @@ export const render = (container, component, place = PosRender.BEFORE_END) => {
 };
 
 export const truncateStr = (str, newLength = 140, endSymbol = `...`) => {
-  return `${str.slice(0, newLength)}${endSymbol}`;
+  return str.length < 140 ? str : `${str.slice(0, newLength)}${endSymbol}`;
 };
 
 export const sortFilmsByField = (films, field) => {

@@ -1,21 +1,25 @@
-import {templateContent} from './template.js';
+import {createContentTemplate} from './template.js';
 import {sortFilmsByFieldWithClone} from '../../utils/common.js';
-import {filmCardBlock} from '../film-card-block/index.js';
+import {createFilmCardBlockComponent} from '../film-card-block/index.js';
 import {FilmSection} from '../../consts/index.js';
 
-export const content = (films) => {
+export const createContentComponent = (films, countCommonFilms) => {
   const allFilms = films ? films : [];
 
-  const filmsTopRated = sortFilmsByFieldWithClone(allFilms, `rate`);
-  const filmsMostCommented = sortFilmsByFieldWithClone(allFilms, `comments`);
+  const filmsTR = sortFilmsByFieldWithClone(allFilms, `rate`);
+  const filmsMC = sortFilmsByFieldWithClone(allFilms, `comments`);
 
   const templatesOfFilmSections = {
-    common: filmCardBlock(FilmSection.COMMON, films),
+    common: createFilmCardBlockComponent(
+        FilmSection.COMMON, films, countCommonFilms
+    ),
     topRated: allFilms.length
-      ? filmCardBlock(FilmSection.TOP_RATED, filmsTopRated) : ``,
+      ? createFilmCardBlockComponent(FilmSection.TOP_RATED, filmsTR)
+      : ``,
     mostCommented: allFilms.length
-      ? filmCardBlock(FilmSection.MOST_COMMENTED, filmsMostCommented) : ``
+      ? createFilmCardBlockComponent(FilmSection.MOST_COMMENTED, filmsMC)
+      : ``
   };
 
-  return templateContent(templatesOfFilmSections);
+  return createContentTemplate(templatesOfFilmSections);
 };
