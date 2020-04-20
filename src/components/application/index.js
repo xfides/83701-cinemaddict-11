@@ -1,9 +1,9 @@
 import {renderHTML, renderDOM, replaceDOM} from '../../utils/common.js';
 import {createFooterStatisticsComponent} from '../footer-statistics/index.js';
 import {createUserRankComponent} from '../user-rank/index.js';
-import {ScreenMsg} from '../../consts/index.js';
 // import CreateContentComponent from '../content/index.js';
 import NavComponent from '../nav/index.js';
+import SortComponent from '../sort/index.js';
 
 
 export default class Application {
@@ -16,7 +16,7 @@ export default class Application {
     this._countCommonFilms = configApp.countCommonFilms;
     this._popUpId = null;
     this._curCategory = null;
-    this._curFilterName = null;
+    this._curSortKind = null;
 
     this.controlData = {
       getFilms: () => {
@@ -50,10 +50,12 @@ export default class Application {
         this.renderNav();
       },
 
-      getCurFilterName: () => {
-        return this._curFilterName;
+      getCurSortKind: () => {
+        return this._curSortKind;
       },
-      setCurFilterName: (newFilter) => {
+      setCurSortKind: (newSortKind) => {
+        this._curSortKind = newSortKind;
+        this.renderSort();
       }
     }
   }
@@ -75,10 +77,14 @@ export default class Application {
       )
     };
 
-    this.instantiateComponents(NavComponent);
+    this.instantiateComponents(
+      NavComponent,
+      SortComponent
+    );
 
     this.renderHeader();
     this.renderNav();
+    this.renderSort();
     this.renderFooter();
   }
 
@@ -97,6 +103,22 @@ export default class Application {
     }
 
     renderDOM(domContainer, navInstance.getDomElement());
+  }
+
+  renderSort() {
+    const sortInstance = this._instances[SortComponent.name];
+    const domContainer = this._domNodes.blockMain;
+
+    if (sortInstance.isRendered()) {
+      const oldDomElement = sortInstance.getDomElement();
+      sortInstance.removeDomElement();
+      const newDomElement = sortInstance.getDomElement();
+
+      replaceDOM(oldDomElement, newDomElement);
+      return;
+    }
+
+    renderDOM(domContainer, sortInstance.getDomElement());
   }
 
 

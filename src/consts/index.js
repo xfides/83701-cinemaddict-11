@@ -18,6 +18,12 @@ export const FilmFilter = {
   FAVORITE: `Favorites`
 };
 
+export const SortKind = {
+  DEFAULT:`Sort by default`,
+  DATE:`Sort by date`,
+  RATE:`Sort by rating`,
+};
+
 export const UserRank = {
   NOVICE: {
     text: `Novice`,
@@ -68,7 +74,8 @@ export const CssClass = {
   FILM_SECTION: `films-list`,
   FILM_SECTION_EXTRA: `films-list--extra`,
   SHOW_MORE: `films-list__show-more`,
-  NAV_CATEGORY_ACTIVE: `main-navigation__item--active`
+  NAV_CATEGORY_ACTIVE: `main-navigation__item--active`,
+  SORT_KIND_ACTIVE: `sort__button--active`
 };
 
 export const Emoji = {

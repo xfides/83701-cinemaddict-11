@@ -1,6 +1,6 @@
 import {createNavItemTemplate} from '../nav-item/index.js';
 import {createNavTemplate} from './template.js';
-import {FilmFilter} from '../../consts/index.js';
+import {FilmFilter, CssClass} from '../../consts/index.js';
 import {filterFilmsByField} from '../../utils/common.js';
 import {createDomElement} from '../../utils/common.js';
 
@@ -25,7 +25,10 @@ export default class NavComponent {
           name: oneCategory,
           id: oneCategory.toLowerCase().split(` `)[0],
           count: filterFilmsByField(films, oneCategory).length,
-          active: activeCategory === oneCategory
+          activeClass: activeCategory === oneCategory
+            ? CssClass.NAV_CATEGORY_ACTIVE
+            : ``,
+          showCountFilms: oneCategory !== FilmFilter.ALL
         });
       })
       .join(``);

@@ -1,13 +1,21 @@
-export const createSortTemplate = () => {
+const createSortItemsTemplate = (sortKindsInfo) => {
+  return sortKindsInfo
+    .map((oneSortKind) => {
+      return (`
+        <li>
+          <a href="#" class="sort__button ${oneSortKind.activeClass}">
+            ${oneSortKind.sortKindStr}
+          </a>
+        </li>
+      `);
+    })
+    .join(``);
+};
+
+export const createSortTemplate = (sortKindsInfo) => {
   return (`
     <ul class="sort">
-      <li>
-        <a href="#" class="sort__button sort__button--active">
-          Sort by default
-        </a>
-      </li>
-      <li><a href="#" class="sort__button">Sort by date</a></li>
-      <li><a href="#" class="sort__button">Sort by rating</a></li>
+      ${createSortItemsTemplate(sortKindsInfo)}
     </ul>
   `);
 };

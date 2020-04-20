@@ -1,13 +1,8 @@
-import {CssClass, FilmFilter} from '../../consts/index.js';
-
-const getActiveClass = (isCategoryActive) => {
-  return isCategoryActive ? CssClass.NAV_CATEGORY_ACTIVE : ``;
-};
-
 const showCountFilmsInCategory = (category) => {
-  if (category.name === FilmFilter.ALL) {
+  if (!category.showCountFilms) {
     return ``;
   }
+
   return (`
     <span class="main-navigation__item-count">
       ${category.count}
@@ -19,7 +14,7 @@ export const createNavItemTemplate = (category) => {
   return (`
     <a 
       href="#${category.id}" 
-      class="main-navigation__item ${getActiveClass(category.active)}">
+      class="main-navigation__item ${category.activeClass}">
         ${category.name}
       ${showCountFilmsInCategory(category)}
     </a>

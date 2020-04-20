@@ -6,7 +6,7 @@ import {
   createFooterStatisticsComponent
 } from './components/footer-statistics/index.js';
 import {createPopUpComponent} from './components/pop-up/index.js';
-import {render} from './utils/common.js';
+import {renderHTML} from './utils/common.js';
 import {PosRender, CssClass, FilmSection} from './consts/index.js';
 import {createFakeFilms} from './utils/fakeData.js';
 //--------------------
