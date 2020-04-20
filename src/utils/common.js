@@ -1,4 +1,5 @@
-import {PosRender, UserRank} from '../consts/index.js';
+// import {PosRender} from '../consts/index.js';
+import {UserRank} from '../consts/index.js';
 
 const cloneObj = (obj) => {
 
@@ -19,8 +20,19 @@ const cloneObj = (obj) => {
   return target;
 };
 
-export const render = (container, component, place = PosRender.BEFORE_END) => {
-  container.insertAdjacentHTML(place, component);
+export const renderHTML = (container, strHtml) => {
+  container.insertAdjacentHTML(`beforeend`, strHtml);
+};
+
+export const renderDOM = (container, domElement) => {
+  container.append(domElement);
+};
+
+export const createDomElement = (templateStrHtml) => {
+  const templateTag = document.createElement(`template`);
+  templateTag.innerHTML = templateStrHtml;
+
+  return templateTag.content.firstElementChild;
 };
 
 export const truncateStr = (str, newLength = 140, endSymbol = `...`) => {
@@ -87,10 +99,10 @@ export const formatNumberWithSpaces = (number) => {
 
 export const formatDurationMinutes = (numberOfMinutes) => {
   return numberOfMinutes >= 60 ? (
-    `${(numberOfMinutes / 60 ^ 0)}h ${(numberOfMinutes % 60)}m`
-  ) : (
-    `${numberOfMinutes}m`
-  );
+      `${(numberOfMinutes / 60 ^ 0)}h ${(numberOfMinutes % 60)}m`
+    ) : (
+      `${numberOfMinutes}m`
+    );
 };
 
 export const formatMsToCommentDate = (milliseconds) => {
@@ -118,4 +130,14 @@ export const formatMsToFilmFullDate = (milliseconds) => {
   return formatter.format(new Date(milliseconds));
 };
 
+export const replaceDOM = (oldDomElement, newDomElement) => {
+  const parentDomElement = oldDomElement.parentElement;
+
+  const isExistElements =
+    !!(parentDomElement && oldDomElement && newDomElement);
+
+  if (isExistElements && parentDomElement.contains(oldDomElement)) {
+    parentDomElement.replaceChild(newDomElement, oldDomElement);
+  }
+};
 

@@ -9,17 +9,28 @@ import {createPopUpComponent} from './components/pop-up/index.js';
 import {render} from './utils/common.js';
 import {PosRender, CssClass, FilmSection} from './consts/index.js';
 import {createFakeFilms} from './utils/fakeData.js';
+//--------------------
+import Application from './components/application/index.js';
+
+// const domNodes = {
+//   blockHeader: null,
+//   blockMain: null,
+//   blockFooterStatistics: null,
+//   blockScript: null
+// };
+
+// let countCommonFilms = FilmSection.COMMON.countFilmsToShow;
+
 
 const fakeFilms = createFakeFilms();
-
-const domNodes = {
-  blockHeader: null,
-  blockMain: null,
-  blockFooterStatistics: null,
-  blockScript: null
+const configApp = {
+  films: fakeFilms,
+  countCommonFilms: FilmSection.COMMON.countFilmsToShow
 };
 
-let countCommonFilms = FilmSection.COMMON.countFilmsToShow;
+const app = new Application(configApp).run();
+
+
 
 const showMoreFilmCards = () => {
   countCommonFilms += FilmSection.COMMON.countFilmsToShow;
@@ -29,8 +40,8 @@ const showMoreFilmCards = () => {
     .remove();
 
   render(
-      domNodes.blockMain,
-      createContentComponent(fakeFilms, countCommonFilms)
+    domNodes.blockMain,
+    createContentComponent(fakeFilms, countCommonFilms)
   );
 
   showMoreHandler();
@@ -38,7 +49,7 @@ const showMoreFilmCards = () => {
 
 const showMoreHandler = () => {
   const showMoreDomNode = document.querySelector(
-      `.${CssClass.SHOW_MORE}`
+    `.${CssClass.SHOW_MORE}`
   );
 
   if (!showMoreDomNode) {
@@ -52,7 +63,7 @@ const init = () => {
   domNodes.blockHeader = document.querySelector(`.header`);
   domNodes.blockMain = document.querySelector(`.main`);
   domNodes.blockFooterStatistics = document.querySelector(
-      `.footer__statistics`
+    `.footer__statistics`
   );
   domNodes.blockScript = document.querySelector(`script`);
 
@@ -60,20 +71,20 @@ const init = () => {
   render(domNodes.blockMain, createNavComponent(fakeFilms));
   render(domNodes.blockMain, createSortTemplate());
   render(
-      domNodes.blockMain,
-      createContentComponent(fakeFilms, countCommonFilms)
+    domNodes.blockMain,
+    createContentComponent(fakeFilms, countCommonFilms)
   );
   render(
-      domNodes.blockFooterStatistics,
-      createFooterStatisticsComponent(fakeFilms)
+    domNodes.blockFooterStatistics,
+    createFooterStatisticsComponent(fakeFilms)
   );
   render(
-      domNodes.blockScript,
-      createPopUpComponent(Array.isArray(fakeFilms) ? fakeFilms[0] : undefined),
-      PosRender.BEFORE_BEGIN
+    domNodes.blockScript,
+    createPopUpComponent(Array.isArray(fakeFilms) ? fakeFilms[0] : undefined),
+    PosRender.BEFORE_BEGIN
   );
 
   showMoreHandler();
 };
 
-init();
+// init();

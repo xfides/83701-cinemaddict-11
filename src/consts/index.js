@@ -1,7 +1,7 @@
-export const PosRender = {
-  BEFORE_END: `beforeend`,
-  BEFORE_BEGIN: `beforebegin`
-};
+// export const PosRender = {
+//   BEFORE_END: `beforeend`,
+//   BEFORE_BEGIN: `beforebegin`
+// };
 
 export const ScreenMsg = {
   NO_FILMS: `There are no movies in our database`,
@@ -12,6 +12,7 @@ export const ScreenMsg = {
 };
 
 export const FilmFilter = {
+  ALL: `All movies`,
   SCHEDULED: `Watchlist`,
   WATCHED: `History`,
   FAVORITE: `Favorites`
@@ -66,7 +67,8 @@ export const CssClass = {
   SECTION_FILMS_ALL: `films`,
   FILM_SECTION: `films-list`,
   FILM_SECTION_EXTRA: `films-list--extra`,
-  SHOW_MORE: `films-list__show-more`
+  SHOW_MORE: `films-list__show-more`,
+  NAV_CATEGORY_ACTIVE: `main-navigation__item--active`
 };
 
 export const Emoji = {

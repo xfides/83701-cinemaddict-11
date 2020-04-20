@@ -23,3 +23,19 @@ export const createContentComponent = (films, countCommonFilms) => {
 
   return createContentTemplate(templatesOfFilmSections);
 };
+
+
+export default class ContentComponent{
+
+  constructor(controlInterface){
+    this._domElement = null;
+    this._films = controlInterface.getFilms();
+    this._countCommonFilms = controlInterface.getCountCommonFilms();
+  }
+
+  getDomElement(){}
+
+
+  removeElement(){}
+
+}
