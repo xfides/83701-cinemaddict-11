@@ -1,9 +1,9 @@
-import {createFilmCardBlockTemplate} from './template.js';
+import {createFilmsBlockTemplate} from './template.js';
 import {createFilmCardComponent} from '../film-card/index.js';
 import {createShowMoreTemplate} from '../show-more/index.js';
 import {CssClass, ScreenMsg} from '../../consts/index.js';
 
-export const createFilmCardBlockComponent = (typeSection, films, countCommonFilms) => {
+export const createFilmsBlockComponent = (typeSection, films, countCommonFilms) => {
   const {
     title: {
       text,
@@ -39,5 +39,5 @@ export const createFilmCardBlockComponent = (typeSection, films, countCommonFilm
     configCardBlock.templateShowMoreBlock = createShowMoreTemplate();
   }
 
-  return createFilmCardBlockTemplate(configCardBlock);
+  return createFilmsBlockTemplate(configCardBlock);
 };

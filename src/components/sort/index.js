@@ -1,6 +1,6 @@
 import {createSortTemplate} from './template.js';
 import {createDomElement} from '../../utils/common.js';
-import {SortKind, CssClass} from '../../consts/index.js';
+import {SortKind, CssClass, FilmSection} from '../../consts/index.js';
 
 export default class SortComponent {
 
@@ -12,11 +12,10 @@ export default class SortComponent {
 
   getTemplate() {
     let activeSortKind = this._controlData.getCurSortKind();
-    activeSortKind = activeSortKind ? activeSortKind : SortKind.DEFAULT;
 
     const sortKinds = Object.keys(SortKind).map((oneSortKind) => {
       return {
-        sortKindStr: SortKind[oneSortKind],
+        sortKindStr: SortKind[oneSortKind].description,
         activeClass: activeSortKind === SortKind[oneSortKind]
           ? CssClass.SORT_KIND_ACTIVE
           : ``
@@ -44,7 +43,7 @@ export default class SortComponent {
     }
 
     const linkSortChecked = Object.values(SortKind).find((oneSortStr) => {
-      return oneSortStr === linkDomElement.textContent.trim();
+      return oneSortStr.description === linkDomElement.textContent.trim();
     });
 
     if (
@@ -54,6 +53,7 @@ export default class SortComponent {
       return;
     }
 
+    this._controlData.setCountCommonFilms(FilmSection.COMMON.countFilmsToShow);
     this._controlData.setCurSortKind(linkSortChecked);
   }
 

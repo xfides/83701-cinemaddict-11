@@ -4,7 +4,7 @@
 // };
 
 export const ScreenMsg = {
-  NO_FILMS: `There are no movies in our database`,
+  NO_FILMS: `There are no movies`,
   LOADING: `Loading...`,
   NO_FILM_FULL_INFO: `Sorry. Not found such movie`,
   STUB_ADD_COMMENT: `Select reaction below and write comment here`,
@@ -19,9 +19,18 @@ export const FilmFilter = {
 };
 
 export const SortKind = {
-  DEFAULT:`Sort by default`,
-  DATE:`Sort by date`,
-  RATE:`Sort by rating`,
+  DEFAULT:{
+    description: `Sort by default`,
+    associatedFilmField: null
+  },
+  DATE: {
+    description:`Sort by date`,
+    associatedFilmField: `prodDate`
+  },
+  RATE: {
+    description:`Sort by rating`,
+    associatedFilmField: `rate`
+  },
 };
 
 export const UserRank = {

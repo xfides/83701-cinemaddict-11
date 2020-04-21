@@ -1,4 +1,4 @@
-export const createFilmCardBlockTemplate = (filmBlock) => {
+export const createFilmsBlockTemplate = (filmBlock) => {
   return (`
     <section class="${filmBlock.classExtraBlock}">
       <h2 class="films-list__title ${filmBlock.classHiddenTitle}">

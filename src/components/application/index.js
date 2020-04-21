@@ -1,10 +1,10 @@
 import {renderHTML, renderDOM, replaceDOM} from '../../utils/common.js';
 import {createFooterStatisticsComponent} from '../footer-statistics/index.js';
 import {createUserRankComponent} from '../user-rank/index.js';
-// import CreateContentComponent from '../content/index.js';
+import {SortKind, FilmFilter} from '../../consts/index.js';
 import NavComponent from '../nav/index.js';
 import SortComponent from '../sort/index.js';
-
+import ContentComponent from '../content/index.js';
 
 export default class Application {
 
@@ -15,8 +15,8 @@ export default class Application {
     this._films = configApp.films;
     this._countCommonFilms = configApp.countCommonFilms;
     this._popUpId = null;
-    this._curCategory = null;
-    this._curSortKind = null;
+    this._curCategory = FilmFilter.ALL;
+    this._curSortKind = SortKind.DEFAULT;
 
     this.controlData = {
       getFilms: () => {
@@ -24,16 +24,20 @@ export default class Application {
       },
       setFilms: (newFilms) => {
         this._films = newFilms;
-        this.renderHeader(this.controlData);
-        this.renderContent(this.controlData)
+        this.renderHeader();
+        this.renderNav();
+        this.renderContent();
       },
 
       getCountCommonFilms: () => {
         return this._countCommonFilms;
       },
       setCountCommonFilms: (newCountCommonFilms) => {
+        const oldCountCommonFilms = this._countCommonFilms;
         this._countCommonFilms = newCountCommonFilms;
-        this.renderContent(this.controlData)
+        if (newCountCommonFilms > oldCountCommonFilms) {
+          this.renderContent(this.controlData)
+        }
       },
 
       getPopUpId: () => {
@@ -48,6 +52,7 @@ export default class Application {
       setCurCategory: (newCategory) => {
         this._curCategory = newCategory;
         this.renderNav();
+        this.renderContent();
       },
 
       getCurSortKind: () => {
@@ -56,6 +61,7 @@ export default class Application {
       setCurSortKind: (newSortKind) => {
         this._curSortKind = newSortKind;
         this.renderSort();
+        this.renderContent();
       }
     }
   }
@@ -79,15 +85,23 @@ export default class Application {
 
     this.instantiateComponents(
       NavComponent,
-      SortComponent
+      SortComponent,
+      ContentComponent
     );
 
     this.renderHeader();
     this.renderNav();
     this.renderSort();
+    this.renderContent();
     this.renderFooter();
   }
 
+  renderHeader() {
+    renderHTML(
+      this._domNodes.blockHeader,
+      createUserRankComponent(this.controlData.getFilms())
+    );
+  }
 
   renderNav() {
     const navInstance = this._instances[NavComponent.name];
@@ -121,18 +135,20 @@ export default class Application {
     renderDOM(domContainer, sortInstance.getDomElement());
   }
 
-
   renderContent() {
-    contentInstance = new CreateContentComponent(this.controlData);
+    const contentInstance = this._instances[ContentComponent.name];
+    const domContainer = this._domNodes.blockMain;
 
-    renderDOM(this._domNodes.blockMain, contentInstance.getDomElement());
-  }
+    if (contentInstance.isRendered()) {
+      const oldDomElement = contentInstance.getDomElement();
+      contentInstance.removeDomElement();
+      const newDomElement = contentInstance.getDomElement();
 
-  renderHeader() {
-    renderHTML(
-      this._domNodes.blockHeader,
-      createUserRankComponent(this.controlData.getFilms())
-    );
+      replaceDOM(oldDomElement, newDomElement);
+      return;
+    }
+
+    renderDOM(domContainer, contentInstance.getDomElement());
   }
 
   renderFooter() {
