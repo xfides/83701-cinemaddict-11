@@ -1,7 +1,7 @@
 // import {PosRender} from '../consts/index.js';
 import {UserRank} from '../consts/index.js';
 
-const cloneObj = (obj) => {
+export const cloneObj = (obj) => {
 
   const target = Array.isArray(obj) ? [] : {};
 
@@ -33,6 +33,15 @@ export const createDomElement = (templateStrHtml) => {
   templateTag.innerHTML = templateStrHtml;
 
   return templateTag.content.firstElementChild;
+};
+
+export const removeDom = (instance) => {
+  instance.getDomElement().remove();
+  instance.removeDomElement();
+
+  if (instance.removeAfter && (typeof instance.removeAfter) === `function`) {
+    instance.removeAfter();
+  }
 };
 
 export const truncateStr = (str, newLength = 140, endSymbol = `...`) => {

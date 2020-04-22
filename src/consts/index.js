@@ -19,16 +19,16 @@ export const FilmFilter = {
 };
 
 export const SortKind = {
-  DEFAULT:{
+  DEFAULT: {
     description: `Sort by default`,
     associatedFilmField: null
   },
   DATE: {
-    description:`Sort by date`,
+    description: `Sort by date`,
     associatedFilmField: `prodDate`
   },
   RATE: {
-    description:`Sort by rating`,
+    description: `Sort by rating`,
     associatedFilmField: `rate`
   },
 };
@@ -84,7 +84,12 @@ export const CssClass = {
   FILM_SECTION_EXTRA: `films-list--extra`,
   SHOW_MORE: `films-list__show-more`,
   NAV_CATEGORY_ACTIVE: `main-navigation__item--active`,
-  SORT_KIND_ACTIVE: `sort__button--active`
+  SORT_KIND_ACTIVE: `sort__button--active`,
+  FILM_CARD_TITLE: `film-card__title`,
+  FILM_CARD_COMMENTS: `film-card__comments`,
+  FILM_CARD_POSTER: `film-card__poster`,
+  FILM_CARD: `film-card`,
+  POPUP_CLOSE: `film-details__close-btn`
 };
 
 export const Emoji = {
@@ -109,4 +114,8 @@ export const Poster = {
     `the-great-flamarion.jpg`,
     `the-man-with-the-golden-arm.jpg`,
   ]
+};
+
+export const keyCodes = {
+  ESC: 27
 };

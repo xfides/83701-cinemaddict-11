@@ -37,13 +37,13 @@ export default class SortComponent {
   }
 
   handleClick(evt) {
-    const linkDomElement = evt.target;
-    if (!(linkDomElement instanceof HTMLAnchorElement)) {
+    const linkDom = evt.target;
+    if (!(linkDom instanceof HTMLAnchorElement)) {
       return;
     }
 
     const linkSortChecked = Object.values(SortKind).find((oneSortStr) => {
-      return oneSortStr.description === linkDomElement.textContent.trim();
+      return oneSortStr.description === linkDom.textContent.trim();
     });
 
     if (

@@ -1,10 +1,16 @@
-import {renderHTML, renderDOM, replaceDOM} from '../../utils/common.js';
+import {
+  renderHTML,
+  renderDOM,
+  replaceDOM,
+  removeDom
+} from '../../utils/common.js';
 import {createFooterStatisticsComponent} from '../footer-statistics/index.js';
 import {createUserRankComponent} from '../user-rank/index.js';
 import {SortKind, FilmFilter} from '../../consts/index.js';
 import NavComponent from '../nav/index.js';
 import SortComponent from '../sort/index.js';
 import ContentComponent from '../content/index.js';
+import PopUpComponent from '../pop-up/index.js';
 
 export default class Application {
 
@@ -14,7 +20,7 @@ export default class Application {
 
     this._films = configApp.films;
     this._countCommonFilms = configApp.countCommonFilms;
-    this._popUpId = null;
+    this._popUpIdentifier = null;
     this._curCategory = FilmFilter.ALL;
     this._curSortKind = SortKind.DEFAULT;
 
@@ -40,10 +46,24 @@ export default class Application {
         }
       },
 
-      getPopUpId: () => {
+      getPopUpIdentifier: () => {
+        return this._popUpIdentifier;
       },
-      setPopUpId: (newPopUpId) => {
-        /* run render\delete popUp */
+      setPopUpIdentifier: (newPopUpIdentifier) => {
+
+        if (newPopUpIdentifier === null) {
+          const popUpInstance = this._instances[PopUpComponent.name];
+          if (!popUpInstance || !popUpInstance.isRendered()) {
+            return;
+          }
+
+          removeDom(popUpInstance);
+          this._popUpIdentifier = newPopUpIdentifier;
+          return;
+        }
+
+        this._popUpIdentifier = newPopUpIdentifier;
+        this.renderPopUp();
       },
 
       getCurCategory: () => {
@@ -86,7 +106,8 @@ export default class Application {
     this.instantiateComponents(
       NavComponent,
       SortComponent,
-      ContentComponent
+      ContentComponent,
+      PopUpComponent
     );
 
     this.renderHeader();
@@ -100,6 +121,13 @@ export default class Application {
     renderHTML(
       this._domNodes.blockHeader,
       createUserRankComponent(this.controlData.getFilms())
+    );
+  }
+
+  renderFooter() {
+    renderHTML(
+      this._domNodes.blockFooterStatistics,
+      createFooterStatisticsComponent(this.controlData.getFilms())
     );
   }
 
@@ -151,11 +179,39 @@ export default class Application {
     renderDOM(domContainer, contentInstance.getDomElement());
   }
 
-  renderFooter() {
-    renderHTML(
-      this._domNodes.blockFooterStatistics,
-      createFooterStatisticsComponent(this.controlData.getFilms())
-    );
+  renderPopUp() {
+    const popUpInstance = this._instances[PopUpComponent.name];
+    const domContainer = this._domNodes.body;
+
+    if (popUpInstance.isRendered()) {
+      const oldDomElement = popUpInstance.getDomElement();
+      popUpInstance.removeDomElement();
+      const newDomElement = popUpInstance.getDomElement();
+
+      replaceDOM(oldDomElement, newDomElement);
+      return;
+    }
+
+    renderDOM(domContainer, popUpInstance.getDomElement());
+  }
+
+  renderClassComponent(nameOfClass, container) {
+    const instance = this._instances[nameOfClass.name];
+
+    if (instance.isRendered()) {
+      const oldDomElement = instance.getDomElement();
+      instance.removeDomElement();
+      const newDomElement = instance.getDomElement();
+
+      replaceDOM(oldDomElement, newDomElement);
+      return;
+    }
+
+    renderDOM(container, instance.getDomElement());
+  }
+
+  renderFunctionComponent(nameOfFunction, container) {
+    renderHTML(container, nameOfFunction(this.controlData));
   }
 
 }

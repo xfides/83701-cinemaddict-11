@@ -44,7 +44,7 @@ export default class ContentComponent {
         ? createFilmsBlockComponent(FilmSection.MOST_COMMENTED, filmsMC)
         : ``
     };
-    
+
     return createContentTemplate(templatesOfFilmSections);
   }
 
@@ -60,17 +60,38 @@ export default class ContentComponent {
   }
 
   handleClick(evt) {
-    if(evt.target.classList.contains(CssClass.SHOW_MORE)){
+    if (evt.target.classList.contains(CssClass.SHOW_MORE)) {
       let curCountCommonFilms = this._controlData.getCountCommonFilms();
       this._controlData.setCountCommonFilms(
-        curCountCommonFilms+curCountCommonFilms
+        curCountCommonFilms + curCountCommonFilms
       )
     }
 
-   //   обложке фильма, заголовку, количеству комментариев
+    if (
+      evt.target.classList.contains(CssClass.FILM_CARD_POSTER)
+      || evt.target.classList.contains(CssClass.FILM_CARD_TITLE)
+      || evt.target.classList.contains(CssClass.FILM_CARD_COMMENTS)
+    ) {
+      const filmCheckedDom = evt.target.closest(`.${CssClass.FILM_CARD}`);
 
+      if (!filmCheckedDom) {
+        return;
+      }
 
+      const titleOfFilmChecked = filmCheckedDom
+        .querySelector(`.${CssClass.FILM_CARD_TITLE}`)
+        .textContent
+        .trim();
 
+      if (titleOfFilmChecked === this._controlData.getPopUpIdentifier()) {
+        return;
+      }
+
+      this._controlData.setPopUpIdentifier(
+        titleOfFilmChecked ? titleOfFilmChecked : null
+      )
+
+    }
   }
 
   handleClickShowMore(evt) {
@@ -109,7 +130,7 @@ export default class ContentComponent {
       return undefined;
     }
 
-    if(sortKind.associatedFilmField) {
+    if (sortKind.associatedFilmField) {
       return sortFilmsByFieldWithClone(films, sortKind.associatedFilmField);
     }
 

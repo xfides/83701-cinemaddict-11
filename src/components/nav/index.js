@@ -47,14 +47,14 @@ export default class NavComponent {
   }
 
   handleClick(evt) {
-    let attrHref = evt.target.getAttribute(`href`);
-    if (!attrHref) {
+    let attrHrefDom = evt.target.getAttribute(`href`);
+    if (!attrHrefDom) {
       return;
     }
 
     const categoriesAll = Object.values(FilmFilter);
     const categoryChecked = categoriesAll.find((oneCategory) => {
-      return attrHref.slice(1) === oneCategory.split(` `)[0].toLowerCase();
+      return attrHrefDom.slice(1) === oneCategory.split(` `)[0].toLowerCase();
     });
 
     if (
