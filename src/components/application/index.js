@@ -81,7 +81,7 @@ export default class Application {
         this.renderClassComponent(SortComponent, this._domNodes.blockMain);
         this.renderClassComponent(ContentComponent, this._domNodes.blockMain);
       }
-    }
+    };
   }
 
   instantiateClassComponents(...componentConstructors) {
@@ -115,25 +115,25 @@ export default class Application {
       blockHeader: document.querySelector(`.header`),
       blockMain: document.querySelector(`.main`),
       blockFooterStatistics: document.querySelector(
-        `.footer__statistics`
+          `.footer__statistics`
       )
     };
 
     this.instantiateClassComponents(
-      NavComponent,
-      SortComponent,
-      ContentComponent,
-      PopUpComponent
+        NavComponent,
+        SortComponent,
+        ContentComponent,
+        PopUpComponent
     );
 
     this.renderFunctionComponent(
-      createUserRankComponent, this._domNodes.blockHeader
+        createUserRankComponent, this._domNodes.blockHeader
     );
     this.renderClassComponent(NavComponent, this._domNodes.blockMain);
     this.renderClassComponent(SortComponent, this._domNodes.blockMain);
     this.renderClassComponent(ContentComponent, this._domNodes.blockMain);
     this.renderFunctionComponent(
-      createFooterStatisticsComponent, this._domNodes.blockFooterStatistics
+        createFooterStatisticsComponent, this._domNodes.blockFooterStatistics
     );
   }
 }

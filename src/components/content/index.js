@@ -35,7 +35,7 @@ export default class ContentComponent extends AbstractComponent {
 
     const templatesOfFilmSections = {
       common: createFilmsBlockComponent(
-        FilmSection.COMMON, configFilms.films, configFilms.countCommonFilms
+          FilmSection.COMMON, configFilms.films, configFilms.countCommonFilms
       ),
       topRated: extraFilms.length
         ? createFilmsBlockComponent(FilmSection.TOP_RATED, filmsTR)
@@ -68,8 +68,8 @@ export default class ContentComponent extends AbstractComponent {
     if (evt.target.classList.contains(CssClass.SHOW_MORE)) {
       let curCountCommonFilms = this._controlData.getCountCommonFilms();
       this._controlData.setCountCommonFilms(
-        curCountCommonFilms + FilmSection.COMMON.countFilmsToShow
-      )
+          curCountCommonFilms + FilmSection.COMMON.countFilmsToShow
+      );
     }
   }
 
@@ -95,9 +95,8 @@ export default class ContentComponent extends AbstractComponent {
       }
 
       this._controlData.setPopUpIdentifier(
-        titleOfFilmChecked ? titleOfFilmChecked : null
-      )
-
+          titleOfFilmChecked ? titleOfFilmChecked : null
+      );
     }
   }
 
@@ -111,7 +110,7 @@ export default class ContentComponent extends AbstractComponent {
         oneFilm[category] === true || oneFilm[category] === undefined
       );
     });
-  };
+  }
 
   sortFilmsByKind(films, sortKind) {
     if (!films) {

@@ -19,7 +19,7 @@ export default class PopUpComponent extends AbstractComponent {
     const filmIdentifier = this._controlData.getPopUpIdentifier();
     const filmsAll = this._controlData.getFilms();
     let film = filmsAll.find((oneFilm) => {
-      return oneFilm.title.trim() === filmIdentifier
+      return oneFilm.title.trim() === filmIdentifier;
     });
     film = film ? cloneObj(film) : undefined;
 
@@ -39,7 +39,7 @@ export default class PopUpComponent extends AbstractComponent {
 
     this._domElement = createDomElement(this.getTemplate());
     this._domElement.addEventListener(`click`, this.handleClick);
-    document.addEventListener('keydown', this.handleClosingPopUp);
+    document.addEventListener(`keydown`, this.handleClosingPopUp);
 
     return this._domElement;
   }
@@ -54,11 +54,11 @@ export default class PopUpComponent extends AbstractComponent {
   }
 
   removeAfter() {
-    document.removeEventListener('keydown', this.handleClosingPopUp);
+    document.removeEventListener(`keydown`, this.handleClosingPopUp);
   }
 
   handleClosingPopUp(evt) {
-    if (evt.type === 'keydown' && evt.keyCode === KeyCode.ESC) {
+    if (evt.type === `keydown` && evt.keyCode === KeyCode.ESC) {
       this._controlData.setPopUpIdentifier(null);
     }
   }

@@ -20,7 +20,7 @@ export default class SortComponent extends AbstractComponent {
         activeClass: activeSortKind === SortKind[oneSortKind]
           ? CssClass.SORT_KIND_ACTIVE
           : ``
-      }
+      };
     });
 
     return createSortTemplate(sortKinds);

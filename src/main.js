@@ -8,4 +8,4 @@ const configApp = {
   countCommonFilms: FilmSection.COMMON.countFilmsToShow
 };
 
-const app = new Application(configApp).run();
+new Application(configApp).run();
