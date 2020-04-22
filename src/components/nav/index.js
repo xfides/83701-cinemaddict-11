@@ -1,12 +1,16 @@
+import AbstractComponent from '../abstract-component/index.js';
 import {createNavItemTemplate} from '../nav-item/index.js';
 import {createNavTemplate} from './template.js';
 import {FilmFilter, CssClass, FilmSection} from '../../consts/index.js';
-import {filterFilmsByField} from '../../utils/common.js';
-import {createDomElement} from '../../utils/common.js';
+import {
+  filterFilmsByField,
+  ensureArray,
+  createDomElement
+} from '../../utils/common.js';
 
-export default class NavComponent {
-
+export default class NavComponent extends AbstractComponent {
   constructor(controlData) {
+    super();
     this._controlData = controlData;
     this._domElement = null;
     this.handleClick = this.handleClick.bind(this);
@@ -14,7 +18,7 @@ export default class NavComponent {
 
   getTemplate() {
     let films = this._controlData.getFilms();
-    films = films ? films : [];
+    films = ensureArray(films);
 
     let activeCategory = this._controlData.getCurCategory();
 
@@ -64,20 +68,7 @@ export default class NavComponent {
       return;
     }
 
-
     this._controlData.setCountCommonFilms(FilmSection.COMMON.countFilmsToShow);
     this._controlData.setCurCategory(categoryChecked);
   }
-
-  isRendered() {
-    return (
-      this._domElement
-      && !(this._domElement.parentNode instanceof DocumentFragment)
-    );
-  }
-
-  removeDomElement() {
-    this._domElement = null;
-  }
-
 }

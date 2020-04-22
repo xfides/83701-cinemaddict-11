@@ -1,15 +1,15 @@
+import AbstractComponent from '../abstract-component/index.js';
 import {createContentTemplate} from './template.js';
 import {createFilmsBlockComponent} from '../films-block/index.js';
 import {FilmSection, CssClass} from '../../consts/index.js';
 import {
   sortFilmsByFieldWithClone,
-  sortFilmsByField, createDomElement
+  createDomElement
 } from '../../utils/common.js';
 
-
-export default class ContentComponent {
-
+export default class ContentComponent extends AbstractComponent {
   constructor(controlData) {
+    super();
     this._domElement = null;
     this._controlData = controlData;
     this.handleClick = this.handleClick.bind(this);
@@ -60,13 +60,20 @@ export default class ContentComponent {
   }
 
   handleClick(evt) {
+    this.handleShowMore(evt);
+    this.handleOpenPopUp(evt);
+  }
+
+  handleShowMore(evt) {
     if (evt.target.classList.contains(CssClass.SHOW_MORE)) {
       let curCountCommonFilms = this._controlData.getCountCommonFilms();
       this._controlData.setCountCommonFilms(
-        curCountCommonFilms + curCountCommonFilms
+        curCountCommonFilms + FilmSection.COMMON.countFilmsToShow
       )
     }
+  }
 
+  handleOpenPopUp(evt) {
     if (
       evt.target.classList.contains(CssClass.FILM_CARD_POSTER)
       || evt.target.classList.contains(CssClass.FILM_CARD_TITLE)
@@ -94,25 +101,6 @@ export default class ContentComponent {
     }
   }
 
-  handleClickShowMore(evt) {
-
-  }
-
-  handleClickShowPopUp(evt) {
-
-  }
-
-  isRendered() {
-    return (
-      this._domElement
-      && !(this._domElement.parentNode instanceof DocumentFragment)
-    );
-  }
-
-  removeDomElement() {
-    this._domElement = null;
-  }
-
   getFilmsByCategory(films, category) {
     if (!films) {
       return undefined;
@@ -136,5 +124,4 @@ export default class ContentComponent {
 
     return films;
   }
-
 }

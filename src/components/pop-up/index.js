@@ -1,25 +1,14 @@
+import AbstractComponent from '../abstract-component/index.js';
 import {createPopUpTemplate} from './template.js';
 import {createFilmFullInfoComponent} from '../film-full-info/index.js';
 import {createFilmFullInfoControlTemplate} from '../film-full-info-control';
 import {createCommentsBlockComponent} from '../comments-block/index.js';
 import {createDomElement, cloneObj} from '../../utils/common.js';
-import {CssClass, keyCodes} from '../../consts/index.js';
+import {CssClass, KeyCode} from '../../consts/index.js';
 
-
-export const createPopUpComponent = (film) => {
-  const templates = {
-    filmFullInfo: createFilmFullInfoComponent(film),
-    commentsBlock: film ? createCommentsBlockComponent(film.comments) : ``,
-    filmFullInfoControl: film ? createFilmFullInfoControlTemplate() : ``
-  };
-
-  return createPopUpTemplate(templates);
-};
-
-
-export default class PopUpComponent {
-
+export default class PopUpComponent extends AbstractComponent {
   constructor(controlData) {
+    super();
     this._domElement = null;
     this._controlData = controlData;
     this.handleClick = this.handleClick.bind(this);
@@ -27,13 +16,11 @@ export default class PopUpComponent {
   }
 
   getTemplate() {
-
     const filmIdentifier = this._controlData.getPopUpIdentifier();
     const filmsAll = this._controlData.getFilms();
     let film = filmsAll.find((oneFilm) => {
       return oneFilm.title.trim() === filmIdentifier
     });
-
     film = film ? cloneObj(film) : undefined;
 
     const templates = {
@@ -52,7 +39,6 @@ export default class PopUpComponent {
 
     this._domElement = createDomElement(this.getTemplate());
     this._domElement.addEventListener(`click`, this.handleClick);
-
     document.addEventListener('keydown', this.handleClosingPopUp);
 
     return this._domElement;
@@ -67,25 +53,13 @@ export default class PopUpComponent {
     }
   }
 
-  isRendered() {
-    return (
-      this._domElement
-      && !(this._domElement.parentNode instanceof DocumentFragment)
-    );
-  }
-
-  removeDomElement() {
-    this._domElement = null;
-  }
-
   removeAfter() {
     document.removeEventListener('keydown', this.handleClosingPopUp);
   }
 
-  handleClosingPopUp (evt) {
-    if (evt.type === 'keydown' && evt.keyCode === keyCodes.ESC) {
+  handleClosingPopUp(evt) {
+    if (evt.type === 'keydown' && evt.keyCode === KeyCode.ESC) {
       this._controlData.setPopUpIdentifier(null);
     }
   }
-
 }

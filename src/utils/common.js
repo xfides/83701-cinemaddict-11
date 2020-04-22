@@ -1,4 +1,3 @@
-// import {PosRender} from '../consts/index.js';
 import {UserRank} from '../consts/index.js';
 
 export const cloneObj = (obj) => {
@@ -150,3 +149,6 @@ export const replaceDOM = (oldDomElement, newDomElement) => {
   }
 };
 
+export const ensureArray = (data) => {
+  return Array.isArray(data) ? data : [];
+};

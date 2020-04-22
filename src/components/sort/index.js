@@ -1,10 +1,11 @@
+import AbstractComponent from '../abstract-component/index.js';
 import {createSortTemplate} from './template.js';
 import {createDomElement} from '../../utils/common.js';
 import {SortKind, CssClass, FilmSection} from '../../consts/index.js';
 
-export default class SortComponent {
-
+export default class SortComponent extends AbstractComponent {
   constructor(controlData) {
+    super();
     this._controlData = controlData;
     this._domElement = null;
     this.handleClick = this.handleClick.bind(this);
@@ -56,16 +57,4 @@ export default class SortComponent {
     this._controlData.setCountCommonFilms(FilmSection.COMMON.countFilmsToShow);
     this._controlData.setCurSortKind(linkSortChecked);
   }
-
-  isRendered() {
-    return (
-      this._domElement
-      && !(this._domElement.parentNode instanceof DocumentFragment)
-    );
-  }
-
-  removeDomElement() {
-    this._domElement = null;
-  }
-
 }

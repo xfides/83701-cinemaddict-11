@@ -1,8 +1,3 @@
-// export const PosRender = {
-//   BEFORE_END: `beforeend`,
-//   BEFORE_BEGIN: `beforebegin`
-// };
-
 export const ScreenMsg = {
   NO_FILMS: `There are no movies`,
   LOADING: `Loading...`,
@@ -116,6 +111,6 @@ export const Poster = {
   ]
 };
 
-export const keyCodes = {
+export const KeyCode = {
   ESC: 27
 };
