@@ -1,6 +1,15 @@
-class EventManager {
+const singletonKey = Symbol();
+const singletonVerification = Symbol();
 
-  constructor() {
+export default class EventManager {
+
+  constructor(verificationValue) {
+    if (verificationValue !== singletonVerification) {
+      throw new Error(
+        `Please use ${this.constructor.name}.getInstance() to get instance`
+      );
+    }
+
     this._events = {};
   }
 
@@ -51,11 +60,14 @@ class EventManager {
     });
   }
 
+  static getInstance() {
+    if (!this[singletonKey]) {
+      this[singletonKey] = new this(singletonVerification);
+    }
+
+    return this[singletonKey];
+  }
+
 }
-
-const eventManager = new EventManager();
-Object.freeze(eventManager);
-
-export {eventManager};
 
 

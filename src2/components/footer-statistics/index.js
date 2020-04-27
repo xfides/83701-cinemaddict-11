@@ -1,10 +1,23 @@
+import AbstractComponent from '../abstract-component';
 import {createFooterStatisticsTemplate} from './template.js';
-import {formatNumberWithSpaces, ensureArray} from '../../utils/common.js';
+import {formatNumberWithSpaces, ensureArray} from '../../utils';
 
-export const createFooterStatisticsComponent = (controlData) => {
-  let films = controlData.getFilms();
-  films = ensureArray(films);
-  const countFilmsFormatted = formatNumberWithSpaces(films.length);
+export default class FooterStatisticsComponent extends AbstractComponent {
 
-  return createFooterStatisticsTemplate(countFilmsFormatted);
-};
+  constructor() {
+    super();
+    this._filmsAll = null;
+  }
+
+  getTemplate() {
+    return createFooterStatisticsTemplate(
+      formatNumberWithSpaces(ensureArray(this._filmsAll).length)
+    );
+  }
+
+  setFilmsAll(newFilmsAll) {
+    this._filmsAll = newFilmsAll;
+    return this;
+  }
+
+}

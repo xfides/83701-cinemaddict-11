@@ -13,98 +13,94 @@ export default class Application {
       layout: new LayoutController(),
       page: new PageController()
     };
-    this._modelInstance = new Model();
-    this.run = this.run.bind(this);
+    this._modelInstance = Model.getInstance();
   }
 
   run() {
-    const dataForController = {
-      modelInstance: this._modelInstance
-    };
-
-    this._controllers.layout.run(dataForController);
-    this._controllers.page.run(dataForController);
+    this._controllers.layout.run();
+    this._controllers.page.run();
 
     if (!this._modelInstance.getFilmsAll()) {
       this._modelInstance.loadData();
     }
   }
+
 }
 
 
 /*
-export default class Application2 {
+ export default class Application2 {
 
-  constructor() {
-    this._appConfig = {
-      status: null,
-      page: null
-    };
-    this._controllers = {
-      layout: new LayoutController(),
-      page: new PageController()
-    };
-    this._modelInstance = new Model();
-    this.run = this.run.bind(this);
-    this.handleLoadDataSuccess = this.handleLoadDataSuccess.bind(this);
-    this.handleLoadDataError = this.handleLoadDataError.bind(this);
-  }
+ constructor() {
+ this._appConfig = {
+ status: null,
+ page: null
+ };
+ this._controllers = {
+ layout: new LayoutController(),
+ page: new PageController()
+ };
+ this._modelInstance = new Model();
+ this.run = this.run.bind(this);
+ this.handleLoadDataSuccess = this.handleLoadDataSuccess.bind(this);
+ this.handleLoadDataError = this.handleLoadDataError.bind(this);
+ }
 
-  handleAppConfig(newAppConfig) {
-    this._appConfig = Object.assign(this._appConfig, newAppConfig);
-    const configForControllers = Object.assign(
-      {modelInstance: this._modelInstance},
-      this._appConfig,
-    );
+ handleAppConfig(newAppConfig) {
+ this._appConfig = Object.assign(this._appConfig, newAppConfig);
+ const configForControllers = Object.assign(
+ {modelInstance: this._modelInstance},
+ this._appConfig,
+ );
 
-    Object.values(this._controllers).forEach((oneController) => {
-      oneController.run(configForControllers);
-    });
-  }
+ Object.values(this._controllers).forEach((oneController) => {
+ oneController.run(configForControllers);
+ });
+ }
 
-  run(newAppConfig = {status: AppStatus.LOADING, page: AppPage.MAIN}) {
-    if (!hasChangesInProps(this._appConfig, newAppConfig)) {
-      return;
-    }
+ run(newAppConfig = {status: AppStatus.LOADING, page: AppPage.MAIN}) {
+ if (!hasChangesInProps(this._appConfig, newAppConfig)) {
+ return;
+ }
 
-    this.handleAppConfig(newAppConfig);
+ this.handleAppConfig(newAppConfig);
 
-    if (!this._modelInstance.getFilms()) {
-      this.loadData();
-    }
-  }
+ if (!this._modelInstance.getFilms()) {
+ this.loadData();
+ }
+ }
 
-  loadData() {
-    this._modelInstance
-      .loadData()
-      .then(
-        this.handleLoadDataSuccess,
-        this.handleLoadDataError
-      );
+ loadData() {
+ this._modelInstance
+ .loadData()
+ .then(
+ this.handleLoadDataSuccess,
+ this.handleLoadDataError
+ );
 
-    return this;
-  }
+ return this;
+ }
 
-  handleLoadDataSuccess(newFilms) {
-    const newAppConfig = {
-      status: ensureArray(newFilms).length
-        ? AppStatus.LOADING_SUCCESS_FULL
-        : AppStatus.LOADING_SUCCESS_EMPTY,
-      page: AppPage.MAIN
-    };
+ handleLoadDataSuccess(newFilms) {
+ const newAppConfig = {
+ status: ensureArray(newFilms).length
+ ? AppStatus.LOADING_SUCCESS_FULL
+ : AppStatus.LOADING_SUCCESS_EMPTY,
+ page: AppPage.MAIN
+ };
 
-    this.run(newAppConfig);
-  }
+ this.run(newAppConfig);
+ }
 
-  handleLoadDataError() {
-    const newAppConfig = {
-      status: AppStatus.LOADING_ERROR,
-      page: AppPage.MAIN
-    };
+ handleLoadDataError() {
+ const newAppConfig = {
+ status: AppStatus.LOADING_ERROR,
+ page: AppPage.MAIN
+ };
 
-    this.run(newAppConfig);
-  }
+ this.run(newAppConfig);
+ }
 
 
-}
-*/
+ }
+ */

@@ -137,5 +137,6 @@ export const LoadingStatus = {
 
 export const Event = {
   CHANGE_PAGE: `change page`,
-  CHANGE_LOADING_STATUS: `change loading status`
+  CHANGE_LOADING_STATUS: `change loading status`,
+  CHANGE_CUR_CATEGORY: `change current category`
 };

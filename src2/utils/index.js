@@ -12,9 +12,6 @@ export const cloneObj = (obj) => {
 };
 
 export const renderHTML = (container, strHtml) => {
-  if(container.lastElementChild){
-    container.lastElementChild.remove();
-  }
   container.insertAdjacentHTML(`beforeend`, strHtml);
 };
 

@@ -1,12 +1,25 @@
+import AbstractComponent from '../abstract-component';
 import {createUserRankTemplate} from './template.js';
 import {getUserRank} from '../../utils';
 
-export const createUserRankComponent = (filmsWatched) => {
-  if (filmsWatched.length === 0) {
-    return `no films`;
+export default class UserRankComponent extends AbstractComponent {
+
+  constructor() {
+    super();
+    this._filmsWatched = null;
   }
 
-  const userRankStatus = getUserRank(filmsWatched.length);
+  getTemplate() {
+    if (this._filmsWatched.length <= 0) {
+      return ``;
+    }
 
-  return createUserRankTemplate(userRankStatus);
-};
+    return createUserRankTemplate(getUserRank(this._filmsWatched.length));
+  }
+
+  setFilmsWatched(newFilmsWatched) {
+    this._filmsWatched = newFilmsWatched;
+    return this;
+  }
+
+}

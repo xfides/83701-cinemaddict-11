@@ -1,37 +1,37 @@
-import AbstractComponent from '../abstract-component/index.js';
-import {createNavItemTemplate} from '../nav-item/index.js';
+import AbstractComponent from '../abstract-component';
+import {createNavItemTemplate} from '../nav-item';
 import {createNavTemplate} from './template.js';
-import {FilmFilter, CssClass, FilmSection} from '../../consts/index.js';
-import {
-  filterFilmsByField,
-  ensureArray,
-  createDomElement
-} from '../../utils/common.js';
+import {FilmFilter, CssClass} from '../../consts';
+import {ensureArray} from '../../utils';
 
 export default class NavComponent extends AbstractComponent {
-  constructor(controlData) {
+
+  constructor() {
     super();
-    this._controlData = controlData;
-    this._domElement = null;
+    this._films = {};
+    this._curCategory = null;
+    this._changeCategoryCB = null;
     this.handleClick = this.handleClick.bind(this);
   }
 
+  setNavInfo(navInfo) {
+    this._films = navInfo.films;
+    this._curCategory = navInfo.curCategory;
+    this._changeCategoryCB = navInfo.changeCategoryCB;
+    return this;
+  }
+
   getTemplate() {
-    let films = this._controlData.getFilms();
-    films = ensureArray(films);
-
-    let activeCategory = this._controlData.getCurCategory();
-
-    const categoriesTemplate = Object.values(FilmFilter)
-      .map((oneCategory) => {
+    const categoriesTemplate = Object.keys(FilmFilter)
+      .map((keyOfCategory) => {
         return createNavItemTemplate({
-          name: oneCategory,
-          id: oneCategory.toLowerCase().split(` `)[0],
-          count: filterFilmsByField(films, oneCategory).length,
-          activeClass: activeCategory === oneCategory
+          name: FilmFilter[keyOfCategory],
+          id: FilmFilter[keyOfCategory].toLowerCase().split(` `)[0],
+          count: ensureArray(this._films[FilmFilter[keyOfCategory]]).length,
+          activeClass: this._curCategory === FilmFilter[keyOfCategory]
             ? CssClass.NAV_CATEGORY_ACTIVE
             : ``,
-          showCountFilms: oneCategory !== FilmFilter.ALL
+          showCountFilms: FilmFilter[keyOfCategory] !== FilmFilter.ALL
         });
       })
       .join(``);
@@ -40,11 +40,7 @@ export default class NavComponent extends AbstractComponent {
   }
 
   getDomElement() {
-    if (this._domElement) {
-      return this._domElement;
-    }
-
-    this._domElement = createDomElement(this.getTemplate());
+    super.getDomElement();
     this._domElement.addEventListener(`click`, this.handleClick);
 
     return this._domElement;
@@ -61,14 +57,9 @@ export default class NavComponent extends AbstractComponent {
       return attrHrefDom.slice(1) === oneCategory.split(` `)[0].toLowerCase();
     });
 
-    if (
-      !categoryChecked
-      || categoryChecked === this._controlData.getCurCategory()
-    ) {
-      return;
+    if (categoryChecked) {
+      this._changeCategoryCB(categoryChecked);
     }
-
-    this._controlData.setCountCommonFilms(FilmSection.COMMON.countFilmsToShow);
-    this._controlData.setCurCategory(categoryChecked);
   }
+
 }
