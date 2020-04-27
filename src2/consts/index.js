@@ -84,7 +84,10 @@ export const CssClass = {
   FILM_CARD_COMMENTS: `film-card__comments`,
   FILM_CARD_POSTER: `film-card__poster`,
   FILM_CARD: `film-card`,
-  POPUP_CLOSE: `film-details__close-btn`
+  POPUP_CLOSE: `film-details__close-btn`,
+  HEADER: `header`,
+  MAIN: `main`,
+  FOOTER_STATISTICS: `footer__statistics`
 };
 
 export const Emoji = {
@@ -125,9 +128,14 @@ export const AppPage = {
   STATISTICS: `statistics`
 };
 
-export const AppStatus = {
+export const LoadingStatus = {
   LOADING: `loading`,
   LOADING_ERROR: `loading_error`,
   LOADING_SUCCESS_FULL: `loading_success_full`,
   LOADING_SUCCESS_EMPTY: `loading_success_empty`
+};
+
+export const Event = {
+  CHANGE_PAGE: `change page`,
+  CHANGE_LOADING_STATUS: `change loading status`
 };

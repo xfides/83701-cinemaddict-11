@@ -1,15 +1,11 @@
 import {createUserRankTemplate} from './template.js';
-import {FilmFilter} from '../../consts/index.js';
-import {
-  getUserRank,
-  filterFilmsByField,
-  ensureArray
-} from '../../utils/common.js';
+import {getUserRank} from '../../utils';
 
-export const createUserRankComponent = (controlData) => {
-  let films = controlData.getFilms();
-  films = ensureArray(films);
-  const filmsWatched = filterFilmsByField(films, FilmFilter.WATCHED);
+export const createUserRankComponent = (filmsWatched) => {
+  if (filmsWatched.length === 0) {
+    return `no films`;
+  }
+
   const userRankStatus = getUserRank(filmsWatched.length);
 
   return createUserRankTemplate(userRankStatus);

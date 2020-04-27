@@ -12,30 +12,55 @@
  у пользователя нет ранга вообще
 
 
-*/
+ */
 
 
 
-
-
-// import {createUserRankComponent} from '../components/user-rank';
 // import NavComponent from '../components/nav';
 // import {createFooterStatisticsComponent} from '../components/footer-statistics';
 
+import {eventManager} from '../event-manager';
+import {createUserRankComponent} from '../components/user-rank';
+import {LoadingStatus, CssClass, Event} from '../consts';
+import {renderHTML} from '../utils';
 
 export default class LayoutController {
 
   constructor() {
-    this._state = {
-      appStatus: null,
-      modelInstance: null
+    this._modelInstance = null;
+    this.status = null;
+    this._domNodes = null;
+    this.handleLoadingStatus = this.handleLoadingStatus.bind(this);
+  }
+
+  run(dataForController) {
+    this._domNodes = {
+      blockHeader: document.querySelector(`.${CssClass.HEADER}`),
+      blockMain: document.querySelector(`.${CssClass.MAIN}`),
+      blockFooterStatistics: document.querySelector(
+        `.${CssClass.FOOTER_STATISTICS}`
+      )
     };
-
+    this._modelInstance = dataForController.modelInstance;
+    eventManager.on(Event.CHANGE_LOADING_STATUS, this.handleLoadingStatus);
+    eventManager.trigger(
+      Event.CHANGE_LOADING_STATUS,
+      {newStatus: LoadingStatus.LOADING}
+    );
   }
 
-  run(newConfig) {
-    console.log(`LayoutController->run()`);
-    console.dir(newConfig);
+  handleLoadingStatus(eventObj) {
+    if (this.status === eventObj.triggerData.newStatus) {
+      return;
+    }
+
+    const filmsWatched = this._modelInstance.getFilmsWatched();
+
+    renderHTML(
+      this._domNodes.blockHeader,
+      createUserRankComponent(filmsWatched)
+    );
   }
+
 
 }

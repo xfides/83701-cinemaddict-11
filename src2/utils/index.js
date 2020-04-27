@@ -12,27 +12,10 @@ export const cloneObj = (obj) => {
 };
 
 export const renderHTML = (container, strHtml) => {
-  container.insertAdjacentHTML(`beforeend`, strHtml);
-};
-
-export const renderDOM = (container, domElement) => {
-  container.append(domElement);
-};
-
-export const createDomElement = (templateStrHtml) => {
-  const templateTag = document.createElement(`template`);
-  templateTag.innerHTML = templateStrHtml;
-
-  return templateTag.content.firstElementChild;
-};
-
-export const removeDom = (instance) => {
-  instance.getDomElement().remove();
-  instance.removeDomElement();
-
-  if (instance.removeAfter && (typeof instance.removeAfter) === `function`) {
-    instance.removeAfter();
+  if(container.lastElementChild){
+    container.lastElementChild.remove();
   }
+  container.insertAdjacentHTML(`beforeend`, strHtml);
 };
 
 export const truncateStr = (str,
@@ -67,11 +50,7 @@ export const sortFilmsByFieldWithClone = (films, field) => {
   return cloneFilms;
 };
 
-export const filterFilmsByField = (films, field) => {
-  return films.filter((oneFilm) => {
-    return !!oneFilm[field];
-  });
-};
+
 
 export const getUserRank = (countFilmsWatched) => {
   if (
@@ -132,24 +111,50 @@ export const formatMsToFilmFullDate = (milliseconds) => {
   return formatter.format(new Date(milliseconds));
 };
 
-export const replaceDOM = (oldDomElement, newDomElement) => {
-  const parentDomElement = oldDomElement.parentElement;
-
-  const isExistElements =
-    !!(parentDomElement && oldDomElement && newDomElement);
-
-  if (isExistElements && parentDomElement.contains(oldDomElement)) {
-    parentDomElement.replaceChild(newDomElement, oldDomElement);
-  }
-};
-
 export const ensureArray = (data) => {
   return Array.isArray(data) ? data : [];
 };
 
-export const hasChangesInProps = (checkingObj, newObj) => {
-  return Object.keys(newObj).some((keyOfNewObj) => {
-    return checkingObj[keyOfNewObj] !== newObj[keyOfNewObj];
-  });
-};
 
+// export const hasChangesInProps = (checkingObj, newObj) => {
+//   return Object.keys(newObj).some((keyOfNewObj) => {
+//     return checkingObj[keyOfNewObj] !== newObj[keyOfNewObj];
+//   });
+// };
+
+// export const createDomElement = (templateStrHtml) => {
+//   const templateTag = document.createElement(`template`);
+//   templateTag.innerHTML = templateStrHtml;
+//
+//   return templateTag.content.firstElementChild;
+// };
+
+// export const renderDOM = (container, domElement) => {
+//   container.append(domElement);
+// };
+//
+// export const replaceDOM = (oldDomElement, newDomElement) => {
+//   const parentDomElement = oldDomElement.parentElement;
+//
+//   const isExistElements =
+//     !!(parentDomElement && oldDomElement && newDomElement);
+//
+//   if (isExistElements && parentDomElement.contains(oldDomElement)) {
+//     parentDomElement.replaceChild(newDomElement, oldDomElement);
+//   }
+// };
+
+// export const filterFilmsByField = (films, field) => {
+//   return films.filter((oneFilm) => {
+//     return !!oneFilm[field];
+//   });
+// };
+
+// export const removeDom = (instance) => {
+//   instance.getDomElement().remove();
+//   instance.removeDomElement();
+//
+//   if (instance.removeAfter && (typeof instance.removeAfter) === `function`) {
+//     instance.removeAfter();
+//   }
+// };

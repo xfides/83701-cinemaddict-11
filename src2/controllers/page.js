@@ -10,11 +10,12 @@
 export default class PageController {
 
   constructor() {
+    this._page = null;
   }
 
   run(newConfig) {
-    console.log(`PageController->run()`);
-    console.dir(newConfig);
+
+
   }
 
 }
