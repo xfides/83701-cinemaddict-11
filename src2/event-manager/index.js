@@ -11,6 +11,9 @@ export default class EventManager {
     }
 
     this._events = {};
+    this._queueOfHandlers = [];
+    this._isScheduleTriggerOnNextTick = false;
+    this.processQueueOfHandlers = this.processQueueOfHandlers.bind(this);
   }
 
   on(name, handler, data) {
@@ -38,25 +41,44 @@ export default class EventManager {
     }
   }
 
-  trigger(name, triggerData) {
-    const handlersByName = this._events[name];
+  processQueueOfHandlers() {
+    this._queueOfHandlers.forEach((oneHandlerInfo) => {
+      oneHandlerInfo.handler(oneHandlerInfo.data);
+    });
+    this._isScheduleTriggerOnNextTick = false;
+    this._queueOfHandlers = [];
+  }
 
-    if (!handlersByName) {
+  trigger(name, triggerData) {
+    if (!this._events[name]) {
       return;
     }
 
-    handlersByName.forEach((oneHandlerInfo) => {
-      const fullEventData = {name};
+    this.queueHandlers(name, triggerData);
 
-      if (oneHandlerInfo.data) {
-        fullEventData.data = oneHandlerInfo.data;
+    if (!this._isScheduleTriggerOnNextTick) {
+      this._isScheduleTriggerOnNextTick = true;
+      setTimeout(this.processQueueOfHandlers, 0);
+    }
+  }
+
+  queueHandlers(name, triggerData) {
+    this._events[name].forEach((oneHandlerInfo) => {
+      if (!this.isHandlerInQueue(oneHandlerInfo)) {
+        oneHandlerInfo.data = {
+          name,
+          triggerData,
+          data: oneHandlerInfo.data
+        };
+
+        this._queueOfHandlers.push(oneHandlerInfo);
       }
+    });
+  }
 
-      if (triggerData) {
-        fullEventData.triggerData = triggerData;
-      }
-
-      oneHandlerInfo.handler(fullEventData);
+  isHandlerInQueue(oneHandlerInfo) {
+    return this._queueOfHandlers.some((handlerInfoInQueue) => {
+      return handlerInfoInQueue.handler === oneHandlerInfo.handler
     });
   }
 

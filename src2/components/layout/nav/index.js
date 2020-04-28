@@ -1,8 +1,8 @@
-import AbstractComponent from '../abstract-component';
+import AbstractComponent from '../../abstract-component';
 import {createNavItemTemplate} from '../nav-item';
 import {createNavTemplate} from './template.js';
-import {FilmFilter, CssClass} from '../../consts';
-import {ensureArray} from '../../utils';
+import {FilmFilter, CssClass} from '../../../consts';
+import {ensureArray} from '../../../utils';
 
 export default class NavComponent extends AbstractComponent {
 
@@ -22,16 +22,16 @@ export default class NavComponent extends AbstractComponent {
   }
 
   getTemplate() {
-    const categoriesTemplate = Object.keys(FilmFilter)
-      .map((keyOfCategory) => {
+    const categoriesTemplate = Object.values(FilmFilter)
+      .map((oneCategory) => {
         return createNavItemTemplate({
-          name: FilmFilter[keyOfCategory],
-          id: FilmFilter[keyOfCategory].toLowerCase().split(` `)[0],
-          count: ensureArray(this._films[FilmFilter[keyOfCategory]]).length,
-          activeClass: this._curCategory === FilmFilter[keyOfCategory]
+          name: oneCategory,
+          id: oneCategory.toLowerCase().split(` `)[0],
+          count: ensureArray(this._films[oneCategory]).length,
+          activeClass: this._curCategory === oneCategory
             ? CssClass.NAV_CATEGORY_ACTIVE
             : ``,
-          showCountFilms: FilmFilter[keyOfCategory] !== FilmFilter.ALL
+          showCountFilms: oneCategory !== FilmFilter.ALL
         });
       })
       .join(``);

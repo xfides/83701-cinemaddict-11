@@ -26,6 +26,10 @@ export const SortKind = {
     description: `Sort by rating`,
     associatedFilmField: `rate`
   },
+  COUNT_COMMENTS: {
+    description: `Sort by count of comments`,
+    associatedFilmField: `comments`
+  }
 };
 
 export const UserRank = {
@@ -136,7 +140,18 @@ export const LoadingStatus = {
 };
 
 export const Event = {
-  CHANGE_PAGE: `change page`,
-  CHANGE_LOADING_STATUS: `change loading status`,
-  CHANGE_CUR_CATEGORY: `change current category`
+  CHANGE_PAGE: `change_page`,
+  CHANGE_LOADING_STATUS: `change_loading_status`,
+  CHANGE_CUR_CATEGORY: `change_cur_category`,
+  CHANGE_CUR_SORT_KIND: `change_cur_sort_kind`,
+  CHANGE_COUNT_COMMON_FILMS: `change_count_common_films`
+};
+
+export const DomNode = {
+  body: document.body,
+  blockHeader: document.querySelector(`.${CssClass.HEADER}`),
+  blockMain: document.querySelector(`.${CssClass.MAIN}`),
+  blockFooterStatistics: document.querySelector(
+    `.${CssClass.FOOTER_STATISTICS}`
+  )
 };

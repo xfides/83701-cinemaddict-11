@@ -1,6 +1,6 @@
-import AbstractComponent from '../abstract-component';
+import AbstractComponent from '../../abstract-component';
 import {createUserRankTemplate} from './template.js';
-import {getUserRank} from '../../utils';
+import {getUserRank} from '../../../utils';
 
 export default class UserRankComponent extends AbstractComponent {
 

@@ -6,7 +6,7 @@ import {
   Event,
   LoadingStatus
 } from '../consts';
-import {filterFilmsByField, ensureArray} from '../utils';
+import {ensureArray, sortFilmsByFieldWithClone} from '../utils';
 import EventManager from '../event-manager';
 
 const singletonKey = Symbol();
@@ -54,8 +54,18 @@ export default class Model {
     });
   }
 
-  getLoadingStatus() {
-    return this._loadingStatus;
+  getFilmsTopRated() {
+    return sortFilmsByFieldWithClone(
+      ensureArray(this._films),
+      SortKind.RATE.associatedFilmField
+    ).slice(0, FilmSection.TOP_RATED.countFilmsToShow);
+  }
+
+  getFilmsMostCommented() {
+    return sortFilmsByFieldWithClone(
+      ensureArray(this._films),
+      SortKind.COUNT_COMMENTS.associatedFilmField
+    ).slice(0, FilmSection.MOST_COMMENTED.countFilmsToShow);
   }
 
   setLoadingStatus(newLoadingStatus) {
@@ -88,13 +98,47 @@ export default class Model {
     );
   }
 
+  getCurSortKind() {
+    return this._curSortKind;
+  }
+
+  setCurSortKind(newSortKind) {
+    if (this._curSortKind === newSortKind) {
+      return;
+    }
+
+    this._curSortKind = newSortKind;
+
+    this._eventManager.trigger(
+      Event.CHANGE_CUR_SORT_KIND,
+      {newSortKind}
+    );
+  }
+
+  getCountCommonFilms() {
+    return this._countCommonFilms
+  }
+
+  setCountCommonFilms(newCountCommonFilms) {
+    if (this._countCommonFilms === newCountCommonFilms) {
+      return;
+    }
+
+    this._countCommonFilms = newCountCommonFilms;
+
+    this._eventManager.trigger(
+      Event.CHANGE_CUR_SORT_KIND,
+      {newCountCommonFilms}
+    );
+  }
+
   loadData() {
     const promiseData = Promise.resolve(createFakeFilms());
     promiseData.then(this.handleLoadSuccess, this.handleLoadError);
   }
 
   handleLoadSuccess(films) {
-    this._films = films ? films : [];
+    this._films = ensureArray(films);
     this.setLoadingStatus(LoadingStatus.LOADING_SUCCESS_FULL);
   }
 
@@ -109,7 +153,6 @@ export default class Model {
 
     return this[singletonKey];
   }
-
 
 }
 

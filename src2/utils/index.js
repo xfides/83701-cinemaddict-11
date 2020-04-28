@@ -22,11 +22,9 @@ export const truncateStr = (str,
 };
 
 export const sortFilmsByField = (films, field) => {
-  if (films.length === 0) {
-    return [];
-  }
+  const isArrayField = Array.isArray(films[0] ? films[0][field] : false);
 
-  if (Array.isArray(films[0][field])) {
+  if (isArrayField) {
     films.sort((oneFilm, anotherFilm) => {
       return anotherFilm[field][`length`] - oneFilm[field][`length`];
     });
@@ -46,8 +44,6 @@ export const sortFilmsByFieldWithClone = (films, field) => {
 
   return cloneFilms;
 };
-
-
 
 export const getUserRank = (countFilmsWatched) => {
   if (

@@ -1,6 +1,6 @@
-import AbstractComponent from '../abstract-component';
+import AbstractComponent from '../../abstract-component';
 import {createFooterStatisticsTemplate} from './template.js';
-import {formatNumberWithSpaces, ensureArray} from '../../utils';
+import {formatNumberWithSpaces, ensureArray} from '../../../utils';
 
 export default class FooterStatisticsComponent extends AbstractComponent {
 
