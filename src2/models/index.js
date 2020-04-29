@@ -77,7 +77,7 @@ export default class Model {
 
     this._eventManager.trigger(
       Event.CHANGE_LOADING_STATUS,
-      {newLoadingStatus}
+      {[Event.CHANGE_LOADING_STATUS]: newLoadingStatus}
     );
   }
 
@@ -94,7 +94,7 @@ export default class Model {
 
     this._eventManager.trigger(
       Event.CHANGE_CUR_CATEGORY,
-      {newCategory}
+      {[Event.CHANGE_CUR_CATEGORY]: newCategory}
     );
   }
 
@@ -111,7 +111,7 @@ export default class Model {
 
     this._eventManager.trigger(
       Event.CHANGE_CUR_SORT_KIND,
-      {newSortKind}
+      {[Event.CHANGE_CUR_SORT_KIND]: newSortKind}
     );
   }
 
@@ -127,8 +127,8 @@ export default class Model {
     this._countCommonFilms = newCountCommonFilms;
 
     this._eventManager.trigger(
-      Event.CHANGE_CUR_SORT_KIND,
-      {newCountCommonFilms}
+      Event.CHANGE_COUNT_COMMON_FILMS,
+      {[Event.CHANGE_COUNT_COMMON_FILMS]: newCountCommonFilms}
     );
   }
 
@@ -143,6 +143,7 @@ export default class Model {
   }
 
   handleLoadError() {
+    this._films = null;
     this.setLoadingStatus(LoadingStatus.LOADING_ERROR);
   }
 

@@ -11,10 +11,6 @@ export const cloneObj = (obj) => {
   return target;
 };
 
-export const renderHTML = (container, strHtml) => {
-  container.insertAdjacentHTML(`beforeend`, strHtml);
-};
-
 export const truncateStr = (str,
                             newLength = ShortDescParam.COUNT_SYMBOLS,
                             endSymbol = ShortDescParam.END_SYMBOL) => {
@@ -109,45 +105,6 @@ export const ensureArray = (data) => {
 };
 
 
-// export const hasChangesInProps = (checkingObj, newObj) => {
-//   return Object.keys(newObj).some((keyOfNewObj) => {
-//     return checkingObj[keyOfNewObj] !== newObj[keyOfNewObj];
-//   });
-// };
-
-// export const createDomElement = (templateStrHtml) => {
-//   const templateTag = document.createElement(`template`);
-//   templateTag.innerHTML = templateStrHtml;
-//
-//   return templateTag.content.firstElementChild;
-// };
-
-// export const renderDOM = (container, domElement) => {
-//   container.append(domElement);
-// };
-//
-// export const replaceDOM = (oldDomElement, newDomElement) => {
-//   const parentDomElement = oldDomElement.parentElement;
-//
-//   const isExistElements =
-//     !!(parentDomElement && oldDomElement && newDomElement);
-//
-//   if (isExistElements && parentDomElement.contains(oldDomElement)) {
-//     parentDomElement.replaceChild(newDomElement, oldDomElement);
-//   }
-// };
-
-// export const filterFilmsByField = (films, field) => {
-//   return films.filter((oneFilm) => {
-//     return !!oneFilm[field];
-//   });
-// };
-
-// export const removeDom = (instance) => {
-//   instance.getDomElement().remove();
-//   instance.removeDomElement();
-//
-//   if (instance.removeAfter && (typeof instance.removeAfter) === `function`) {
-//     instance.removeAfter();
-//   }
+// export const renderHTML = (container, strHtml) => {
+//   container.insertAdjacentHTML(`beforeend`, strHtml);
 // };

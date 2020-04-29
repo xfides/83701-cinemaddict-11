@@ -2,7 +2,7 @@ import EventManager from '../event-manager';
 import Model from '../models';
 import ContentComponent from '../components/pages/main/content';
 import SortComponent from '../components/pages/main/sort';
-import {Event, FilmFilter, DomNode, FilmSection} from '../consts';
+import {Event, FilmFilter, DomNode, FilmSection, SortKind} from '../consts';
 import {sortFilmsByFieldWithClone} from '../utils';
 
 export default class PageController {
@@ -18,12 +18,15 @@ export default class PageController {
     this.updateFilms = this.updateFilms.bind(this);
     this.handleNewSortKind = this.handleNewSortKind.bind(this);
     this.increaseCountCommonFilms = this.increaseCountCommonFilms.bind(this);
+    this.resetPageMain = this.resetPageMain.bind(this);
+    this.trimPageMain = this.trimPageMain.bind(this);
   }
 
   run() {
-    this._eventManager.on(Event.CHANGE_CUR_SORT_KIND, this.updatePageMain);
     this._eventManager.on(Event.CHANGE_LOADING_STATUS, this.updatePageMain);
     this._eventManager.on(Event.CHANGE_COUNT_COMMON_FILMS, this.updateFilms);
+    this._eventManager.on(Event.CHANGE_CUR_SORT_KIND, this.trimPageMain);
+    this._eventManager.on(Event.CHANGE_CUR_CATEGORY, this.resetPageMain);
   }
 
   updatePageMain() {
@@ -103,6 +106,20 @@ export default class PageController {
     this._components[ContentComponent.name]
       .setFilmsInfo(filmsInfo)
       .render(DomNode.blockMain);
+  }
+
+  resetPageMain() {
+    this._modelInstance.setCurSortKind(SortKind.DEFAULT);
+    this._modelInstance.setCountCommonFilms(
+      FilmSection.COMMON.countFilmsToShow
+    );
+  }
+
+  trimPageMain() {
+    this._modelInstance.setCountCommonFilms(
+      FilmSection.COMMON.countFilmsToShow
+    );
+    this.updatePageMain();
   }
 
 }
