@@ -132,6 +132,23 @@ export default class Model {
     );
   }
 
+  getCurPopUpIdentifier() {
+    return this._popUpIdentifier;
+  }
+
+  setCurPopUpIdentifier(newPopUpIdentifier) {
+    if (this._popUpIdentifier === newPopUpIdentifier) {
+      return;
+    }
+
+    this._popUpIdentifier = newPopUpIdentifier;
+
+    this._eventManager.trigger(
+      Event.CHANGE_POP_UP_IDENTIFIER,
+      {[Event.CHANGE_POP_UP_IDENTIFIER]: newPopUpIdentifier}
+    );
+  }
+
   loadData() {
     const promiseData = Promise.resolve(createFakeFilms());
     promiseData.then(this.handleLoadSuccess, this.handleLoadError);

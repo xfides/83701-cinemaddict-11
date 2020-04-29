@@ -23,19 +23,28 @@ export const createFilmCardTemplate = (film) => {
         ${film.countComments} comments
       </a>
       <form class="film-card__controls">
-        <button class="film-card__controls-item 
-                    button 
-                    film-card__controls-item--add-to-watchlist">
+        <button 
+          class="film-card__controls-item 
+               button 
+               film-card__controls-item--add-to-watchlist
+               ${film.isScheduledActive}
+               ">
           Add to watchlist
         </button>
-        <button class="film-card__controls-item 
-                    button 
-                    film-card__controls-item--mark-as-watched">
+        <button 
+          class="film-card__controls-item 
+               button 
+               film-card__controls-item--mark-as-watched
+               ${film.isWatchedActive}
+               ">
           Mark as watched
         </button>
-        <button class="film-card__controls-item 
-                    button 
-                    film-card__controls-item--favorite">
+        <button 
+          class="film-card__controls-item 
+               button 
+               film-card__controls-item--favorite
+               ${film.isFavoriteActive}
+               ">
           Mark as favorite
         </button>
        </form>

@@ -91,7 +91,8 @@ export const CssClass = {
   POPUP_CLOSE: `film-details__close-btn`,
   HEADER: `header`,
   MAIN: `main`,
-  FOOTER_STATISTICS: `footer__statistics`
+  FOOTER_STATISTICS: `footer__statistics`,
+  FILM_BUTTON_ACTIVE: ` film-card__controls-item--active`
 };
 
 export const Emoji = {
@@ -144,7 +145,8 @@ export const Event = {
   CHANGE_LOADING_STATUS: `change_loading_status`,
   CHANGE_CUR_CATEGORY: `change_cur_category`,
   CHANGE_CUR_SORT_KIND: `change_cur_sort_kind`,
-  CHANGE_COUNT_COMMON_FILMS: `change_count_common_films`
+  CHANGE_COUNT_COMMON_FILMS: `change_count_common_films`,
+  CHANGE_POP_UP_IDENTIFIER: `change_pop_up_identifier`,
 };
 
 export const DomNode = {

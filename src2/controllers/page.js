@@ -19,13 +19,14 @@ export default class PageController {
     this.handleNewSortKind = this.handleNewSortKind.bind(this);
     this.increaseCountCommonFilms = this.increaseCountCommonFilms.bind(this);
     this.resetPageMain = this.resetPageMain.bind(this);
-    this.trimPageMain = this.trimPageMain.bind(this);
+    this.changeSortPageMain = this.changeSortPageMain.bind(this);
+    this.analyzePopUpIdentifier = this.analyzePopUpIdentifier.bind(this);
   }
 
   run() {
     this._eventManager.on(Event.CHANGE_LOADING_STATUS, this.updatePageMain);
     this._eventManager.on(Event.CHANGE_COUNT_COMMON_FILMS, this.updateFilms);
-    this._eventManager.on(Event.CHANGE_CUR_SORT_KIND, this.trimPageMain);
+    this._eventManager.on(Event.CHANGE_CUR_SORT_KIND, this.changeSortPageMain);
     this._eventManager.on(Event.CHANGE_CUR_CATEGORY, this.resetPageMain);
   }
 
@@ -77,6 +78,7 @@ export default class PageController {
       filmsMC: this._modelInstance.getFilmsMostCommented(),
       countCommonFilms: this._modelInstance.getCountCommonFilms(),
       increaseCountCommonFilms: this.increaseCountCommonFilms,
+      analyzePopUpIdentifier: this.analyzePopUpIdentifier,
       commonFilms
     };
   }
@@ -109,17 +111,29 @@ export default class PageController {
   }
 
   resetPageMain() {
-    this._modelInstance.setCurSortKind(SortKind.DEFAULT);
     this._modelInstance.setCountCommonFilms(
       FilmSection.COMMON.countFilmsToShow
     );
+
+    if (this._modelInstance.getCurSortKind() === SortKind.DEFAULT) {
+      this.updateFilms();
+      return;
+    }
+
+    this._modelInstance.setCurSortKind(SortKind.DEFAULT);
   }
 
-  trimPageMain() {
+  changeSortPageMain() {
     this._modelInstance.setCountCommonFilms(
       FilmSection.COMMON.countFilmsToShow
     );
     this.updatePageMain();
+  }
+
+  analyzePopUpIdentifier(newPopUpIdentifier){
+    if(this._modelInstance.getCurPopUpIdentifier() !== newPopUpIdentifier){
+      this._modelInstance.setCurPopUpIdentifier(newPopUpIdentifier);
+    }
   }
 
 }

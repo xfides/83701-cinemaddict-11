@@ -12,6 +12,7 @@ export default class ContentComponent extends AbstractComponent {
     this._filmsTR = null;
     this._filmsMC = null;
     this._increaseCountCommonFilms = null;
+    this._analyzePopUpIdentifier = null;
     this.handleClick = this.handleClick.bind(this);
   }
 
@@ -50,13 +51,7 @@ export default class ContentComponent extends AbstractComponent {
         .textContent
         .trim();
 
-      if (titleOfFilmChecked === this._controlData.getPopUpIdentifier()) {
-        return;
-      }
-
-      this._controlData.setPopUpIdentifier(
-        titleOfFilmChecked ? titleOfFilmChecked : null
-      );
+      this._analyzePopUpIdentifier(titleOfFilmChecked);
     }
   }
 
@@ -66,6 +61,7 @@ export default class ContentComponent extends AbstractComponent {
     this._filmsTR = filmsInfo.filmsTR;
     this._filmsMC = filmsInfo.filmsMC;
     this._increaseCountCommonFilms = filmsInfo.increaseCountCommonFilms;
+    this._analyzePopUpIdentifier = filmsInfo.analyzePopUpIdentifier;
     return this;
   }
 
