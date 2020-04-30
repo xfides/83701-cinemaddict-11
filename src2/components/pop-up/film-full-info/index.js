@@ -1,9 +1,9 @@
 import {createFilmFullInfoTemplate} from './template.js';
-import {ScreenMsg} from '../../consts/index.js';
+import {ScreenMsg} from '../../../consts';
 import {
   formatMsToFilmFullDate,
   formatDurationMinutes
-} from '../../utils/common.js';
+} from '../../../utils';
 
 export const createFilmFullInfoComponent = (film) => {
   if (!film) {

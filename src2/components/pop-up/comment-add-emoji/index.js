@@ -1,5 +1,5 @@
 import {createCommentAddEmojiTemplate} from './template.js';
-import {Emoji} from '../../consts/index.js';
+import {Emoji} from '../../../consts';
 
 export const createCommentAddEmojiComponent = (emojiImg) => {
   const emojiData = {

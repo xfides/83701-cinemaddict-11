@@ -1,7 +1,7 @@
 import Model from '../models';
 import LayoutController from './layout';
 import PageController from './page';
-// import PopUpController from './pop-Up';
+import PopUpController from './pop-Up';
 import {LoadingStatus} from '../consts';
 
 export default class Application {
@@ -10,7 +10,7 @@ export default class Application {
     this._controllers = {
       layout: new LayoutController(),
       page: new PageController(),
-      // popUp: new PopUpController()
+      popUp: new PopUpController()
     };
     this._modelInstance = Model.getInstance();
   }
@@ -18,7 +18,7 @@ export default class Application {
   run() {
     this._controllers.layout.run();
     this._controllers.page.run();
-    // this._controllers.popUp.run();
+    this._controllers.popUp.run();
     this._modelInstance.setLoadingStatus(LoadingStatus.LOADING);
 
     if (!this._modelInstance.getFilmsAll()) {

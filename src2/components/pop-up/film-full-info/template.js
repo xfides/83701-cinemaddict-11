@@ -1,4 +1,4 @@
-import {wordsPlural} from '../../consts/locals/en.js';
+import {wordsPlural} from '../../../consts/locales/en.js';
 
 const getOneGenreTemplate = (genre) => {
   return `<span class="film-details__genre">${genre}</span>`;

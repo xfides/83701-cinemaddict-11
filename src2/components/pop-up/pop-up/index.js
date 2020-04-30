@@ -3,25 +3,27 @@ import {createPopUpTemplate} from './template.js';
 import {createFilmFullInfoComponent} from '../film-full-info';
 import {createFilmFullInfoControlTemplate} from '../film-full-info-control';
 import {createCommentsBlockComponent} from '../comments-block';
-import {createDomElement, cloneObj} from '../../../utils';
 import {CssClass, KeyCode} from '../../../consts';
 
 export default class PopUpComponent extends AbstractComponent {
+
   constructor() {
     super();
     this._popUpFilm = null;
-    this.handleClick = this.handleClick.bind(this);
-    this.handleClosingPopUp = this.handleClosingPopUp.bind(this);
+    this._analyzePopUpIdentifier = null;
+    this.handleMouseClick = this.handleMouseClick.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
   getTemplate() {
-
-
-
     const templates = {
-      filmFullInfo: createFilmFullInfoComponent(film),
-      commentsBlock: film ? createCommentsBlockComponent(film.comments) : ``,
-      filmFullInfoControl: film ? createFilmFullInfoControlTemplate() : ``
+      filmFullInfo: createFilmFullInfoComponent(this._popUpFilm),
+      commentsBlock: this._popUpFilm
+        ? createCommentsBlockComponent(this._popUpFilm.comments)
+        : ``,
+      filmFullInfoControl: this._popUpFilm
+        ? createFilmFullInfoControlTemplate()
+        : ``
     };
 
     return createPopUpTemplate(templates);
@@ -29,34 +31,35 @@ export default class PopUpComponent extends AbstractComponent {
 
   getDomElement() {
     super.getDomElement();
-
-    this._domElement.addEventListener(`click`, this.handleClick);
-    document.addEventListener(`keydown`, this.handleClosingPopUp);
+    this._domElement.addEventListener(`click`, this.handleMouseClick);
+    document.addEventListener(`keydown`, this.handleKeyDown);
 
     return this._domElement;
   }
 
-  handleClick(evt) {
+  handleMouseClick(evt) {
     const closePopUpDom =
       evt.target.classList.contains(`${CssClass.POPUP_CLOSE}`);
 
     if (closePopUpDom) {
-      this._controlData.setPopUpIdentifier(null);
+      this._analyzePopUpIdentifier(null);
     }
   }
 
-  removeAfter() {
-    document.removeEventListener(`keydown`, this.handleClosingPopUp);
+  handleKeyDown(evt) {
+    if (evt.type === `keydown` && evt.keyCode === KeyCode.ESC) {
+      this._analyzePopUpIdentifier(null);
+    }
   }
 
-  setPopUpIdentifier(popUpFilm){
-    this._popUpFilm = popUpFilm;
+  executeAfterRemove() {
+    document.removeEventListener(`keydown`, this.handleKeyDown);
+  }
+
+  setPopUpFilm(popUpInfo) {
+    this._popUpFilm = popUpInfo.film;
+    this._analyzePopUpIdentifier = popUpInfo.analyzePopUpIdentifier;
     return this;
   }
 
-  handleClosingPopUp(evt) {
-    if (evt.type === `keydown` && evt.keyCode === KeyCode.ESC) {
-      this._controlData.setPopUpIdentifier(null);
-    }
-  }
 }

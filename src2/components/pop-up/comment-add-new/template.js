@@ -1,4 +1,4 @@
-import {ScreenMsg, Emoji} from '../../consts/index.js';
+import {ScreenMsg, Emoji} from '../../../consts';
 
 const getDefaultEmojiData = () => {
   return {

@@ -1,5 +1,6 @@
 import {UserRank} from '../consts/index.js';
 import {ShortDescParam} from '../consts';
+import moment from 'moment';
 
 export const cloneObj = (obj) => {
   const target = Array.isArray(obj) ? [] : {};
@@ -76,35 +77,21 @@ export const formatDurationMinutes = (numberOfMinutes) => {
 };
 
 export const formatMsToCommentDate = (milliseconds) => {
-  const formatter = new Intl.DateTimeFormat(`en-GB`, {
-    year: `numeric`,
-    month: `2-digit`,
-    day: `2-digit`,
-    hour: `2-digit`,
-    minute: `2-digit`,
-  });
+  const dateToDisplay = moment(milliseconds);
+  const absoluteDate = dateToDisplay.format(`YYYY/MM/DD HH:MM`);
+  const relativeDate = dateToDisplay.fromNow();
 
-  const [ymd, hm] = formatter.format(new Date(milliseconds)).split(`, `);
-  const [y, m, d] = ymd.split(`/`);
-
-  return `${d}/${m}/${y} ${hm}`;
+  return `${absoluteDate}  ( ${relativeDate} )`;
 };
 
 export const formatMsToFilmFullDate = (milliseconds) => {
-  const formatter = new Intl.DateTimeFormat(`en-GB`, {
-    year: `numeric`,
-    month: `long`,
-    day: `2-digit`,
-  });
+  const dateToDisplay = moment(milliseconds);
+  const absoluteDate = dateToDisplay.format(`DD MMMM YYYY`);
 
-  return formatter.format(new Date(milliseconds));
+  return absoluteDate;
 };
 
 export const ensureArray = (data) => {
   return Array.isArray(data) ? data : [];
 };
 
-
-// export const renderHTML = (container, strHtml) => {
-//   container.insertAdjacentHTML(`beforeend`, strHtml);
-// };

@@ -1,7 +1,8 @@
 import EventManager from '../event-manager';
 import Model from '../models';
 import PopUpComponent from '../components/pop-up/pop-up';
-import {Event, FilmFilter, DomNode, FilmSection, SortKind} from '../consts';
+import {Event, DomNode} from '../consts';
+import {cloneObj} from '../utils';
 
 
 export default class PopUpController {
@@ -12,59 +13,52 @@ export default class PopUpController {
     this._components = {
       [PopUpComponent.name]: new PopUpComponent()
     };
+
+    this.handlePopUp = this.handlePopUp.bind(this);
+    this.analyzePopUpIdentifier = this.analyzePopUpIdentifier.bind(this);
   }
 
   run() {
-    this._eventManager.on(Event.newPopUpIdentifier, this.handlePopUp)
+    this._eventManager.on(Event.CHANGE_POP_UP_IDENTIFIER, this.handlePopUp)
   }
 
-  handlePopUp(){
+  handlePopUp() {
+    const curPopUpIdentifier = this._modelInstance.getCurPopUpIdentifier();
+    const filmsAll = this._modelInstance.getFilmsAll();
 
+    if (!curPopUpIdentifier) {
+      this._components[PopUpComponent.name].removeDomElement();
 
-    const filmsAll = this._modelInstance.newPopUpIdentifier();
-    let film = filmsAll.find((oneFilm) => {
-      return oneFilm.title.trim() === newPopUpIdentifier;
+      return;
+    }
+
+    const film = filmsAll.find((oneFilm) => {
+      return oneFilm.title.trim() === curPopUpIdentifier;
     });
-    film = film ? cloneObj(film) : undefined;
+
+    if (!film) {
+      return;
+    }
+
+    const popUpInfo = {
+      film: cloneObj(film),
+      analyzePopUpIdentifier: this.analyzePopUpIdentifier
+    };
+
+    this.renderPopUp(popUpInfo);
   }
 
-  renderPopUp(popUpFilm){
+  renderPopUp(popUpInfo) {
     this._components[PopUpComponent.name]
-      .setPopUpFilm(popUpFilm)
+      .setPopUpFilm(popUpInfo)
       .render(DomNode.body);
   }
 
-  removePopUp(){
-
-  }
-
-
-  updatePageMain() {
-    const sortInfo = {
-      curSortKind: this._modelInstance.getCurSortKind(),
-      changeSortKindCB: this.handleNewSortKind
-    };
-
-    this.renderSort(sortInfo);
-    this.renderFilms(this.getFilmsInfo());
-  }
-
-  handleNewSortKind(newSortKind) {
-    const curSortKind = this._modelInstance.getCurSortKind();
-
-    if (curSortKind !== newSortKind) {
-      this._modelInstance.setCurSortKind(newSortKind);
+  analyzePopUpIdentifier(newPopUpIdentifier) {
+    if (this._modelInstance.getCurPopUpIdentifier() !== newPopUpIdentifier) {
+      this._modelInstance.setCurPopUpIdentifier(newPopUpIdentifier);
     }
   }
-
-  renderSort(sortInfo) {
-    this._components[SortComponent.name]
-      .setSortKind(sortInfo)
-      .render(DomNode.blockMain);
-  }
-
-
-
 
 }
 
