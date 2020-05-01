@@ -20,12 +20,12 @@ const getNoEmojiData = () => {
   };
 };
 
-const handleZeroComments = (countComments) => {
+const getEmojiData = (countComments) => {
   return countComments === 0 ? getDefaultEmojiData() : getNoEmojiData();
 };
 
 export const createCommentAddNewTemplate = (commentAddNewData) => {
-  const defaultDataEmoji = handleZeroComments(commentAddNewData.countComments);
+  const defaultDataEmoji = getEmojiData(commentAddNewData.countComments);
 
   return (`
     <div class="film-details__new-comment">

@@ -1,10 +1,5 @@
-export const PosRender = {
-  BEFORE_END: `beforeend`,
-  BEFORE_BEGIN: `beforebegin`
-};
-
 export const ScreenMsg = {
-  NO_FILMS: `There are no movies in our database`,
+  NO_FILMS: `There are no movies`,
   LOADING: `Loading...`,
   NO_FILM_FULL_INFO: `Sorry. Not found such movie`,
   STUB_ADD_COMMENT: `Select reaction below and write comment here`,
@@ -12,9 +7,25 @@ export const ScreenMsg = {
 };
 
 export const FilmFilter = {
+  ALL: `All movies`,
   SCHEDULED: `Watchlist`,
   WATCHED: `History`,
   FAVORITE: `Favorites`
+};
+
+export const SortKind = {
+  DEFAULT: {
+    description: `Sort by default`,
+    associatedFilmField: null
+  },
+  DATE: {
+    description: `Sort by date`,
+    associatedFilmField: `prodDate`
+  },
+  RATE: {
+    description: `Sort by rating`,
+    associatedFilmField: `rate`
+  },
 };
 
 export const UserRank = {
@@ -66,7 +77,14 @@ export const CssClass = {
   SECTION_FILMS_ALL: `films`,
   FILM_SECTION: `films-list`,
   FILM_SECTION_EXTRA: `films-list--extra`,
-  SHOW_MORE: `films-list__show-more`
+  SHOW_MORE: `films-list__show-more`,
+  NAV_CATEGORY_ACTIVE: `main-navigation__item--active`,
+  SORT_KIND_ACTIVE: `sort__button--active`,
+  FILM_CARD_TITLE: `film-card__title`,
+  FILM_CARD_COMMENTS: `film-card__comments`,
+  FILM_CARD_POSTER: `film-card__poster`,
+  FILM_CARD: `film-card`,
+  POPUP_CLOSE: `film-details__close-btn`
 };
 
 export const Emoji = {
@@ -91,4 +109,8 @@ export const Poster = {
     `the-great-flamarion.jpg`,
     `the-man-with-the-golden-arm.jpg`,
   ]
+};
+
+export const KeyCode = {
+  ESC: 27
 };
