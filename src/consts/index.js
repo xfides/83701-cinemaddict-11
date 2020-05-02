@@ -26,6 +26,10 @@ export const SortKind = {
     description: `Sort by rating`,
     associatedFilmField: `rate`
   },
+  COUNT_COMMENTS: {
+    description: `Sort by count of comments`,
+    associatedFilmField: `comments`
+  }
 };
 
 export const UserRank = {
@@ -84,7 +88,11 @@ export const CssClass = {
   FILM_CARD_COMMENTS: `film-card__comments`,
   FILM_CARD_POSTER: `film-card__poster`,
   FILM_CARD: `film-card`,
-  POPUP_CLOSE: `film-details__close-btn`
+  POPUP_CLOSE: `film-details__close-btn`,
+  HEADER: `header`,
+  MAIN: `main`,
+  FOOTER_STATISTICS: `footer__statistics`,
+  FILM_BUTTON_ACTIVE: ` film-card__controls-item--active`
 };
 
 export const Emoji = {
@@ -113,4 +121,39 @@ export const Poster = {
 
 export const KeyCode = {
   ESC: 27
+};
+
+export const ShortDescParam = {
+  COUNT_SYMBOLS: 140,
+  END_SYMBOL: `...`
+};
+
+export const AppPage = {
+  MAIN: `main`,
+  STATISTICS: `statistics`
+};
+
+export const LoadingStatus = {
+  LOADING: `loading`,
+  LOADING_ERROR: `loading_error`,
+  LOADING_SUCCESS_FULL: `loading_success_full`,
+  LOADING_SUCCESS_EMPTY: `loading_success_empty`
+};
+
+export const Event = {
+  CHANGE_PAGE: `change_page`,
+  CHANGE_LOADING_STATUS: `change_loading_status`,
+  CHANGE_CUR_CATEGORY: `change_cur_category`,
+  CHANGE_CUR_SORT_KIND: `change_cur_sort_kind`,
+  CHANGE_COUNT_COMMON_FILMS: `change_count_common_films`,
+  CHANGE_POP_UP_IDENTIFIER: `change_pop_up_identifier`,
+};
+
+export const DomNode = {
+  body: document.body,
+  blockHeader: document.querySelector(`.${CssClass.HEADER}`),
+  blockMain: document.querySelector(`.${CssClass.MAIN}`),
+  blockFooterStatistics: document.querySelector(
+    `.${CssClass.FOOTER_STATISTICS}`
+  )
 };
