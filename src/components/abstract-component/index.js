@@ -1,10 +1,11 @@
-import {createDomElement} from "../../utils/common.js";
-
 export default class AbstractComponent {
+
   constructor() {
     if (new.target === AbstractComponent) {
       throw new Error(`Can't instantiate AbstractComponent, only concrete one.`);
     }
+
+    this._domElement = null;
   }
 
   getTemplate() {
@@ -15,9 +16,24 @@ export default class AbstractComponent {
     if (this._domElement) {
       return this._domElement;
     }
-    this._domElement = createDomElement(this.getTemplate());
+
+    const templateTag = document.createElement(`template`);
+    templateTag.innerHTML = this.getTemplate();
+    this._domElement = templateTag.content.firstElementChild;
 
     return this._domElement;
+  }
+
+  removeDomElement() {
+    this.getDomElement().remove();
+    this._domElement = null;
+
+    if (
+      this.executeAfterRemove
+      && (typeof this.executeAfterRemove) === `function`
+    ) {
+      this.executeAfterRemove();
+    }
   }
 
   isRendered() {
@@ -27,7 +43,32 @@ export default class AbstractComponent {
     );
   }
 
-  removeDomElement() {
-    this._domElement = null;
+  render(container) {
+    if (!this.getDomElement()) {
+      return;
+    }
+
+    if (!this.isRendered()) {
+      container.append(this.getDomElement());
+      return;
+    }
+
+    this.reRender();
   }
+
+  reRender() {
+    const oldDomElement = this.getDomElement();
+    const parentOldDomElement = oldDomElement.parentElement;
+    this._domElement = null;
+    const newDomElement = this.getDomElement();
+
+    if (
+      parentOldDomElement
+      && oldDomElement
+      && newDomElement
+    ) {
+      parentOldDomElement.replaceChild(newDomElement, oldDomElement);
+    }
+  }
+
 }
