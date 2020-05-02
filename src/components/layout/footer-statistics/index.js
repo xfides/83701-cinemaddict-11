@@ -11,7 +11,7 @@ export default class FooterStatisticsComponent extends AbstractComponent {
 
   getTemplate() {
     return createFooterStatisticsTemplate(
-      formatNumberWithSpaces(ensureArray(this._filmsAll).length)
+        formatNumberWithSpaces(ensureArray(this._filmsAll).length)
     );
   }
 

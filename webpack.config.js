@@ -3,7 +3,7 @@ const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 
 module.exports = {
   mode: 'development',
-  entry: './src2/main.js',
+  entry: './src/main.js',
   output: {
     filename: 'bundle.js',
     path: path.join(__dirname, 'public'),

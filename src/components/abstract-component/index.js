@@ -1,5 +1,3 @@
-import {createDomElement} from "../../utils";
-
 export default class AbstractComponent {
 
   constructor() {

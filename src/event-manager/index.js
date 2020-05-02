@@ -6,7 +6,7 @@ export default class EventManager {
   constructor(verificationValue) {
     if (verificationValue !== singletonVerification) {
       throw new Error(
-        `Please use ${this.constructor.name}.getInstance() to get instance`
+          `Please use ${this.constructor.name}.getInstance() to get instance`
       );
     }
 
@@ -78,7 +78,7 @@ export default class EventManager {
 
   isHandlerInQueue(oneHandlerInfo) {
     return this._queueOfHandlers.some((handlerInfoInQueue) => {
-      return handlerInfoInQueue.handler === oneHandlerInfo.handler
+      return handlerInfoInQueue.handler === oneHandlerInfo.handler;
     });
   }
 
@@ -92,11 +92,11 @@ export default class EventManager {
     }
 
     handlerInQueue.data.attachedData = Object.assign(
-      handlerInQueue.data.attachedData, oneHandlerInfo.data
+        handlerInQueue.data.attachedData, oneHandlerInfo.data
     );
 
     handlerInQueue.data.triggerData = Object.assign(
-      handlerInQueue.data.triggerData, triggerData
+        handlerInQueue.data.triggerData, triggerData
     );
   }
 
@@ -121,7 +121,7 @@ export default class EventManager {
   checkDataForEvent(data) {
     if (data && (typeof data !== `object`)) {
       throw new Error(
-        `event data must be type of object. You gave ${typeof data} 
+          `event data must be type of object. You gave ${typeof data} 
       `);
     }
   }

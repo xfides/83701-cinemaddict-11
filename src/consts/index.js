@@ -154,6 +154,6 @@ export const DomNode = {
   blockHeader: document.querySelector(`.${CssClass.HEADER}`),
   blockMain: document.querySelector(`.${CssClass.MAIN}`),
   blockFooterStatistics: document.querySelector(
-    `.${CssClass.FOOTER_STATISTICS}`
+      `.${CssClass.FOOTER_STATISTICS}`
   )
 };

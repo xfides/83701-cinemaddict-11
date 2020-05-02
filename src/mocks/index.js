@@ -164,7 +164,7 @@ dataFactory.film = {
       new Array(faker.random.number({min: 0, max: 17})).fill(null);
 
     return commentsToFilm.map(
-      () => createObjectByStructure(structureComment, this.comment)
+        () => createObjectByStructure(structureComment, this.comment)
     );
 
   },

@@ -4,7 +4,6 @@ import PopUpComponent from '../components/pop-up/pop-up';
 import {Event, DomNode} from '../consts';
 import {cloneObj} from '../utils';
 
-
 export default class PopUpController {
 
   constructor() {
@@ -19,7 +18,7 @@ export default class PopUpController {
   }
 
   run() {
-    this._eventManager.on(Event.CHANGE_POP_UP_IDENTIFIER, this.handlePopUp)
+    this._eventManager.on(Event.CHANGE_POP_UP_IDENTIFIER, this.handlePopUp);
   }
 
   handlePopUp() {

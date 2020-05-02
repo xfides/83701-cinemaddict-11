@@ -1,6 +1,6 @@
 import AbstractComponent from '../../../abstract-component';
 import {createSortTemplate} from './template.js';
-import {SortKind, CssClass, FilmSection} from '../../../../consts';
+import {SortKind, CssClass} from '../../../../consts';
 
 export default class SortComponent extends AbstractComponent {
 

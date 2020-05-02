@@ -47,16 +47,16 @@ export default class PageController {
   makeInterfaceToFilms() {
     return {
       [FilmFilter.ALL]: this._modelInstance.getFilmsAll.bind(
-        this._modelInstance
+          this._modelInstance
       ),
       [FilmFilter.WATCHED]: this._modelInstance.getFilmsWatched.bind(
-        this._modelInstance
+          this._modelInstance
       ),
       [FilmFilter.FAVORITE]: this._modelInstance.getFilmsFavorite.bind(
-        this._modelInstance
+          this._modelInstance
       ),
       [FilmFilter.SCHEDULED]: this._modelInstance.getFilmsScheduled.bind(
-        this._modelInstance
+          this._modelInstance
       )
     };
   }
@@ -68,8 +68,8 @@ export default class PageController {
 
     if (curSortKind.associatedFilmField) {
       commonFilms = sortFilmsByFieldWithClone(
-        commonFilms,
-        curSortKind.associatedFilmField
+          commonFilms,
+          curSortKind.associatedFilmField
       );
     }
 
@@ -112,7 +112,7 @@ export default class PageController {
 
   resetPageMain() {
     this._modelInstance.setCountCommonFilms(
-      FilmSection.COMMON.countFilmsToShow
+        FilmSection.COMMON.countFilmsToShow
     );
 
     if (this._modelInstance.getCurSortKind() === SortKind.DEFAULT) {
@@ -125,13 +125,13 @@ export default class PageController {
 
   changeSortPageMain() {
     this._modelInstance.setCountCommonFilms(
-      FilmSection.COMMON.countFilmsToShow
+        FilmSection.COMMON.countFilmsToShow
     );
     this.updatePageMain();
   }
 
-  analyzePopUpIdentifier(newPopUpIdentifier){
-    if(this._modelInstance.getCurPopUpIdentifier() !== newPopUpIdentifier){
+  analyzePopUpIdentifier(newPopUpIdentifier) {
+    if (this._modelInstance.getCurPopUpIdentifier() !== newPopUpIdentifier) {
       this._modelInstance.setCurPopUpIdentifier(newPopUpIdentifier);
     }
   }
