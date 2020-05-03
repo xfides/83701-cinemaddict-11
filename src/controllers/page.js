@@ -87,7 +87,7 @@ export default class PageController {
     const curCountCommonFilms = this._modelInstance.getCountCommonFilms();
     const newCountCommonFilms =
       curCountCommonFilms + FilmSection.COMMON.countFilmsToShow;
-    this._modelInstance.setCountCommonFilms(newCountCommonFilms);
+    this._modelInstance.setCurCountCommonFilms(newCountCommonFilms);
   }
 
   handleNewSortKind(newSortKind) {
@@ -111,7 +111,7 @@ export default class PageController {
   }
 
   resetPageMain() {
-    this._modelInstance.setCountCommonFilms(
+    this._modelInstance.setCurCountCommonFilms(
         FilmSection.COMMON.countFilmsToShow
     );
 
@@ -124,7 +124,7 @@ export default class PageController {
   }
 
   changeSortPageMain() {
-    this._modelInstance.setCountCommonFilms(
+    this._modelInstance.setCurCountCommonFilms(
         FilmSection.COMMON.countFilmsToShow
     );
     this.updatePageMain();

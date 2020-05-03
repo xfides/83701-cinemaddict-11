@@ -19,7 +19,7 @@ export default class Application {
     this._controllers.layout.run();
     this._controllers.page.run();
     this._controllers.popUp.run();
-    this._modelInstance.setLoadingStatus(LoadingStatus.LOADING);
+    this._modelInstance.setCurLoadingStatus(LoadingStatus.LOADING);
 
     if (!this._modelInstance.getFilmsAll()) {
       this._modelInstance.loadData();

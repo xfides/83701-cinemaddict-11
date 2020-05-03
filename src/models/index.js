@@ -20,6 +20,7 @@ export default class Model {
           `Please use ${this.constructor.name}.getInstance() to get instance`
       );
     }
+
     this._eventManager = EventManager.getInstance();
     this._films = null;
     this._countCommonFilms = FilmSection.COMMON.countFilmsToShow;
@@ -28,8 +29,8 @@ export default class Model {
     this._curSortKind = SortKind.DEFAULT;
     this._page = null;
     this._loadingStatus = null;
-    this.handleLoadSuccess = this.handleLoadSuccess.bind(this);
-    this.handleLoadError = this.handleLoadError.bind(this);
+    this._handleLoadSuccess = this._handleLoadSuccess.bind(this);
+    this._handleLoadError = this._handleLoadError.bind(this);
   }
 
   getFilmsAll() {
@@ -68,7 +69,23 @@ export default class Model {
     ).slice(0, FilmSection.MOST_COMMENTED.countFilmsToShow);
   }
 
-  setLoadingStatus(newLoadingStatus) {
+  getCurCategory() {
+    return this._curCategory;
+  }
+
+  getCurSortKind() {
+    return this._curSortKind;
+  }
+
+  getCountCommonFilms() {
+    return this._countCommonFilms;
+  }
+
+  getCurPopUpIdentifier() {
+    return this._popUpIdentifier;
+  }
+
+  setCurLoadingStatus(newLoadingStatus) {
     if (this._loadingStatus === newLoadingStatus) {
       return;
     }
@@ -79,10 +96,6 @@ export default class Model {
         Event.CHANGE_LOADING_STATUS,
         {[Event.CHANGE_LOADING_STATUS]: newLoadingStatus}
     );
-  }
-
-  getCurCategory() {
-    return this._curCategory;
   }
 
   setCurCategory(newCategory) {
@@ -98,10 +111,6 @@ export default class Model {
     );
   }
 
-  getCurSortKind() {
-    return this._curSortKind;
-  }
-
   setCurSortKind(newSortKind) {
     if (this._curSortKind === newSortKind) {
       return;
@@ -115,11 +124,20 @@ export default class Model {
     );
   }
 
-  getCountCommonFilms() {
-    return this._countCommonFilms;
+  setCurPopUpIdentifier(newPopUpIdentifier) {
+    if (this._popUpIdentifier === newPopUpIdentifier) {
+      return;
+    }
+
+    this._popUpIdentifier = newPopUpIdentifier;
+
+    this._eventManager.trigger(
+      Event.CHANGE_POP_UP_IDENTIFIER,
+      {[Event.CHANGE_POP_UP_IDENTIFIER]: newPopUpIdentifier}
+    );
   }
 
-  setCountCommonFilms(newCountCommonFilms) {
+  setCurCountCommonFilms(newCountCommonFilms) {
     if (this._countCommonFilms === newCountCommonFilms) {
       return;
     }
@@ -132,36 +150,19 @@ export default class Model {
     );
   }
 
-  getCurPopUpIdentifier() {
-    return this._popUpIdentifier;
-  }
-
-  setCurPopUpIdentifier(newPopUpIdentifier) {
-    if (this._popUpIdentifier === newPopUpIdentifier) {
-      return;
-    }
-
-    this._popUpIdentifier = newPopUpIdentifier;
-
-    this._eventManager.trigger(
-        Event.CHANGE_POP_UP_IDENTIFIER,
-        {[Event.CHANGE_POP_UP_IDENTIFIER]: newPopUpIdentifier}
-    );
-  }
-
   loadData() {
     const promiseData = Promise.resolve(createFakeFilms());
-    promiseData.then(this.handleLoadSuccess, this.handleLoadError);
+    promiseData.then(this._handleLoadSuccess, this._handleLoadError);
   }
 
-  handleLoadSuccess(films) {
+  _handleLoadSuccess(films) {
     this._films = ensureArray(films);
-    this.setLoadingStatus(LoadingStatus.LOADING_SUCCESS_FULL);
+    this.setCurLoadingStatus(LoadingStatus.LOADING_SUCCESS_FULL);
   }
 
-  handleLoadError() {
+  _handleLoadError() {
     this._films = null;
-    this.setLoadingStatus(LoadingStatus.LOADING_ERROR);
+    this.setCurLoadingStatus(LoadingStatus.LOADING_ERROR);
   }
 
   static getInstance() {
