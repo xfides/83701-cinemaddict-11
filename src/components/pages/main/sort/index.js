@@ -7,8 +7,8 @@ export default class SortComponent extends AbstractComponent {
   constructor() {
     super();
     this._curSortKind = SortKind.DEFAULT;
-    this._changeSortKindCB = null;
-    this.handleClick = this.handleClick.bind(this);
+    this._sortKindChangeHandler = null;
+    this._sortKindClickHandler = this._sortKindClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -27,30 +27,34 @@ export default class SortComponent extends AbstractComponent {
 
   getDomElement() {
     super.getDomElement();
-    this._domElement.addEventListener(`click`, this.handleClick);
+    this._domElement.addEventListener(`click`, this._sortKindClickHandler);
 
     return this._domElement;
   }
 
-  handleClick(evt) {
-    const linkDom = evt.target;
-    if (!(linkDom instanceof HTMLAnchorElement)) {
-      return;
-    }
-
-    const linkSortChecked = Object.values(SortKind).find((oneSortStr) => {
-      return oneSortStr.description === linkDom.textContent.trim();
-    });
-
-    if (linkSortChecked) {
-      this._changeSortKindCB(linkSortChecked);
-    }
-  }
-
   setSortKind(sortInfo) {
     this._curSortKind = sortInfo.curSortKind;
-    this._changeSortKindCB = sortInfo.changeSortKindCB;
+    this._sortKindChangeHandler = sortInfo.sortKindChangeHandler;
     return this;
+  }
+
+  _getCheckedLinkSort(evt) {
+    const linkDom = evt.target;
+    if (!(linkDom instanceof HTMLAnchorElement)) {
+      return undefined;
+    }
+
+    return Object.values(SortKind).find((oneSortStr) => {
+      return oneSortStr.description === linkDom.textContent.trim();
+    });
+  }
+
+  _sortKindClickHandler(evt) {
+    const linkSortChecked = this._getCheckedLinkSort(evt);
+
+    if (linkSortChecked) {
+      this._sortKindChangeHandler(linkSortChecked);
+    }
   }
 
 }

@@ -10,14 +10,14 @@ export default class NavComponent extends AbstractComponent {
     super();
     this._films = {};
     this._curCategory = null;
-    this._changeCategoryCB = null;
-    this.handleClick = this.handleClick.bind(this);
+    this._categoryChangeHandler = null;
+    this._navClickHandler = this._navClickHandler.bind(this);
   }
 
   setNavInfo(navInfo) {
     this._films = navInfo.films;
     this._curCategory = navInfo.curCategory;
-    this._changeCategoryCB = navInfo.changeCategoryCB;
+    this._categoryChangeHandler = navInfo.categoryChangeHandler;
     return this;
   }
 
@@ -41,12 +41,12 @@ export default class NavComponent extends AbstractComponent {
 
   getDomElement() {
     super.getDomElement();
-    this._domElement.addEventListener(`click`, this.handleClick);
+    this._domElement.addEventListener(`click`, this._navClickHandler);
 
     return this._domElement;
   }
 
-  handleClick(evt) {
+  _navClickHandler(evt) {
     let attrHrefDom = evt.target.getAttribute(`href`);
     if (!attrHrefDom) {
       return;
@@ -58,7 +58,7 @@ export default class NavComponent extends AbstractComponent {
     });
 
     if (categoryChecked) {
-      this._changeCategoryCB(categoryChecked);
+      this._categoryChangeHandler(categoryChecked);
     }
   }
 

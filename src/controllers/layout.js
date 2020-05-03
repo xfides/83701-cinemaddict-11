@@ -15,48 +15,38 @@ export default class LayoutController {
       [FooterStatisticsComponent.name]: new FooterStatisticsComponent(),
       [NavComponent.name]: new NavComponent(),
     };
-    this.updateLayout = this.updateLayout.bind(this);
-    this.handleNewCategory = this.handleNewCategory.bind(this);
-    this.updateNav = this.updateNav.bind(this);
+    this._layoutUpdateHandler = this._layoutUpdateHandler.bind(this);
+    this._categoryChangeHandler = this._categoryChangeHandler.bind(this);
+    this._navUpdateHandler = this._navUpdateHandler.bind(this);
   }
 
   run() {
-    this._eventManager.on(Event.CHANGE_LOADING_STATUS, this.updateLayout);
-    this._eventManager.on(Event.CHANGE_CUR_CATEGORY, this.updateNav);
+    this._eventManager.on(
+        Event.CHANGE_LOADING_STATUS,
+        this._layoutUpdateHandler
+    );
+    this._eventManager.on(Event.CHANGE_CUR_CATEGORY, this._navUpdateHandler);
   }
 
-  updateLayout() {
-    const films = this.getFilmsFromModel();
-    const navInfo = {
-      curCategory: this._modelInstance.getCurCategory(),
-      changeCategoryCB: this.handleNewCategory,
-      films
-    };
-
-    this.renderUserRank(films[FilmFilter.WATCHED]);
-    this.renderNav(navInfo);
-    this.renderFooterStatistics(films[FilmFilter.ALL]);
+  _renderUserRank(filmsWatched) {
+    this._components[UserRankComponent.name]
+      .setFilmsWatched(filmsWatched)
+      .render(DomNode.blockHeader);
   }
 
-  updateNav() {
-    const navInfo = {
-      films: this.getFilmsFromModel(),
-      curCategory: this._modelInstance.getCurCategory(),
-      changeCategoryCB: this.handleNewCategory,
-    };
-
-    this.renderNav(navInfo);
+  _renderNav(navInfo) {
+    this._components[NavComponent.name]
+      .setNavInfo(navInfo)
+      .render(DomNode.blockMain);
   }
 
-  handleNewCategory(newCategory) {
-    const curCategory = this._modelInstance.getCurCategory();
-
-    if (curCategory !== newCategory) {
-      this._modelInstance.setCurCategory(newCategory);
-    }
+  _renderFooterStatistics(filmsAll) {
+    this._components[FooterStatisticsComponent.name]
+      .setFilmsAll(filmsAll)
+      .render(DomNode.blockFooterStatistics);
   }
 
-  getFilmsFromModel() {
+  _getFilmsByCategory() {
     return {
       [FilmFilter.ALL]: this._modelInstance.getFilmsAll(),
       [FilmFilter.WATCHED]: this._modelInstance.getFilmsWatched(),
@@ -65,22 +55,28 @@ export default class LayoutController {
     };
   }
 
-  renderUserRank(filmsWatched) {
-    this._components[UserRankComponent.name]
-      .setFilmsWatched(filmsWatched)
-      .render(DomNode.blockHeader);
+  _layoutUpdateHandler() {
+    const films = this._getFilmsByCategory();
+
+    this._navUpdateHandler();
+    this._renderUserRank(films[FilmFilter.WATCHED]);
+    this._renderFooterStatistics(films[FilmFilter.ALL]);
   }
 
-  renderNav(navInfo) {
-    this._components[NavComponent.name]
-      .setNavInfo(navInfo)
-      .render(DomNode.blockMain);
+  _navUpdateHandler() {
+    const navInfo = {
+      films: this._getFilmsByCategory(),
+      curCategory: this._modelInstance.getCurCategory(),
+      categoryChangeHandler: this._categoryChangeHandler,
+    };
+
+    this._renderNav(navInfo);
   }
 
-  renderFooterStatistics(filmsAll) {
-    this._components[FooterStatisticsComponent.name]
-      .setFilmsAll(filmsAll)
-      .render(DomNode.blockFooterStatistics);
+  _categoryChangeHandler(newCategory) {
+    if (this._modelInstance.getCurCategory() !== newCategory) {
+      this._modelInstance.setCurCategory(newCategory);
+    }
   }
 
 }

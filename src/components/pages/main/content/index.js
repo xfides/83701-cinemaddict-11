@@ -11,58 +11,9 @@ export default class ContentComponent extends AbstractComponent {
     this._countCommonFilms = FilmSection.COMMON.countFilmsToShow;
     this._filmsTR = null;
     this._filmsMC = null;
-    this._increaseCountCommonFilms = null;
-    this._analyzePopUpIdentifier = null;
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  getDomElement() {
-    super.getDomElement();
-    this._domElement.addEventListener(`click`, this.handleClick);
-
-    return this._domElement;
-  }
-
-  handleClick(evt) {
-    this.handleShowMore(evt);
-    this.handleOpenPopUp(evt);
-  }
-
-  handleShowMore(evt) {
-    if (evt.target.classList.contains(CssClass.SHOW_MORE)) {
-      this._increaseCountCommonFilms();
-    }
-  }
-
-  handleOpenPopUp(evt) {
-    if (
-      evt.target.classList.contains(CssClass.FILM_CARD_POSTER)
-      || evt.target.classList.contains(CssClass.FILM_CARD_TITLE)
-      || evt.target.classList.contains(CssClass.FILM_CARD_COMMENTS)
-    ) {
-      const filmCheckedDom = evt.target.closest(`.${CssClass.FILM_CARD}`);
-
-      if (!filmCheckedDom) {
-        return;
-      }
-
-      const titleOfFilmChecked = filmCheckedDom
-        .querySelector(`.${CssClass.FILM_CARD_TITLE}`)
-        .textContent
-        .trim();
-
-      this._analyzePopUpIdentifier(titleOfFilmChecked);
-    }
-  }
-
-  setFilmsInfo(filmsInfo) {
-    this._commonFilms = filmsInfo.commonFilms;
-    this._countCommonFilms = filmsInfo.countCommonFilms;
-    this._filmsTR = filmsInfo.filmsTR;
-    this._filmsMC = filmsInfo.filmsMC;
-    this._increaseCountCommonFilms = filmsInfo.increaseCountCommonFilms;
-    this._analyzePopUpIdentifier = filmsInfo.analyzePopUpIdentifier;
-    return this;
+    this._countCommonFilmsChangeHandler = null;
+    this._popUpOpenHandler = null;
+    this._contentClickHandler = this._contentClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -79,6 +30,50 @@ export default class ContentComponent extends AbstractComponent {
     };
 
     return createContentTemplate(templatesOfFilmSections);
+  }
+
+  getDomElement() {
+    super.getDomElement();
+    this._domElement.addEventListener(`click`, this._contentClickHandler);
+
+    return this._domElement;
+  }
+
+  setFilmsInfo(filmsInfo) {
+    this._commonFilms = filmsInfo.commonFilms;
+    this._countCommonFilms = filmsInfo.countCommonFilms;
+    this._filmsTR = filmsInfo.filmsTR;
+    this._filmsMC = filmsInfo.filmsMC;
+    this._countCommonFilmsChangeHandler = filmsInfo.countCommonFilmsChangeHandler;
+    this._popUpOpenHandler = filmsInfo.popUpOpenHandler;
+    return this;
+  }
+
+  _contentClickHandler(evt) {
+    this._showMoreClickHandler(evt);
+    this._filmCardClickHandler(evt);
+  }
+
+  _showMoreClickHandler(evt) {
+    if (evt.target.classList.contains(CssClass.SHOW_MORE)) {
+      this._countCommonFilmsChangeHandler();
+    }
+  }
+
+  _filmCardClickHandler(evt) {
+    if (
+      evt.target.classList.contains(CssClass.FILM_CARD_POSTER)
+      || evt.target.classList.contains(CssClass.FILM_CARD_TITLE)
+      || evt.target.classList.contains(CssClass.FILM_CARD_COMMENTS)
+    ) {
+      const filmCheckedDom = evt.target.closest(`.${CssClass.FILM_CARD}`);
+      const titleOfFilmChecked = filmCheckedDom
+        .querySelector(`.${CssClass.FILM_CARD_TITLE}`)
+        .textContent
+        .trim();
+
+      this._popUpOpenHandler(titleOfFilmChecked);
+    }
   }
 
 }

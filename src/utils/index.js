@@ -70,7 +70,7 @@ export const formatNumberWithSpaces = (number) => {
 
 export const formatDurationMinutes = (numberOfMinutes) => {
   return numberOfMinutes >= 60 ? (
-    `${(numberOfMinutes / 60 ^ 0)}h ${(numberOfMinutes % 60)}m`
+    `${(Math.trunc(numberOfMinutes / 60))}h ${(numberOfMinutes % 60)}m`
   ) : (
     `${numberOfMinutes}m`
   );
@@ -85,10 +85,7 @@ export const formatMsToCommentDate = (milliseconds) => {
 };
 
 export const formatMsToFilmFullDate = (milliseconds) => {
-  const dateToDisplay = moment(milliseconds);
-  const absoluteDate = dateToDisplay.format(`DD MMMM YYYY`);
-
-  return absoluteDate;
+  return moment(milliseconds).format(`DD MMMM YYYY`);
 };
 
 export const ensureArray = (data) => {
