@@ -113,7 +113,7 @@ export default class EventManager {
   static _checkDataForEvent(data) {
     if (data && (typeof data !== `object`)) {
       throw new Error(
-        `event data must be type of object. You gave ${typeof data} 
+          `event data must be type of object. You gave ${typeof data} 
       `);
     }
   }

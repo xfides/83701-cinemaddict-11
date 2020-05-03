@@ -132,8 +132,8 @@ export default class Model {
     this._popUpIdentifier = newPopUpIdentifier;
 
     this._eventManager.trigger(
-      Event.CHANGE_POP_UP_IDENTIFIER,
-      {[Event.CHANGE_POP_UP_IDENTIFIER]: newPopUpIdentifier}
+        Event.CHANGE_POP_UP_IDENTIFIER,
+        {[Event.CHANGE_POP_UP_IDENTIFIER]: newPopUpIdentifier}
     );
   }
 

@@ -19,8 +19,8 @@ export default class PopUpController {
 
   run() {
     this._eventManager.on(
-      Event.CHANGE_POP_UP_IDENTIFIER,
-      this._popUpUpdateHandler
+        Event.CHANGE_POP_UP_IDENTIFIER,
+        this._popUpUpdateHandler
     );
   }
 

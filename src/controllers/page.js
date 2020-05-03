@@ -14,38 +14,13 @@ export default class PageController {
       [SortComponent.name]: new SortComponent(),
       [ContentComponent.name]: new ContentComponent()
     };
-    this.updatePageMain = this.updatePageMain.bind(this);
-    this.updateFilms = this.updateFilms.bind(this);
-    this.handleNewSortKind = this.handleNewSortKind.bind(this);
-    this.increaseCountCommonFilms = this.increaseCountCommonFilms.bind(this);
-    this.resetPageMain = this.resetPageMain.bind(this);
-    this.changeSortPageMain = this.changeSortPageMain.bind(this);
-    this.analyzePopUpIdentifier = this.analyzePopUpIdentifier.bind(this);
-  }
+    this._pageMainUpdateHandler = this._pageMainUpdateHandler.bind(this);
+    this._filmsUpdateHandler = this._filmsUpdateHandler.bind(this);
+    this._sortKindChangeHandler = this._sortKindChangeHandler.bind(this);
+    this._countCommonFilmsChangeHandler = this._countCommonFilmsChangeHandler.bind(this);
+    this._popUpOpenHandler = this._popUpOpenHandler.bind(this);
 
-  run() {
-    this._eventManager.on(Event.CHANGE_LOADING_STATUS, this.updatePageMain);
-    this._eventManager.on(Event.CHANGE_COUNT_COMMON_FILMS, this.updateFilms);
-    this._eventManager.on(Event.CHANGE_CUR_SORT_KIND, this.changeSortPageMain);
-    this._eventManager.on(Event.CHANGE_CUR_CATEGORY, this.resetPageMain);
-  }
-
-  updatePageMain() {
-    const sortInfo = {
-      curSortKind: this._modelInstance.getCurSortKind(),
-      changeSortKindCB: this.handleNewSortKind
-    };
-
-    this.renderSort(sortInfo);
-    this.renderFilms(this.getFilmsInfo());
-  }
-
-  updateFilms() {
-    this.renderFilms(this.getFilmsInfo());
-  }
-
-  makeInterfaceToFilms() {
-    return {
+    this._interfaceToFilmsByCategory = {
       [FilmFilter.ALL]: this._modelInstance.getFilmsAll.bind(
           this._modelInstance
       ),
@@ -61,41 +36,24 @@ export default class PageController {
     };
   }
 
-  getFilmsInfo() {
-    const curSortKind = this._modelInstance.getCurSortKind();
-    const curCategory = this._modelInstance.getCurCategory();
-    let commonFilms = this.makeInterfaceToFilms()[curCategory]();
-
-    if (curSortKind.associatedFilmField) {
-      commonFilms = sortFilmsByFieldWithClone(
-          commonFilms,
-          curSortKind.associatedFilmField
-      );
-    }
-
-    return {
-      filmsTR: this._modelInstance.getFilmsTopRated(),
-      filmsMC: this._modelInstance.getFilmsMostCommented(),
-      countCommonFilms: this._modelInstance.getCountCommonFilms(),
-      increaseCountCommonFilms: this.increaseCountCommonFilms,
-      analyzePopUpIdentifier: this.analyzePopUpIdentifier,
-      commonFilms
-    };
-  }
-
-  increaseCountCommonFilms() {
-    const curCountCommonFilms = this._modelInstance.getCountCommonFilms();
-    const newCountCommonFilms =
-      curCountCommonFilms + FilmSection.COMMON.countFilmsToShow;
-    this._modelInstance.setCurCountCommonFilms(newCountCommonFilms);
-  }
-
-  handleNewSortKind(newSortKind) {
-    const curSortKind = this._modelInstance.getCurSortKind();
-
-    if (curSortKind !== newSortKind) {
-      this._modelInstance.setCurSortKind(newSortKind);
-    }
+  run() {
+    this._eventManager.on(
+        Event.CHANGE_LOADING_STATUS,
+        this._pageMainUpdateHandler
+    );
+    this._eventManager.on(
+        Event.CHANGE_COUNT_COMMON_FILMS,
+        this._filmsUpdateHandler
+    );
+    this._eventManager.on(
+        Event.CHANGE_CUR_SORT_KIND,
+        this._pageMainUpdateHandler
+    );
+    this._eventManager.on(
+        Event.CHANGE_CUR_CATEGORY,
+        this._pageMainUpdateHandler,
+        {setSortKindToDefault: true}
+    );
   }
 
   renderSort(sortInfo) {
@@ -110,27 +68,71 @@ export default class PageController {
       .render(DomNode.blockMain);
   }
 
-  resetPageMain() {
-    this._modelInstance.setCurCountCommonFilms(
-        FilmSection.COMMON.countFilmsToShow
-    );
+  _getFilmsInfo() {
+    return {
+      filmsTR: this._modelInstance.getFilmsTopRated(),
+      filmsMC: this._modelInstance.getFilmsMostCommented(),
+      commonFilms: this._getCommonFilms(),
+      countCommonFilms: this._modelInstance.getCountCommonFilms(),
+      countCommonFilmsChangeHandler: this._countCommonFilmsChangeHandler,
+      popUpOpenHandler: this._popUpOpenHandler
+    };
+  }
 
-    if (this._modelInstance.getCurSortKind() === SortKind.DEFAULT) {
-      this.updateFilms();
-      return;
+  _getCommonFilms() {
+    const curCategory = this._modelInstance.getCurCategory();
+    const curSortKind = this._modelInstance.getCurSortKind();
+    let commonFilms = this._interfaceToFilmsByCategory[curCategory]();
+
+    if (curSortKind.associatedFilmField) {
+      commonFilms = sortFilmsByFieldWithClone(
+          commonFilms,
+          curSortKind.associatedFilmField
+      );
     }
 
-    this._modelInstance.setCurSortKind(SortKind.DEFAULT);
+    return commonFilms;
   }
 
-  changeSortPageMain() {
+  _pageMainUpdateHandler(evt) {
     this._modelInstance.setCurCountCommonFilms(
         FilmSection.COMMON.countFilmsToShow
     );
-    this.updatePageMain();
+
+    if (
+      evt.attachedData.setSortKindToDefault
+      && this._modelInstance.getCurSortKind() !== SortKind.DEFAULT
+    ) {
+      this._modelInstance.setCurSortKind(SortKind.DEFAULT);
+    }
+
+    const sortInfo = {
+      curSortKind: this._modelInstance.getCurSortKind(),
+      sortKindChangeHandler: this._sortKindChangeHandler
+    };
+
+    this.renderSort(sortInfo);
+    this.renderFilms(this._getFilmsInfo());
   }
 
-  analyzePopUpIdentifier(newPopUpIdentifier) {
+  _filmsUpdateHandler() {
+    this.renderFilms(this._getFilmsInfo());
+  }
+
+  _countCommonFilmsChangeHandler() {
+    const curCountCommonFilms = this._modelInstance.getCountCommonFilms();
+    const newCountCommonFilms =
+      curCountCommonFilms + FilmSection.COMMON.countFilmsToShow;
+    this._modelInstance.setCurCountCommonFilms(newCountCommonFilms);
+  }
+
+  _sortKindChangeHandler(newSortKind) {
+    if (this._modelInstance.getCurSortKind() !== newSortKind) {
+      this._modelInstance.setCurSortKind(newSortKind);
+    }
+  }
+
+  _popUpOpenHandler(newPopUpIdentifier) {
     if (this._modelInstance.getCurPopUpIdentifier() !== newPopUpIdentifier) {
       this._modelInstance.setCurPopUpIdentifier(newPopUpIdentifier);
     }

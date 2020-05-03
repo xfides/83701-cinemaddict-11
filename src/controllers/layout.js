@@ -22,8 +22,8 @@ export default class LayoutController {
 
   run() {
     this._eventManager.on(
-      Event.CHANGE_LOADING_STATUS,
-      this._layoutUpdateHandler
+        Event.CHANGE_LOADING_STATUS,
+        this._layoutUpdateHandler
     );
     this._eventManager.on(Event.CHANGE_CUR_CATEGORY, this._navUpdateHandler);
   }
