@@ -85,10 +85,7 @@ export const formatMsToCommentDate = (milliseconds) => {
 };
 
 export const formatMsToFilmFullDate = (milliseconds) => {
-  const dateToDisplay = moment(milliseconds);
-  const absoluteDate = dateToDisplay.format(`DD MMMM YYYY`);
-
-  return absoluteDate;
+  return moment(milliseconds).format(`DD MMMM YYYY`);
 };
 
 export const ensureArray = (data) => {

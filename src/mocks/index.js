@@ -1,4 +1,4 @@
-import {default as faker} from 'faker';
+import faker from 'faker';
 import {FilmFilter, Emoji, Poster} from '../consts/index.js';
 
 const createObjectByStructure = (structure, dataFactory) => {
