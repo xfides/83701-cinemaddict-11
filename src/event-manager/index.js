@@ -13,11 +13,11 @@ export default class EventManager {
     this._events = {};
     this._queueOfHandlers = [];
     this._isScheduleTriggerOnNextTick = false;
-    this.processQueueOfHandlers = this.processQueueOfHandlers.bind(this);
+    this._processQueueOfHandlers = this._processQueueOfHandlers.bind(this);
   }
 
   on(name, handler, data = {}) {
-    this.checkDataForEvent(data);
+    EventManager._checkDataForEvent(data);
     this._events[name] = this._events[name] ? this._events[name] : [];
     this._events[name].push({handler, data});
   }
@@ -47,18 +47,18 @@ export default class EventManager {
       return;
     }
 
-    this.checkDataForEvent(triggerData);
-    this.queueHandlers(name, triggerData);
+    EventManager._checkDataForEvent(triggerData);
+    this._queueHandlers(name, triggerData);
 
     if (!this._isScheduleTriggerOnNextTick) {
       this._isScheduleTriggerOnNextTick = true;
-      setTimeout(this.processQueueOfHandlers, 0);
+      setTimeout(this._processQueueOfHandlers, 0);
     }
   }
 
-  queueHandlers(name, triggerData) {
+  _queueHandlers(name, triggerData) {
     this._events[name].forEach((oneHandlerInfo) => {
-      if (!this.isHandlerInQueue(oneHandlerInfo)) {
+      if (!this._isHandlerInQueue(oneHandlerInfo)) {
         const eventFullData = {
           name,
           triggerData,
@@ -71,18 +71,18 @@ export default class EventManager {
 
         this._queueOfHandlers.push(handlerForQueue);
       } else {
-        this.updateHandlerInQueue(oneHandlerInfo, triggerData);
+        this._updateHandlerInQueue(oneHandlerInfo, triggerData);
       }
     });
   }
 
-  isHandlerInQueue(oneHandlerInfo) {
+  _isHandlerInQueue(oneHandlerInfo) {
     return this._queueOfHandlers.some((handlerInfoInQueue) => {
       return handlerInfoInQueue.handler === oneHandlerInfo.handler;
     });
   }
 
-  updateHandlerInQueue(oneHandlerInfo, triggerData) {
+  _updateHandlerInQueue(oneHandlerInfo, triggerData) {
     const handlerInQueue = this._queueOfHandlers.find((oneHandlerInQueue) => {
       return oneHandlerInQueue.handler === oneHandlerInfo.handler;
     });
@@ -100,7 +100,7 @@ export default class EventManager {
     );
   }
 
-  processQueueOfHandlers() {
+  _processQueueOfHandlers() {
     this._isScheduleTriggerOnNextTick = false;
     const handlersForExecute = [...this._queueOfHandlers];
     this._queueOfHandlers = [];
@@ -110,20 +110,20 @@ export default class EventManager {
     });
   }
 
+  static _checkDataForEvent(data) {
+    if (data && (typeof data !== `object`)) {
+      throw new Error(
+        `event data must be type of object. You gave ${typeof data} 
+      `);
+    }
+  }
+
   static getInstance() {
     if (!this[singletonKey]) {
       this[singletonKey] = new this(singletonVerification);
     }
 
     return this[singletonKey];
-  }
-
-  checkDataForEvent(data) {
-    if (data && (typeof data !== `object`)) {
-      throw new Error(
-          `event data must be type of object. You gave ${typeof data} 
-      `);
-    }
   }
 
 }
