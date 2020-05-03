@@ -10,9 +10,9 @@ export default class PopUpComponent extends AbstractComponent {
   constructor() {
     super();
     this._popUpFilm = null;
-    this._analyzePopUpIdentifier = null;
-    this.handleMouseClick = this.handleMouseClick.bind(this);
-    this.handleKeyDown = this.handleKeyDown.bind(this);
+    this._popUpChangeHandler = null;
+    this._popUpClickHandler = this._popUpClickHandler.bind(this);
+    this._popUpKeyDownHandler = this._popUpKeyDownHandler.bind(this);
   }
 
   getTemplate() {
@@ -31,35 +31,35 @@ export default class PopUpComponent extends AbstractComponent {
 
   getDomElement() {
     super.getDomElement();
-    this._domElement.addEventListener(`click`, this.handleMouseClick);
-    document.addEventListener(`keydown`, this.handleKeyDown);
+    this._domElement.addEventListener(`click`, this._popUpClickHandler);
+    document.addEventListener(`keydown`, this._popUpKeyDownHandler);
 
     return this._domElement;
   }
 
-  handleMouseClick(evt) {
+  executeAfterRemove() {
+    document.removeEventListener(`keydown`, this._popUpKeyDownHandler);
+  }
+
+  setPopUpInfo(popUpInfo) {
+    this._popUpFilm = popUpInfo.popUpFilm;
+    this._popUpChangeHandler = popUpInfo.popUpChangeHandler;
+    return this;
+  }
+
+  _popUpClickHandler(evt) {
     const closePopUpDom =
       evt.target.classList.contains(`${CssClass.POPUP_CLOSE}`);
 
     if (closePopUpDom) {
-      this._analyzePopUpIdentifier(null);
+      this._popUpChangeHandler(null);
     }
   }
 
-  handleKeyDown(evt) {
+  _popUpKeyDownHandler(evt) {
     if (evt.type === `keydown` && evt.keyCode === KeyCode.ESC) {
-      this._analyzePopUpIdentifier(null);
+      this._popUpChangeHandler(null);
     }
-  }
-
-  executeAfterRemove() {
-    document.removeEventListener(`keydown`, this.handleKeyDown);
-  }
-
-  setPopUpFilm(popUpInfo) {
-    this._popUpFilm = popUpInfo.film;
-    this._analyzePopUpIdentifier = popUpInfo.analyzePopUpIdentifier;
-    return this;
   }
 
 }
