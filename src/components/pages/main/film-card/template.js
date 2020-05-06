@@ -1,6 +1,6 @@
 export const createFilmCardTemplate = (film) => {
   return (`
-    <article class="film-card">
+    <article class="film-card" data-id="${film.id}">
       <h3 class="film-card__title">
         ${film.title}
       </h3>

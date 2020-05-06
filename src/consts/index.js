@@ -92,7 +92,11 @@ export const CssClass = {
   HEADER: `header`,
   MAIN: `main`,
   FOOTER_STATISTICS: `footer__statistics`,
-  FILM_BUTTON_ACTIVE: ` film-card__controls-item--active`
+  FILM_CARD_BUTTON: `film-card__controls-item`,
+  FILM_CARD_BUTTON_ACTIVE: `film-card__controls-item--active`,
+  FILM_CARD_BUTTON_SCHEDULED: `film-card__controls-item--add-to-watchlist`,
+  FILM_CARD_BUTTON_WATCHED: `film-card__controls-item--mark-as-watched`,
+  FILM_CARD_BUTTON_FAVORITE: `film-card__controls-item--favorite`,
 };
 
 export const Emoji = {
@@ -147,6 +151,8 @@ export const Event = {
   CHANGE_CUR_SORT_KIND: `change_cur_sort_kind`,
   CHANGE_COUNT_COMMON_FILMS: `change_count_common_films`,
   CHANGE_POP_UP_IDENTIFIER: `change_pop_up_identifier`,
+  FILM_CHANGE_CATEGORY: `film_change_category`,
+  FILM_CHANGE_COMMENTS: `film_change_comments`
 };
 
 export const DomNode = {
@@ -157,3 +163,5 @@ export const DomNode = {
       `.${CssClass.FOOTER_STATISTICS}`
   )
 };
+
+

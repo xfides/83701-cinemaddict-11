@@ -6,7 +6,11 @@ import {
   Event,
   LoadingStatus
 } from '../consts';
-import {ensureArray, sortFilmsByFieldWithClone} from '../utils';
+import {
+  ensureArray,
+  sortFilmsByFieldWithClone,
+  hasSecondObjSameProps
+} from '../utils';
 import EventManager from '../event-manager';
 
 const singletonKey = Symbol();
@@ -24,13 +28,19 @@ export default class Model {
     this._eventManager = EventManager.getInstance();
     this._films = null;
     this._countCommonFilms = FilmSection.COMMON.countFilmsToShow;
-    this._popUpIdentifier = null;
+    this._popUpId = null;
     this._curCategory = FilmFilter.ALL;
     this._curSortKind = SortKind.DEFAULT;
     this._page = null;
     this._loadingStatus = null;
     this._handleLoadSuccess = this._handleLoadSuccess.bind(this);
     this._handleLoadError = this._handleLoadError.bind(this);
+  }
+
+  getFilmById(id){
+    return this._films.find((oneFilm) => {
+      return oneFilm.id === id;
+    });
   }
 
   getFilmsAll() {
@@ -81,8 +91,8 @@ export default class Model {
     return this._countCommonFilms;
   }
 
-  getCurPopUpIdentifier() {
-    return this._popUpIdentifier;
+  getCurPopUpId() {
+    return this._popUpId;
   }
 
   setCurLoadingStatus(newLoadingStatus) {
@@ -124,16 +134,16 @@ export default class Model {
     );
   }
 
-  setCurPopUpIdentifier(newPopUpIdentifier) {
-    if (this._popUpIdentifier === newPopUpIdentifier) {
+  setCurPopUpId(newPopUpId) {
+    if (this._popUpId === newPopUpId) {
       return;
     }
 
-    this._popUpIdentifier = newPopUpIdentifier;
+    this._popUpId = newPopUpId;
 
     this._eventManager.trigger(
         Event.CHANGE_POP_UP_IDENTIFIER,
-        {[Event.CHANGE_POP_UP_IDENTIFIER]: newPopUpIdentifier}
+        {[Event.CHANGE_POP_UP_IDENTIFIER]: newPopUpId}
     );
   }
 
@@ -148,6 +158,17 @@ export default class Model {
         Event.CHANGE_COUNT_COMMON_FILMS,
         {[Event.CHANGE_COUNT_COMMON_FILMS]: newCountCommonFilms}
     );
+  }
+
+  setCategoryForFilm(filmId, categoryInfo={}){
+    const filmToChange = this._films.find((film)=>{
+      return film.id === filmId;
+    });
+
+    if(filmToChange && !hasSecondObjSameProps(filmToChange, categoryInfo)){
+      Object.assign(filmToChange, categoryInfo);
+      this._eventManager.trigger(Event.FILM_CHANGE_CATEGORY, categoryInfo);
+    }
   }
 
   loadData() {

@@ -70,4 +70,5 @@ export default class AbstractComponent {
       parentOldDomElement.replaceChild(newDomElement, oldDomElement);
     }
   }
+
 }

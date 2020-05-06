@@ -27,6 +27,7 @@ const structureComment = {
 };
 
 const structureFilm = {
+  id: `string`,
   pathToPosterImg: `string`,
   title: `string`,
   titleOrig: `string`,
@@ -77,6 +78,9 @@ dataFactory.comment = {
 
 dataFactory.film = {
   __proto__: dataFactory,
+  id() {
+    return faker.random.uuid();
+  },
   pathToPosterImg() {
     return this.randomPathToSmth(Poster.RELATIVE_PATH, Poster.IMAGES);
   },
@@ -164,7 +168,7 @@ dataFactory.film = {
       new Array(faker.random.number({min: 0, max: 17})).fill(null);
 
     return commentsToFilm.map(
-        () => createObjectByStructure(structureComment, this.comment)
+      () => createObjectByStructure(structureComment, this.comment)
     );
 
   },

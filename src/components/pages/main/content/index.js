@@ -13,13 +13,14 @@ export default class ContentComponent extends AbstractComponent {
     this._filmsMC = null;
     this._countCommonFilmsChangeHandler = null;
     this._popUpOpenHandler = null;
+    this._filmCategoryUpdateHandler = null;
     this._contentClickHandler = this._contentClickHandler.bind(this);
   }
 
   getTemplate() {
     const templatesOfFilmSections = {
       common: createFilmsBlockComponent(
-          FilmSection.COMMON, this._commonFilms, this._countCommonFilms
+        FilmSection.COMMON, this._commonFilms, this._countCommonFilms
       ),
       topRated: this._filmsTR.length
         ? createFilmsBlockComponent(FilmSection.TOP_RATED, this._filmsTR)
@@ -35,8 +36,28 @@ export default class ContentComponent extends AbstractComponent {
   getDomElement() {
     super.getDomElement();
     this._domElement.addEventListener(`click`, this._contentClickHandler);
+    this._fixJumpingPosterBug();
 
     return this._domElement;
+  }
+
+  _fixJumpingPosterBug() {
+    const self = this;
+    const postersCssSelector = `.${CssClass.FILM_CARD_POSTER}`;
+    const posters = this._domElement.querySelectorAll(postersCssSelector);
+
+    const restoreTransDurHandler = () => {
+      posters.forEach((onePoster) => {
+        onePoster.style.transitionDuration = ``;
+      });
+      self._domElement.removeEventListener(`mousemove`, restoreTransDurHandler);
+    };
+
+    posters.forEach((onePoster) => {
+      onePoster.style.transitionDuration = `0s`;
+    });
+
+    this._domElement.addEventListener(`mousemove`, restoreTransDurHandler);
   }
 
   setFilmsInfo(filmsInfo) {
@@ -46,12 +67,14 @@ export default class ContentComponent extends AbstractComponent {
     this._filmsMC = filmsInfo.filmsMC;
     this._countCommonFilmsChangeHandler = filmsInfo.countCommonFilmsChangeHandler;
     this._popUpOpenHandler = filmsInfo.popUpOpenHandler;
+    this._filmCategoryUpdateHandler = filmsInfo.filmCategoryUpdateHandler;
     return this;
   }
 
   _contentClickHandler(evt) {
     this._showMoreClickHandler(evt);
     this._filmCardClickHandler(evt);
+    this._filmCardControlClickHandler(evt);
   }
 
   _showMoreClickHandler(evt) {
@@ -66,14 +89,26 @@ export default class ContentComponent extends AbstractComponent {
       || evt.target.classList.contains(CssClass.FILM_CARD_TITLE)
       || evt.target.classList.contains(CssClass.FILM_CARD_COMMENTS)
     ) {
-      const filmCheckedDom = evt.target.closest(`.${CssClass.FILM_CARD}`);
-      const titleOfFilmChecked = filmCheckedDom
-        .querySelector(`.${CssClass.FILM_CARD_TITLE}`)
-        .textContent
-        .trim();
-
-      this._popUpOpenHandler(titleOfFilmChecked);
+      const checkedFilmCardDom = evt.target.closest(`.${CssClass.FILM_CARD}`);
+      this._popUpOpenHandler(checkedFilmCardDom.dataset.id);
     }
   }
 
+  _filmCardControlClickHandler(evt) {
+    evt.preventDefault();
+
+    if (evt.target.classList.contains(CssClass.FILM_CARD_BUTTON)) {
+      const buttonClasses = [
+        CssClass.FILM_CARD_BUTTON_SCHEDULED,
+        CssClass.FILM_CARD_BUTTON_FAVORITE,
+        CssClass.FILM_CARD_BUTTON_WATCHED
+      ];
+      const checkedClass = buttonClasses.find((buttonClass) => {
+        return evt.target.classList.contains(buttonClass);
+      });
+      const filmId = evt.target.closest(`.${CssClass.FILM_CARD}`).dataset.id;
+
+      this._filmCategoryUpdateHandler({checkedClass, filmId});
+    }
+  }
 }

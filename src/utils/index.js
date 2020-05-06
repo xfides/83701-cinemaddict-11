@@ -13,8 +13,8 @@ export const cloneObj = (obj) => {
 };
 
 export const truncateStr = (str,
-    newLength = ShortDescParam.COUNT_SYMBOLS,
-    endSymbol = ShortDescParam.END_SYMBOL) => {
+                            newLength = ShortDescParam.COUNT_SYMBOLS,
+                            endSymbol = ShortDescParam.END_SYMBOL) => {
   return str.length < 140 ? str : `${str.slice(0, newLength)}${endSymbol}`;
 };
 
@@ -70,10 +70,10 @@ export const formatNumberWithSpaces = (number) => {
 
 export const formatDurationMinutes = (numberOfMinutes) => {
   return numberOfMinutes >= 60 ? (
-    `${(Math.trunc(numberOfMinutes / 60))}h ${(numberOfMinutes % 60)}m`
-  ) : (
-    `${numberOfMinutes}m`
-  );
+      `${(Math.trunc(numberOfMinutes / 60))}h ${(numberOfMinutes % 60)}m`
+    ) : (
+      `${numberOfMinutes}m`
+    );
 };
 
 export const formatMsToCommentDate = (milliseconds) => {
@@ -90,5 +90,11 @@ export const formatMsToFilmFullDate = (milliseconds) => {
 
 export const ensureArray = (data) => {
   return Array.isArray(data) ? data : [];
+};
+
+export const hasSecondObjSameProps = (firstObj, secondObj) => {
+  return Object.keys(secondObj).every((key)=>{
+    return secondObj[key] === firstObj[key];
+  });
 };
 

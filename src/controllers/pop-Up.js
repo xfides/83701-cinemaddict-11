@@ -19,8 +19,8 @@ export default class PopUpController {
 
   run() {
     this._eventManager.on(
-        Event.CHANGE_POP_UP_IDENTIFIER,
-        this._popUpUpdateHandler
+      Event.CHANGE_POP_UP_IDENTIFIER,
+      this._popUpUpdateHandler
     );
   }
 
@@ -30,34 +30,26 @@ export default class PopUpController {
       .render(DomNode.body);
   }
 
-  _getPopUpFilmByIdentifier(curPopUpIdentifier) {
-    const filmsAll = this._modelInstance.getFilmsAll();
-
-    return filmsAll.find((oneFilm) => {
-      return oneFilm.title.trim() === curPopUpIdentifier;
-    });
-  }
-
   _popUpUpdateHandler() {
-    const curPopUpIdentifier = this._modelInstance.getCurPopUpIdentifier();
-    if (!curPopUpIdentifier) {
+    const curPopUpId = this._modelInstance.getCurPopUpId();
+    if (!curPopUpId) {
       this._components[PopUpComponent.name].removeDomElement();
 
       return;
     }
 
-    const filmByIdentifier = this._getPopUpFilmByIdentifier(curPopUpIdentifier);
+    const filmById = this._modelInstance.getFilmById(curPopUpId);
     const popUpInfo = {
-      popUpFilm: filmByIdentifier ? cloneObj(filmByIdentifier) : undefined,
+      popUpFilm: filmById ? cloneObj(filmById) : undefined,
       popUpChangeHandler: this._popUpChangeHandler
     };
 
     this._renderPopUp(popUpInfo);
   }
 
-  _popUpChangeHandler(newPopUpIdentifier) {
-    if (this._modelInstance.getCurPopUpIdentifier() !== newPopUpIdentifier) {
-      this._modelInstance.setCurPopUpIdentifier(newPopUpIdentifier);
+  _popUpChangeHandler(newPopUpId) {
+    if (this._modelInstance.getCurPopUpId() !== newPopUpId) {
+      this._modelInstance.setCurPopUpId(newPopUpId);
     }
   }
 
