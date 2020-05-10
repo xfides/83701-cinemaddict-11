@@ -1075,3 +1075,96 @@ button {
   padding-top: 50px;
   padding-bottom: 50px;
 }
+
+
+.film-card__controls-item--load, [data-load] + label {
+  animation: changingBoxShadow  1.5s linear infinite;
+  cursor:wait;
+}
+
+.film-details__control-label--disabled,
+.film-details__control-label--disabled:hover{
+  opacity: 0.5;
+}
+
+button[disabled]{
+  opacity: 0.5;
+}
+
+.animate__headShake {
+  -webkit-animation-timing-function: ease-in-out;
+  animation-timing-function: ease-in-out;
+  -webkit-animation-name: headShake;
+  animation-name: headShake;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+}
+
+@keyframes changingBoxShadow {
+  0%   {
+    box-shadow: inset 0 -1px 0 #f5df00;
+  }
+  24%   {
+    box-shadow: inset 0 -1px 0 #f5df00;
+  }
+  25%  {
+    box-shadow: inset 1px 0 0  #f5df00;
+  }
+  49%{
+    box-shadow: inset 1px 0 0  #f5df00;
+  }
+  50%  {
+    box-shadow: inset 0 1px 0  #f5df00;
+  }
+  74%{
+    box-shadow: inset 0 1px 0  #f5df00;
+  }
+  75%  {
+    box-shadow: inset -1px 0 0  #f5df00;
+  }
+  99%{
+    box-shadow: inset -1px 0 0  #f5df00;
+  }
+  100% {
+    box-shadow: inset 0 -1px 0 #f5df00;
+  }
+}
+
+@keyframes headShake {
+  0% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+
+  6.5% {
+    -webkit-transform: translateX(-6px) rotateY(-9deg);
+    transform: translateX(-6px) rotateY(-9deg);
+  }
+
+  18.5% {
+    -webkit-transform: translateX(5px) rotateY(7deg);
+    transform: translateX(5px) rotateY(7deg);
+  }
+
+  31.5% {
+    -webkit-transform: translateX(-3px) rotateY(-5deg);
+    transform: translateX(-3px) rotateY(-5deg);
+  }
+
+  43.5% {
+    -webkit-transform: translateX(2px) rotateY(3deg);
+    transform: translateX(2px) rotateY(3deg);
+  }
+
+  50% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+}
+
+
+

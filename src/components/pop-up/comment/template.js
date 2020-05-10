@@ -1,6 +1,6 @@
 export const createCommentTemplate = (comment) => {
   return (`
-    <li class="film-details__comment">
+    <li class="film-details__comment" data-id=${comment.id}>
       <span class="film-details__comment-emoji">
         <img 
           src="${comment.pathToEmotion}" 

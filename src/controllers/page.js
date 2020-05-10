@@ -2,7 +2,14 @@ import EventManager from '../event-manager';
 import Model from '../models';
 import ContentComponent from '../components/pages/main/content';
 import SortComponent from '../components/pages/main/sort';
-import {Event, FilmFilter, DomNode, FilmSection, SortKind, CssClass} from '../consts';
+import {
+  Event,
+  FilmFilter,
+  DomNode,
+  FilmSection,
+  SortKind,
+  CssClass
+} from '../consts';
 import {sortFilmsByFieldWithClone} from '../utils';
 
 export default class PageController {
@@ -34,7 +41,6 @@ export default class PageController {
     this._countCommonFilmsChangeHandler = this._countCommonFilmsChangeHandler.bind(this);
     this._popUpOpenHandler = this._popUpOpenHandler.bind(this);
     this._filmCategoryUpdateHandler = this._filmCategoryUpdateHandler.bind(this);
-    // this._filmCardsUpdateHandler = this._filmCardsUpdateHandler.bind(this);
   }
 
   run() {
@@ -56,7 +62,15 @@ export default class PageController {
       {setSortKindToDefault: true}
     );
     this._eventManager.on(
-      Event.FILM_CHANGE_CATEGORY,
+      Event.FILM_CHANGE_CATEGORY_START,
+      this._filmsUpdateHandler
+    );
+    this._eventManager.on(
+      Event.FILM_CHANGE_CATEGORY_DONE,
+      this._filmsUpdateHandler
+    );
+    this._eventManager.on(
+      Event.FILM_DELETE_COMMENT,
       this._filmsUpdateHandler
     );
   }
@@ -148,39 +162,31 @@ export default class PageController {
 
   _filmCategoryUpdateHandler(newInfo) {
     const {checkedClass, filmId} = newInfo;
-    const filmToUpdate = this._modelInstance.getFilmById(filmId);
-    let categoryInfo;
+    const categoryInfo = this._createInfoForChangingFilmCategory(checkedClass);
 
-    switch (checkedClass){
-      case CssClass.FILM_CARD_BUTTON_FAVORITE:
-        categoryInfo = {
-          [FilmFilter.FAVORITE]: !filmToUpdate[FilmFilter.FAVORITE]
-        };
-        break;
-      case CssClass.FILM_CARD_BUTTON_SCHEDULED:
-        categoryInfo = {
-          [FilmFilter.SCHEDULED]: !filmToUpdate[FilmFilter.SCHEDULED]
-        };
-        break;
-      case CssClass.FILM_CARD_BUTTON_WATCHED:
-        categoryInfo = {
-          [FilmFilter.WATCHED]: !filmToUpdate[FilmFilter.WATCHED]
-        };
-        break;
-    }
+    this._modelInstance.setCategoryForFilm(newInfo.filmId, categoryInfo);
 
-    this._modelInstance.setCategoryForFilm(filmId, categoryInfo);
+    // async process of changing Category for film
+
+    setTimeout(() => {
+      const film = this._modelInstance.getFilmById(filmId);
+      const categoryToChange = categoryInfo.awaitConfirmChangingCategory;
+
+      categoryInfo[categoryToChange] = !film[categoryToChange];
+      categoryInfo.awaitConfirmChangingCategory = null;
+      this._modelInstance.setCategoryForFilm(filmId, categoryInfo);
+    }, 2000);
   }
 
-  _filmCardsUpdateHandler(evt){
-    const categoryInfo = evt.triggerData;
-    const isUserTurnedOffCategory = !Object.values(categoryInfo)[0];
-
-    if(isUserTurnedOffCategory){
-      this._filmsUpdateHandler();
-      return null;
+  _createInfoForChangingFilmCategory(checkedClass) {
+    switch (checkedClass) {
+      case CssClass.FILM_CARD_BUTTON_FAVORITE:
+        return {awaitConfirmChangingCategory: FilmFilter.FAVORITE};
+      case CssClass.FILM_CARD_BUTTON_SCHEDULED:
+        return {awaitConfirmChangingCategory: FilmFilter.SCHEDULED};
+      case CssClass.FILM_CARD_BUTTON_WATCHED:
+        return {awaitConfirmChangingCategory: FilmFilter.WATCHED};
     }
-
   }
 
 }

@@ -1,3 +1,22 @@
+import {CssClass, FilmFilter} from '../../../../consts';
+
+const configureButtonClasses = (film, category) => {
+  let classes = ` `;
+
+  if (film.awaitConfirmChangingCategory === category) {
+    classes = ` ${classes} ${CssClass.FILM_CARD_BUTTON_LOAD} `;
+  }
+  if (film[category]) {
+    classes = ` ${classes} ${CssClass.FILM_CARD_BUTTON_ACTIVE} `;
+  }
+
+  return classes;
+};
+
+const getDisabledBtnAttr = (film) => {
+  return film.awaitConfirmChangingCategory ? `disabled` : ``;
+};
+
 export const createFilmCardTemplate = (film) => {
   return (`
     <article class="film-card" data-id="${film.id}">
@@ -27,24 +46,25 @@ export const createFilmCardTemplate = (film) => {
           class="film-card__controls-item 
                button 
                film-card__controls-item--add-to-watchlist
-               ${film.isScheduledActive}
-               ">
+               ${configureButtonClasses(film, FilmFilter.SCHEDULED)}"
+          ${getDisabledBtnAttr(film)}>
+               
           Add to watchlist
         </button>
         <button 
           class="film-card__controls-item 
                button 
                film-card__controls-item--mark-as-watched
-               ${film.isWatchedActive}
-               ">
+               ${configureButtonClasses(film, FilmFilter.WATCHED)}"
+          ${getDisabledBtnAttr(film)}>
           Mark as watched
         </button>
         <button 
           class="film-card__controls-item 
                button 
                film-card__controls-item--favorite
-               ${film.isFavoriteActive}
-               ">
+               ${configureButtonClasses(film, FilmFilter.FAVORITE)}"
+          ${getDisabledBtnAttr(film)}>     
           Mark as favorite
         </button>
        </form>

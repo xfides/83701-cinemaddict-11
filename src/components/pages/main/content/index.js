@@ -18,11 +18,15 @@ export default class ContentComponent extends AbstractComponent {
   }
 
   getTemplate() {
+    const hasAllFilmsTRZeroRate = this._filmsTR.every((oneFilmTR)=>{
+      return oneFilmTR.rate === 0
+    });
+
     const templatesOfFilmSections = {
       common: createFilmsBlockComponent(
         FilmSection.COMMON, this._commonFilms, this._countCommonFilms
       ),
-      topRated: this._filmsTR.length
+      topRated: this._filmsTR.length && !hasAllFilmsTRZeroRate
         ? createFilmsBlockComponent(FilmSection.TOP_RATED, this._filmsTR)
         : ``,
       mostCommented: this._filmsMC.length
@@ -39,6 +43,17 @@ export default class ContentComponent extends AbstractComponent {
     this._fixJumpingPosterBug();
 
     return this._domElement;
+  }
+
+  setFilmsInfo(filmsInfo) {
+    this._commonFilms = filmsInfo.commonFilms;
+    this._countCommonFilms = filmsInfo.countCommonFilms;
+    this._filmsTR = filmsInfo.filmsTR;
+    this._filmsMC = filmsInfo.filmsMC;
+    this._countCommonFilmsChangeHandler = filmsInfo.countCommonFilmsChangeHandler;
+    this._popUpOpenHandler = filmsInfo.popUpOpenHandler;
+    this._filmCategoryUpdateHandler = filmsInfo.filmCategoryUpdateHandler;
+    return this;
   }
 
   _fixJumpingPosterBug() {
@@ -58,17 +73,6 @@ export default class ContentComponent extends AbstractComponent {
     });
 
     this._domElement.addEventListener(`mousemove`, restoreTransDurHandler);
-  }
-
-  setFilmsInfo(filmsInfo) {
-    this._commonFilms = filmsInfo.commonFilms;
-    this._countCommonFilms = filmsInfo.countCommonFilms;
-    this._filmsTR = filmsInfo.filmsTR;
-    this._filmsMC = filmsInfo.filmsMC;
-    this._countCommonFilmsChangeHandler = filmsInfo.countCommonFilmsChangeHandler;
-    this._popUpOpenHandler = filmsInfo.popUpOpenHandler;
-    this._filmCategoryUpdateHandler = filmsInfo.filmCategoryUpdateHandler;
-    return this;
   }
 
   _contentClickHandler(evt) {
@@ -95,9 +99,8 @@ export default class ContentComponent extends AbstractComponent {
   }
 
   _filmCardControlClickHandler(evt) {
-    evt.preventDefault();
-
     if (evt.target.classList.contains(CssClass.FILM_CARD_BUTTON)) {
+      evt.preventDefault();
       const buttonClasses = [
         CssClass.FILM_CARD_BUTTON_SCHEDULED,
         CssClass.FILM_CARD_BUTTON_FAVORITE,
@@ -111,4 +114,5 @@ export default class ContentComponent extends AbstractComponent {
       this._filmCategoryUpdateHandler({checkedClass, filmId});
     }
   }
+
 }

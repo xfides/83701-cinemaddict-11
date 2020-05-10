@@ -4,7 +4,9 @@ import {Emoji} from '../../../consts';
 
 export const createCommentAddNewComponent = (countComments) => {
   const commentAddNewData = {
-    templateEmojis: Emoji.IMAGES.map(createCommentAddEmojiComponent).join(``),
+    templateEmojis: Object.values(Emoji.Images)
+      .map(createCommentAddEmojiComponent)
+      .join(``),
     countComments
   };
 

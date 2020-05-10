@@ -20,10 +20,12 @@ const createObjectByStructure = (structure, dataFactory) => {
 };
 
 const structureComment = {
+  id: `string`,
   text: `string`,
   pathToEmotion: `string`,
   author: `string`,
-  date: `number ms`
+  date: `number ms`,
+  awaitConfirmDeletingComment: `string | null`
 };
 
 const structureFilm = {
@@ -44,7 +46,9 @@ const structureFilm = {
   comments: `array of objects`,
   [FilmFilter.SCHEDULED]: `bool`,
   [FilmFilter.WATCHED]: `bool`,
-  [FilmFilter.FAVORITE]: `bool`
+  [FilmFilter.FAVORITE]: `bool`,
+  awaitConfirmChangingCategory: `string | null`,
+  awaitConfirmAddingComment: `string | null`,
 };
 
 const dataFactory = {
@@ -62,17 +66,26 @@ const dataFactory = {
 
 dataFactory.comment = {
   __proto__: dataFactory,
+  id() {
+    return faker.random.uuid();
+  },
   text() {
     return faker.lorem.sentences();
   },
   pathToEmotion() {
-    return this.randomPathToSmth(Emoji.RELATIVE_PATH, Emoji.IMAGES);
+    return this.randomPathToSmth(
+      Emoji.RELATIVE_PATH,
+      Object.values(Emoji.Images)
+    );
   },
   author() {
     return this.human();
   },
   date() {
     return faker.date.between(`2010-01-01`, new Date()).getTime();
+  },
+  awaitConfirmDeletingComment() {
+    return null;
   }
 };
 
@@ -180,7 +193,13 @@ dataFactory.film = {
   },
   [FilmFilter.FAVORITE]() {
     return faker.random.boolean() && faker.random.boolean();
-  }
+  },
+  awaitConfirmChangingCategory() {
+    return null;
+  },
+  awaitConfirmAddingComment() {
+    return null;
+  },
 };
 
 export const createFakeFilms = () => {

@@ -88,25 +88,41 @@ export const CssClass = {
   FILM_CARD_COMMENTS: `film-card__comments`,
   FILM_CARD_POSTER: `film-card__poster`,
   FILM_CARD: `film-card`,
+  FILM_DETAILS: `film-details`,
   POPUP_CLOSE: `film-details__close-btn`,
   HEADER: `header`,
   MAIN: `main`,
   FOOTER_STATISTICS: `footer__statistics`,
   FILM_CARD_BUTTON: `film-card__controls-item`,
+  FILM_CARD_BUTTON_LOAD: `film-card__controls-item--load`,
   FILM_CARD_BUTTON_ACTIVE: `film-card__controls-item--active`,
   FILM_CARD_BUTTON_SCHEDULED: `film-card__controls-item--add-to-watchlist`,
   FILM_CARD_BUTTON_WATCHED: `film-card__controls-item--mark-as-watched`,
   FILM_CARD_BUTTON_FAVORITE: `film-card__controls-item--favorite`,
+  FILM_DETAILS_CONTROL: `film-details__control-label`,
+  FILM_DETAILS_CONTROL_DISABLED: `film-details__control-label--disabled`,
+  FILM_DETAILS_CONTROL_SCHEDULED: `film-details__control-label--watchlist`,
+  FILM_DETAILS_CONTROL_WATCHED: `film-details__control-label--watched`,
+  FILM_DETAILS_CONTROL_FAVORITE: `film-details__control-label--favorite`,
+  FILM_DETAILS_EMOJI_LABEL: `film-details__emoji-label`,
+  FILM_DETAILS_EMOJI_LABEL_ADD: `film-details__add-emoji-label`,
+  FILM_DETAILS_EMOJI_LIST: `film-details__emoji-list`,
+  FILM_DETAILS_EMOJI_ITEM: `film-details__emoji-item`,
+  FILM_DETAILS_COMMENT: `film-details__comment`,
+  FILM_DETAILS_COMMENT_INPUT: `film-details__comment-input`,
+  FILM_DETAILS_COMMENT_DELETE: `film-details__comment-delete`,
+  FILM_DETAILS_COMMENTS_COUNT: `film-details__comments-count`,
+  ANIMATE_HEADSHAKE: `animate__headShake`,
 };
 
 export const Emoji = {
   RELATIVE_PATH: `./images/emoji/`,
-  IMAGES: [
-    `angry.png`,
-    `puke.png`,
-    `sleeping.png`,
-    `smile.png`
-  ],
+  Images: {
+    ANGRY :`angry.png`,
+    PUKE: `puke.png`,
+    SLEEPING: `sleeping.png`,
+    SMILE:`smile.png`
+  },
   DEFAULT_IMG_COMMENT_ZERO: `smile.png`
 };
 
@@ -151,8 +167,10 @@ export const Event = {
   CHANGE_CUR_SORT_KIND: `change_cur_sort_kind`,
   CHANGE_COUNT_COMMON_FILMS: `change_count_common_films`,
   CHANGE_POP_UP_IDENTIFIER: `change_pop_up_identifier`,
-  FILM_CHANGE_CATEGORY: `film_change_category`,
-  FILM_CHANGE_COMMENTS: `film_change_comments`
+  FILM_CHANGE_CATEGORY_DONE: `film_change_category_done`,
+  FILM_CHANGE_CATEGORY_START: `film_change_category_start`,
+  FILM_DELETE_COMMENT: `film_delete_comment`,
+  FILM_ADD_COMMENT: `film_add_comment`
 };
 
 export const DomNode = {
@@ -164,4 +182,9 @@ export const DomNode = {
   )
 };
 
+export const Animation = {
+  HEADSHAKE:{
+    duration: 1000
+  }
+};
 

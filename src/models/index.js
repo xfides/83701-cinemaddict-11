@@ -21,7 +21,7 @@ export default class Model {
   constructor(verificationValue) {
     if (verificationValue !== singletonVerification) {
       throw new Error(
-          `Please use ${this.constructor.name}.getInstance() to get instance`
+        `Please use ${this.constructor.name}.getInstance() to get instance`
       );
     }
 
@@ -37,7 +37,7 @@ export default class Model {
     this._handleLoadError = this._handleLoadError.bind(this);
   }
 
-  getFilmById(id){
+  getFilmById(id) {
     return this._films.find((oneFilm) => {
       return oneFilm.id === id;
     });
@@ -67,15 +67,15 @@ export default class Model {
 
   getFilmsTopRated() {
     return sortFilmsByFieldWithClone(
-        ensureArray(this._films),
-        SortKind.RATE.associatedFilmField
+      ensureArray(this._films),
+      SortKind.RATE.associatedFilmField
     ).slice(0, FilmSection.TOP_RATED.countFilmsToShow);
   }
 
   getFilmsMostCommented() {
     return sortFilmsByFieldWithClone(
-        ensureArray(this._films),
-        SortKind.COUNT_COMMENTS.associatedFilmField
+      ensureArray(this._films),
+      SortKind.COUNT_COMMENTS.associatedFilmField
     ).slice(0, FilmSection.MOST_COMMENTED.countFilmsToShow);
   }
 
@@ -103,8 +103,8 @@ export default class Model {
     this._loadingStatus = newLoadingStatus;
 
     this._eventManager.trigger(
-        Event.CHANGE_LOADING_STATUS,
-        {[Event.CHANGE_LOADING_STATUS]: newLoadingStatus}
+      Event.CHANGE_LOADING_STATUS,
+      {[Event.CHANGE_LOADING_STATUS]: newLoadingStatus}
     );
   }
 
@@ -116,8 +116,8 @@ export default class Model {
     this._curCategory = newCategory;
 
     this._eventManager.trigger(
-        Event.CHANGE_CUR_CATEGORY,
-        {[Event.CHANGE_CUR_CATEGORY]: newCategory}
+      Event.CHANGE_CUR_CATEGORY,
+      {[Event.CHANGE_CUR_CATEGORY]: newCategory}
     );
   }
 
@@ -129,8 +129,8 @@ export default class Model {
     this._curSortKind = newSortKind;
 
     this._eventManager.trigger(
-        Event.CHANGE_CUR_SORT_KIND,
-        {[Event.CHANGE_CUR_SORT_KIND]: newSortKind}
+      Event.CHANGE_CUR_SORT_KIND,
+      {[Event.CHANGE_CUR_SORT_KIND]: newSortKind}
     );
   }
 
@@ -142,8 +142,8 @@ export default class Model {
     this._popUpId = newPopUpId;
 
     this._eventManager.trigger(
-        Event.CHANGE_POP_UP_IDENTIFIER,
-        {[Event.CHANGE_POP_UP_IDENTIFIER]: newPopUpId}
+      Event.CHANGE_POP_UP_IDENTIFIER,
+      {[Event.CHANGE_POP_UP_IDENTIFIER]: newPopUpId}
     );
   }
 
@@ -155,20 +155,40 @@ export default class Model {
     this._countCommonFilms = newCountCommonFilms;
 
     this._eventManager.trigger(
-        Event.CHANGE_COUNT_COMMON_FILMS,
-        {[Event.CHANGE_COUNT_COMMON_FILMS]: newCountCommonFilms}
+      Event.CHANGE_COUNT_COMMON_FILMS,
+      {[Event.CHANGE_COUNT_COMMON_FILMS]: newCountCommonFilms}
     );
   }
 
-  setCategoryForFilm(filmId, categoryInfo={}){
-    const filmToChange = this._films.find((film)=>{
+  setCategoryForFilm(filmId, categoryInfo = {}) {
+    const filmToChange = this._films.find((film) => {
       return film.id === filmId;
     });
 
-    if(filmToChange && !hasSecondObjSameProps(filmToChange, categoryInfo)){
-      Object.assign(filmToChange, categoryInfo);
-      this._eventManager.trigger(Event.FILM_CHANGE_CATEGORY, categoryInfo);
+    if (!filmToChange || hasSecondObjSameProps(filmToChange, categoryInfo)) {
+      return undefined;
     }
+
+    if (categoryInfo.awaitConfirmChangingCategory) {
+      this._eventManager.trigger(Event.FILM_CHANGE_CATEGORY_START, categoryInfo);
+    } else {
+      this._eventManager.trigger(Event.FILM_CHANGE_CATEGORY_DONE, categoryInfo);
+    }
+
+    Object.assign(filmToChange, categoryInfo);
+  }
+
+  deleteFilmComment(filmId, commentId) {
+    const film = this.getFilmById(filmId);
+    const indexOfCommentToDelete = film.comments.findIndex((oldComment) => {
+      return oldComment.id === commentId;
+    });
+
+    if (indexOfCommentToDelete !== -1) {
+      film.comments.splice(indexOfCommentToDelete, 1);
+    }
+
+    this._eventManager.trigger(Event.FILM_DELETE_COMMENT);
   }
 
   loadData() {

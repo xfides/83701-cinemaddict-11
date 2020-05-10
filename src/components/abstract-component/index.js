@@ -37,7 +37,7 @@ export default class AbstractComponent {
   }
 
   isRendered() {
-    return (
+    return !!(
       this._domElement
       && !(this._domElement.parentNode instanceof DocumentFragment)
     );
