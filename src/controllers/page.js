@@ -38,7 +38,8 @@ export default class PageController {
     this._pageMainUpdateHandler = this._pageMainUpdateHandler.bind(this);
     this._filmsUpdateHandler = this._filmsUpdateHandler.bind(this);
     this._sortKindChangeHandler = this._sortKindChangeHandler.bind(this);
-    this._countCommonFilmsChangeHandler = this._countCommonFilmsChangeHandler.bind(this);
+    this._countCommonFilmsToShowChangeHandler =
+      this._countCommonFilmsToShowChangeHandler.bind(this);
     this._popUpOpenHandler = this._popUpOpenHandler.bind(this);
     this._filmCategoryUpdateHandler = this._filmCategoryUpdateHandler.bind(this);
   }
@@ -70,7 +71,7 @@ export default class PageController {
       this._filmsUpdateHandler
     );
     this._eventManager.on(
-      Event.FILM_DELETE_COMMENT,
+      Event.FILM_DELETE_COMMENT_DONE,
       this._filmsUpdateHandler
     );
   }
@@ -92,8 +93,8 @@ export default class PageController {
       filmsTR: this._modelInstance.getFilmsTopRated(),
       filmsMC: this._modelInstance.getFilmsMostCommented(),
       commonFilms: this._getCommonFilms(),
-      countCommonFilms: this._modelInstance.getCountCommonFilms(),
-      countCommonFilmsChangeHandler: this._countCommonFilmsChangeHandler,
+      countCommonFilmsToShow: this._modelInstance.getCountCommonFilmsToShow(),
+      countCommonFilmsToShowChangeHandler: this._countCommonFilmsToShowChangeHandler,
       popUpOpenHandler: this._popUpOpenHandler,
       filmCategoryUpdateHandler: this._filmCategoryUpdateHandler,
     };
@@ -122,7 +123,7 @@ export default class PageController {
   }
 
   _pageMainUpdateHandler(evt) {
-    this._modelInstance.setCurCountCommonFilms(
+    this._modelInstance.setCurCountCommonFilmsToShow(
       FilmSection.COMMON.countFilmsToShow
     );
 
@@ -141,11 +142,12 @@ export default class PageController {
     this.renderFilms(this._getFilmsInfo());
   }
 
-  _countCommonFilmsChangeHandler() {
-    const curCountCommonFilms = this._modelInstance.getCountCommonFilms();
-    const newCountCommonFilms =
-      curCountCommonFilms + FilmSection.COMMON.countFilmsToShow;
-    this._modelInstance.setCurCountCommonFilms(newCountCommonFilms);
+  _countCommonFilmsToShowChangeHandler() {
+    const curCountCommonFilmsToShow =
+      this._modelInstance.getCountCommonFilmsToShow();
+    const newCountCommonFilmsToShow =
+      curCountCommonFilmsToShow + FilmSection.COMMON.countFilmsToShow;
+    this._modelInstance.setCurCountCommonFilmsToShow(newCountCommonFilmsToShow);
   }
 
   _sortKindChangeHandler(newSortKind) {
@@ -160,34 +162,22 @@ export default class PageController {
     }
   }
 
-  _filmCategoryUpdateHandler(newInfo) {
-    const {checkedClass, filmId} = newInfo;
-    const categoryInfo = this._createInfoForChangingFilmCategory(checkedClass);
+  _filmCategoryUpdateHandler(filmId, checkedClass) {
+    let checkedCategory;
 
-    this._modelInstance.setCategoryForFilm(newInfo.filmId, categoryInfo);
-
-    // async process of changing Category for film
-
-    setTimeout(() => {
-      const film = this._modelInstance.getFilmById(filmId);
-      const categoryToChange = categoryInfo.awaitConfirmChangingCategory;
-
-      categoryInfo[categoryToChange] = !film[categoryToChange];
-      categoryInfo.awaitConfirmChangingCategory = null;
-      this._modelInstance.setCategoryForFilm(filmId, categoryInfo);
-    }, 2000);
-  }
-
-  _createInfoForChangingFilmCategory(checkedClass) {
     switch (checkedClass) {
       case CssClass.FILM_CARD_BUTTON_FAVORITE:
-        return {awaitConfirmChangingCategory: FilmFilter.FAVORITE};
+        checkedCategory = FilmFilter.FAVORITE;
+        break;
       case CssClass.FILM_CARD_BUTTON_SCHEDULED:
-        return {awaitConfirmChangingCategory: FilmFilter.SCHEDULED};
+        checkedCategory = FilmFilter.SCHEDULED;
+        break;
       case CssClass.FILM_CARD_BUTTON_WATCHED:
-        return {awaitConfirmChangingCategory: FilmFilter.WATCHED};
+        checkedCategory = FilmFilter.WATCHED;
+        break;
     }
+
+    this._modelInstance.setCategoryForFilm(filmId, checkedCategory);
   }
 
 }
-

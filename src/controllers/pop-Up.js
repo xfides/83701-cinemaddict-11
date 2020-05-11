@@ -15,27 +15,23 @@ export default class PopUpController {
     this._popUpChangeHandler = this._popUpChangeHandler.bind(this);
     this._popUpUpdateHandler = this._popUpUpdateHandler.bind(this);
     this._commentDeleteHandler = this._commentDeleteHandler.bind(this);
-    this._popUpCategoryUpdateHandler =
-      this._popUpCategoryUpdateHandler.bind(this);
+    this._commentSendHandler = this._commentSendHandler.bind(this);
+    this._popUpFilmCategoryUpdateHandler =
+      this._popUpFilmCategoryUpdateHandler.bind(this);
   }
 
   run() {
-    this._eventManager.on(
+    const eventsOfPopUp = [
       Event.CHANGE_POP_UP_IDENTIFIER,
-      this._popUpUpdateHandler
-    );
-    this._eventManager.on(
-      Event.FILM_DELETE_COMMENT,
-      this._popUpUpdateHandler
-    );
-    this._eventManager.on(
       Event.FILM_CHANGE_CATEGORY_START,
-      this._popUpUpdateHandler
-    );
-    this._eventManager.on(
       Event.FILM_CHANGE_CATEGORY_DONE,
-      this._popUpUpdateHandler
-    );
+      Event.FILM_DELETE_COMMENT_START,
+      Event.FILM_DELETE_COMMENT_DONE
+    ];
+
+    eventsOfPopUp.forEach((event)=>{
+      this._eventManager.on(event,this._popUpUpdateHandler);
+    });
   }
 
   _renderPopUp(popUpInfo) {
@@ -61,8 +57,9 @@ export default class PopUpController {
     const popUpInfo = {
       popUpFilm: filmById ? cloneObj(filmById) : undefined,
       popUpChangeHandler: this._popUpChangeHandler,
-      popUpCategoryUpdateHandler: this._popUpCategoryUpdateHandler,
+      popUpFilmCategoryUpdateHandler: this._popUpFilmCategoryUpdateHandler,
       commentDeleteHandler: this._commentDeleteHandler,
+      commentSendHandler: this._commentSendHandler,
     };
 
     this._renderPopUp(popUpInfo);
@@ -75,45 +72,29 @@ export default class PopUpController {
   }
 
   _commentDeleteHandler(filmId, commentId) {
-    const popUpInstance = this._components[PopUpComponent.name];
-
-    popUpInstance.markStartingOfDeletingComment(commentId);
-
-    // async process of deleting comment has 2 endings
-    // false Ending - call popUpInstance.markCancelingOfDeletingComment(commentId)
-    // true  Ending - call this._modelInstance.deleteFilmComment(filmId, commentId);
-
-    this._modelInstance.deleteFilmComment(filmId, commentId);
+    this._modelInstance.deleteComment(filmId, commentId);
   }
 
-  _popUpCategoryUpdateHandler(newInfo) {
-    const {checkedClass, filmId} = newInfo;
-    const categoryInfo = this._createInfoForChangingFilmCategory(checkedClass);
-    this._modelInstance.setCategoryForFilm(newInfo.filmId, categoryInfo);
+  _commentSendHandler(commentInfo){
 
-    // async process of changing Category for film
-
-    setTimeout(() => {
-      const film = this._modelInstance.getFilmById(filmId);
-      const categoryToChange = categoryInfo.awaitConfirmChangingCategory;
-
-      categoryInfo[categoryToChange] = !film[categoryToChange];
-      categoryInfo.awaitConfirmChangingCategory = null;
-      this._modelInstance.setCategoryForFilm(filmId, categoryInfo);
-    }, 2000);
   }
 
-  _createInfoForChangingFilmCategory(checkedClass) {
+  _popUpFilmCategoryUpdateHandler(filmId, checkedClass) {
+    let checkedCategory;
+
     switch (checkedClass) {
       case CssClass.FILM_DETAILS_CONTROL_FAVORITE:
-        return {awaitConfirmChangingCategory: FilmFilter.FAVORITE};
+        checkedCategory =  FilmFilter.FAVORITE;
+        break;
       case CssClass.FILM_DETAILS_CONTROL_SCHEDULED:
-        return {awaitConfirmChangingCategory: FilmFilter.SCHEDULED};
+        checkedCategory = FilmFilter.SCHEDULED;
+        break;
       case CssClass.FILM_DETAILS_CONTROL_WATCHED:
-        return {awaitConfirmChangingCategory: FilmFilter.WATCHED};
+        checkedCategory = FilmFilter.WATCHED;
+        break;
     }
+
+    this._modelInstance.setCategoryForFilm(filmId, checkedCategory);
   }
 
 }
-
-

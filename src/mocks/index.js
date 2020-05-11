@@ -25,7 +25,7 @@ const structureComment = {
   pathToEmotion: `string`,
   author: `string`,
   date: `number ms`,
-  awaitConfirmDeletingComment: `string | null`
+  awaitConfirmDeletingComment: `bool`
 };
 
 const structureFilm = {
@@ -85,7 +85,7 @@ dataFactory.comment = {
     return faker.date.between(`2010-01-01`, new Date()).getTime();
   },
   awaitConfirmDeletingComment() {
-    return null;
+    return false;
   }
 };
 
@@ -178,7 +178,7 @@ dataFactory.film = {
   },
   comments() {
     const commentsToFilm =
-      new Array(faker.random.number({min: 0, max: 17})).fill(null);
+      new Array(faker.random.number({min: 0, max: 2})).fill(null);
 
     return commentsToFilm.map(
       () => createObjectByStructure(structureComment, this.comment)

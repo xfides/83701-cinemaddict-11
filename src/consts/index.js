@@ -140,7 +140,8 @@ export const Poster = {
 };
 
 export const KeyCode = {
-  ESC: 27
+  ESC: `Escape`,
+  ENTER:`Enter`,
 };
 
 export const ShortDescParam = {
@@ -169,7 +170,8 @@ export const Event = {
   CHANGE_POP_UP_IDENTIFIER: `change_pop_up_identifier`,
   FILM_CHANGE_CATEGORY_DONE: `film_change_category_done`,
   FILM_CHANGE_CATEGORY_START: `film_change_category_start`,
-  FILM_DELETE_COMMENT: `film_delete_comment`,
+  FILM_DELETE_COMMENT_START: `film_delete_comment_start`,
+  FILM_DELETE_COMMENT_DONE: `film_delete_comment_done`,
   FILM_ADD_COMMENT: `film_add_comment`
 };
 

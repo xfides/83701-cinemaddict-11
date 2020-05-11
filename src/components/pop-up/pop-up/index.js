@@ -11,7 +11,7 @@ export default class PopUpComponent extends AbstractComponent {
     super();
     this._popUpFilm = null;
     this._popUpChangeHandler = null;
-    this._popUpCategoryUpdateHandler = null;
+    this._popUpFilmCategoryUpdateHandler = null;
     this._popUpClickHandler = this._popUpClickHandler.bind(this);
     this._popUpKeyDownHandler = this._popUpKeyDownHandler.bind(this);
   }
@@ -36,6 +36,10 @@ export default class PopUpComponent extends AbstractComponent {
     this._domElement.addEventListener(`click`, this._popUpClickHandler);
     document.addEventListener(`keydown`, this._popUpKeyDownHandler);
 
+    if(!this.isRendered()){
+      this._setDefaultsForNewComment();
+    }
+
     return this._domElement;
   }
 
@@ -46,8 +50,9 @@ export default class PopUpComponent extends AbstractComponent {
   setPopUpInfo(popUpInfo) {
     this._popUpFilm = popUpInfo.popUpFilm;
     this._popUpChangeHandler = popUpInfo.popUpChangeHandler;
-    this._popUpCategoryUpdateHandler = popUpInfo.popUpCategoryUpdateHandler;
+    this._popUpFilmCategoryUpdateHandler = popUpInfo.popUpFilmCategoryUpdateHandler;
     this._commentDeleteHandler = popUpInfo.commentDeleteHandler;
+    this._commentSendHandler = popUpInfo.commentSendHandler;
     return this;
   }
 
@@ -71,8 +76,15 @@ export default class PopUpComponent extends AbstractComponent {
   }
 
   _popUpKeyDownHandler(evt) {
-    if (evt.type === `keydown` && evt.keyCode === KeyCode.ESC) {
+    if (evt.type === `keydown` && evt.key === KeyCode.ESC) {
       this._popUpChangeHandler(null);
+    }
+    if (
+      evt.type === `keydown`
+      && (evt.ctrlKey || evt.metaKey)
+      && evt.key === KeyCode.ENTER
+    ) {
+      this._commentSendHandler();
     }
   }
 
@@ -153,6 +165,7 @@ export default class PopUpComponent extends AbstractComponent {
   _commentDeleteClickHandler(evt) {
     if (
       evt.target.classList.contains(`${CssClass.FILM_DETAILS_COMMENT_DELETE}`)
+      && !evt.target.disabled
     ) {
       evt.preventDefault();
 
@@ -162,12 +175,6 @@ export default class PopUpComponent extends AbstractComponent {
 
       this._commentDeleteHandler(filmId, commentId);
     }
-  }
-
-  markStartingOfDeletingComment(commentId) {
-  }
-
-  markCancelingOfDeletingComment(commentId) {
   }
 
 
@@ -220,13 +227,31 @@ export default class PopUpComponent extends AbstractComponent {
       });
       const filmId = label.closest(`.${CssClass.FILM_DETAILS}`).dataset.id;
 
-      this._popUpCategoryUpdateHandler({checkedClass, filmId});
+      this._popUpFilmCategoryUpdateHandler(filmId, checkedClass);
     }
   }
 
-  showRejectingOfChangingCategory(classCategory) {
+
+  // --= ADDING NEW COMMENT =---
+
+  _commentSendHandler() {
+    const isReadyComment = this._validateCommentForm();
+
+    if(isReadyComment){
+      this._commentSendHandler(commentInfo);
+    }
+  }
+
+  _validateCommentForm(){
+
+  };
+
+
+  // --= SHOW REJECTING OF OPERATION WITH ANIMATION =---
+
+  showRejectingOnDom(selector) {
     const classListOfCategory = this._domElement
-      .querySelector(`.${classCategory}`)
+      .querySelector(selector)
       .classList;
 
     classListOfCategory.add(CssClass.ANIMATE_HEADSHAKE);
@@ -240,15 +265,31 @@ export default class PopUpComponent extends AbstractComponent {
   }
 
 
-  // --= ADDING NEW COMMENT =---
 
-  _commentFormSendHandler() {
-  }
+  _setDefaultsForNewComment(){
+    const getDefaultEmojiData = () => {
+      return {
+        emojiTemplateImg: `
+      <img 
+        src="${Emoji.RELATIVE_PATH}${Emoji.DEFAULT_IMG_COMMENT_ZERO}" 
+        width="55" 
+        height="55" 
+        alt="emoji-smile">
+    `,
+        textNewComment: ScreenMsg.STUB_ADD_COMMENT_ZERO
+      };
+    };
 
-  markStartingOfAddingNewComment() {
-  }
+    const getNoEmojiData = () => {
+      return {
+        emojiTemplateImg: ``,
+        textNewComment: ``
+      };
+    };
 
-  markCancelingOfAddingNewComment() {
+    const getEmojiData = (countComments) => {
+      return countComments === 0 ? getDefaultEmojiData() : getNoEmojiData();
+    };
   }
 
 }

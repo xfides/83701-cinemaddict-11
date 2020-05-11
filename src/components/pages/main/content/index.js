@@ -8,10 +8,10 @@ export default class ContentComponent extends AbstractComponent {
   constructor() {
     super();
     this._commonFilms = null;
-    this._countCommonFilms = FilmSection.COMMON.countFilmsToShow;
+    this._countCommonFilmsToShow = FilmSection.COMMON.countFilmsToShow;
     this._filmsTR = null;
     this._filmsMC = null;
-    this._countCommonFilmsChangeHandler = null;
+    this._countCommonFilmsToShowChangeHandler = null;
     this._popUpOpenHandler = null;
     this._filmCategoryUpdateHandler = null;
     this._contentClickHandler = this._contentClickHandler.bind(this);
@@ -24,7 +24,7 @@ export default class ContentComponent extends AbstractComponent {
 
     const templatesOfFilmSections = {
       common: createFilmsBlockComponent(
-        FilmSection.COMMON, this._commonFilms, this._countCommonFilms
+        FilmSection.COMMON, this._commonFilms, this._countCommonFilmsToShow
       ),
       topRated: this._filmsTR.length && !hasAllFilmsTRZeroRate
         ? createFilmsBlockComponent(FilmSection.TOP_RATED, this._filmsTR)
@@ -47,10 +47,11 @@ export default class ContentComponent extends AbstractComponent {
 
   setFilmsInfo(filmsInfo) {
     this._commonFilms = filmsInfo.commonFilms;
-    this._countCommonFilms = filmsInfo.countCommonFilms;
+    this._countCommonFilmsToShow = filmsInfo.countCommonFilmsToShow;
     this._filmsTR = filmsInfo.filmsTR;
     this._filmsMC = filmsInfo.filmsMC;
-    this._countCommonFilmsChangeHandler = filmsInfo.countCommonFilmsChangeHandler;
+    this._countCommonFilmsToShowChangeHandler =
+      filmsInfo.countCommonFilmsToShowChangeHandler;
     this._popUpOpenHandler = filmsInfo.popUpOpenHandler;
     this._filmCategoryUpdateHandler = filmsInfo.filmCategoryUpdateHandler;
     return this;
@@ -83,7 +84,7 @@ export default class ContentComponent extends AbstractComponent {
 
   _showMoreClickHandler(evt) {
     if (evt.target.classList.contains(CssClass.SHOW_MORE)) {
-      this._countCommonFilmsChangeHandler();
+      this._countCommonFilmsToShowChangeHandler();
     }
   }
 
@@ -111,7 +112,7 @@ export default class ContentComponent extends AbstractComponent {
       });
       const filmId = evt.target.closest(`.${CssClass.FILM_CARD}`).dataset.id;
 
-      this._filmCategoryUpdateHandler({checkedClass, filmId});
+      this._filmCategoryUpdateHandler(filmId, checkedClass);
     }
   }
 

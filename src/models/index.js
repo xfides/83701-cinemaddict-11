@@ -9,7 +9,6 @@ import {
 import {
   ensureArray,
   sortFilmsByFieldWithClone,
-  hasSecondObjSameProps
 } from '../utils';
 import EventManager from '../event-manager';
 
@@ -27,7 +26,7 @@ export default class Model {
 
     this._eventManager = EventManager.getInstance();
     this._films = null;
-    this._countCommonFilms = FilmSection.COMMON.countFilmsToShow;
+    this._countCommonFilmsToShow = FilmSection.COMMON.countFilmsToShow;
     this._popUpId = null;
     this._curCategory = FilmFilter.ALL;
     this._curSortKind = SortKind.DEFAULT;
@@ -87,8 +86,8 @@ export default class Model {
     return this._curSortKind;
   }
 
-  getCountCommonFilms() {
-    return this._countCommonFilms;
+  getCountCommonFilmsToShow() {
+    return this._countCommonFilmsToShow;
   }
 
   getCurPopUpId() {
@@ -147,48 +146,57 @@ export default class Model {
     );
   }
 
-  setCurCountCommonFilms(newCountCommonFilms) {
-    if (this._countCommonFilms === newCountCommonFilms) {
+  setCurCountCommonFilmsToShow(newCountCommonFilmsToShow) {
+    if (this._countCommonFilmsToShow === newCountCommonFilmsToShow) {
       return;
     }
 
-    this._countCommonFilms = newCountCommonFilms;
+    this._countCommonFilmsToShow = newCountCommonFilmsToShow;
 
     this._eventManager.trigger(
       Event.CHANGE_COUNT_COMMON_FILMS,
-      {[Event.CHANGE_COUNT_COMMON_FILMS]: newCountCommonFilms}
+      {[Event.CHANGE_COUNT_COMMON_FILMS]: newCountCommonFilmsToShow}
     );
   }
 
-  setCategoryForFilm(filmId, categoryInfo = {}) {
+  setCategoryForFilm(filmId, checkedCategory) {
     const filmToChange = this._films.find((film) => {
       return film.id === filmId;
     });
 
-    if (!filmToChange || hasSecondObjSameProps(filmToChange, categoryInfo)) {
-      return undefined;
-    }
+    filmToChange.awaitConfirmChangingCategory = checkedCategory;
+    this._eventManager.trigger(Event.FILM_CHANGE_CATEGORY_START);
 
-    if (categoryInfo.awaitConfirmChangingCategory) {
-      this._eventManager.trigger(Event.FILM_CHANGE_CATEGORY_START, categoryInfo);
-    } else {
-      this._eventManager.trigger(Event.FILM_CHANGE_CATEGORY_DONE, categoryInfo);
-    }
+    // async process of changing Category for film
 
-    Object.assign(filmToChange, categoryInfo);
+    setTimeout(() => {
+      filmToChange[checkedCategory] = !filmToChange[checkedCategory];
+      filmToChange.awaitConfirmChangingCategory = null;
+      this._eventManager.trigger(Event.FILM_CHANGE_CATEGORY_DONE);
+    }, 2000);
   }
 
-  deleteFilmComment(filmId, commentId) {
+  deleteComment(filmId, commentId) {
     const film = this.getFilmById(filmId);
-    const indexOfCommentToDelete = film.comments.findIndex((oldComment) => {
+    const indexOfCommentToDelete = this._getIndexOfComment(film, commentId);
+
+    film.comments[indexOfCommentToDelete].awaitConfirmDeletingComment = true;
+    this._eventManager.trigger(Event.FILM_DELETE_COMMENT_START);
+
+    // async process of deleting comment
+
+    setTimeout(() => {
+      const indexOfCommentToDelete = this._getIndexOfComment(film, commentId);
+      film.comments[indexOfCommentToDelete].awaitConfirmDeletingComment = false;
+      film.comments.splice(indexOfCommentToDelete, 1);
+      this._eventManager.trigger(Event.FILM_DELETE_COMMENT_DONE);
+    }, 5000);
+  }
+
+  _getIndexOfComment(film, commentId) {
+    return film.comments.findIndex((oldComment) => {
       return oldComment.id === commentId;
     });
-
-    if (indexOfCommentToDelete !== -1) {
-      film.comments.splice(indexOfCommentToDelete, 1);
-    }
-
-    this._eventManager.trigger(Event.FILM_DELETE_COMMENT);
   }
 
   loadData() {
@@ -215,5 +223,4 @@ export default class Model {
   }
 
 }
-
 
