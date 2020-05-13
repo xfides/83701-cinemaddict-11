@@ -1,6 +1,14 @@
+const getAbilityDeletingComment = (comment) => {
+  return comment.awaitConfirmDeletingComment
+    ? `<button class="film-details__comment-delete" disabled>
+         ...Deleting...
+        </button>`
+    : `<button class="film-details__comment-delete">Delete</button>`;
+};
+
 export const createCommentTemplate = (comment) => {
   return (`
-    <li class="film-details__comment">
+    <li class="film-details__comment" data-id=${comment.id}>
       <span class="film-details__comment-emoji">
         <img 
           src="${comment.pathToEmotion}" 
@@ -19,9 +27,7 @@ export const createCommentTemplate = (comment) => {
           <span class="film-details__comment-day">
             ${comment.date}
           </span>
-          <button class="film-details__comment-delete">
-            Delete
-          </button>
+          ${getAbilityDeletingComment(comment)}
         </p>
       </div>
     </li>

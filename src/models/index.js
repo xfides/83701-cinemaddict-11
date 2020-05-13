@@ -6,8 +6,14 @@ import {
   Event,
   LoadingStatus
 } from '../consts';
-import {ensureArray, sortFilmsByFieldWithClone} from '../utils';
+import {
+  ensureArray,
+  sortFilmsByFieldWithClone,
+} from '../utils';
 import EventManager from '../event-manager';
+import {encode} from 'he';
+import faker from 'faker';
+import {Emoji} from '../consts';
 
 const singletonKey = Symbol();
 const singletonVerification = Symbol();
@@ -23,14 +29,20 @@ export default class Model {
 
     this._eventManager = EventManager.getInstance();
     this._films = null;
-    this._countCommonFilms = FilmSection.COMMON.countFilmsToShow;
-    this._popUpIdentifier = null;
+    this._countCommonFilmsToShow = FilmSection.COMMON.countFilmsToShow;
+    this._popUpId = null;
     this._curCategory = FilmFilter.ALL;
     this._curSortKind = SortKind.DEFAULT;
     this._page = null;
     this._loadingStatus = null;
     this._handleLoadSuccess = this._handleLoadSuccess.bind(this);
     this._handleLoadError = this._handleLoadError.bind(this);
+  }
+
+  getFilmById(id) {
+    return this._films.find((oneFilm) => {
+      return oneFilm.id === id;
+    });
   }
 
   getFilmsAll() {
@@ -77,12 +89,12 @@ export default class Model {
     return this._curSortKind;
   }
 
-  getCountCommonFilms() {
-    return this._countCommonFilms;
+  getCountCommonFilmsToShow() {
+    return this._countCommonFilmsToShow;
   }
 
-  getCurPopUpIdentifier() {
-    return this._popUpIdentifier;
+  getCurPopUpId() {
+    return this._popUpId;
   }
 
   setCurLoadingStatus(newLoadingStatus) {
@@ -124,35 +136,104 @@ export default class Model {
     );
   }
 
-  setCurPopUpIdentifier(newPopUpIdentifier) {
-    if (this._popUpIdentifier === newPopUpIdentifier) {
+  setCurPopUpId(newPopUpId) {
+    if (this._popUpId === newPopUpId) {
       return;
     }
 
-    this._popUpIdentifier = newPopUpIdentifier;
+    this._popUpId = newPopUpId;
 
     this._eventManager.trigger(
         Event.CHANGE_POP_UP_IDENTIFIER,
-        {[Event.CHANGE_POP_UP_IDENTIFIER]: newPopUpIdentifier}
+        {[Event.CHANGE_POP_UP_IDENTIFIER]: newPopUpId}
     );
   }
 
-  setCurCountCommonFilms(newCountCommonFilms) {
-    if (this._countCommonFilms === newCountCommonFilms) {
+  setCurCountCommonFilmsToShow(newCountCommonFilmsToShow) {
+    if (this._countCommonFilmsToShow === newCountCommonFilmsToShow) {
       return;
     }
 
-    this._countCommonFilms = newCountCommonFilms;
+    this._countCommonFilmsToShow = newCountCommonFilmsToShow;
 
     this._eventManager.trigger(
         Event.CHANGE_COUNT_COMMON_FILMS,
-        {[Event.CHANGE_COUNT_COMMON_FILMS]: newCountCommonFilms}
+        {[Event.CHANGE_COUNT_COMMON_FILMS]: newCountCommonFilmsToShow}
     );
+  }
+
+  setCategoryForFilm(filmId, checkedCategory) {
+    const filmToChange = this._films.find((film) => {
+      return film.id === filmId;
+    });
+
+    filmToChange.awaitConfirmChangingCategory = checkedCategory;
+    this._eventManager.trigger(Event.FILM_CHANGE_CATEGORY_START);
+
+    // async process of changing Category for film
+
+    setTimeout(() => {
+      filmToChange[checkedCategory] = !filmToChange[checkedCategory];
+      filmToChange.awaitConfirmChangingCategory = null;
+      this._eventManager.trigger(Event.FILM_CHANGE_CATEGORY_DONE);
+    }, 2000);
+  }
+
+  deleteComment(filmId, commentId) {
+    const film = this.getFilmById(filmId);
+    const indexOfComment = this._getIndexOfComment(film, commentId);
+
+    film.comments[indexOfComment].awaitConfirmDeletingComment = true;
+    this._eventManager.trigger(Event.FILM_DELETE_COMMENT_START);
+
+    // async process of deleting comment
+
+    setTimeout(() => {
+      const indexOfCommentToDelete = this._getIndexOfComment(film, commentId);
+      film.comments[indexOfCommentToDelete].awaitConfirmDeletingComment = false;
+      film.comments.splice(indexOfCommentToDelete, 1);
+      this._eventManager.trigger(Event.FILM_DELETE_COMMENT_DONE);
+    }, 5000);
+  }
+
+  addNewComment(commentInfo, filmId) {
+    const film = this.getFilmById(filmId);
+    film.awaitConfirmAddingComment = true;
+
+    this._eventManager.trigger(Event.FILM_ADD_COMMENT_START);
+
+    // async process of adding comment
+
+    setTimeout(() => {
+      film.awaitConfirmAddingComment = false;
+      const newComment = this._buildComment(commentInfo);
+      film.comments.push(newComment);
+
+      this._eventManager.trigger(Event.FILM_ADD_COMMENT_DONE);
+    }, 5000);
   }
 
   loadData() {
     const promiseData = Promise.resolve(createFakeFilms());
     promiseData.then(this._handleLoadSuccess, this._handleLoadError);
+  }
+
+  _getIndexOfComment(film, commentId) {
+    return film.comments.findIndex((oldComment) => {
+      return oldComment.id === commentId;
+    });
+  }
+
+  _buildComment(commentInfo) {
+    const emojiImg = Emoji.Images[commentInfo.checkedEmoji.toUpperCase()];
+    return {
+      id: faker.random.uuid(),
+      text: encode(commentInfo.commentText),
+      pathToEmotion: `${Emoji.RELATIVE_PATH}${emojiImg}`,
+      author: faker.name.findName(),
+      date: +new Date(),
+      awaitConfirmDeletingComment: false
+    };
   }
 
   _handleLoadSuccess(films) {
@@ -174,5 +255,4 @@ export default class Model {
   }
 
 }
-
 

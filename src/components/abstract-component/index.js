@@ -37,7 +37,7 @@ export default class AbstractComponent {
   }
 
   isRendered() {
-    return (
+    return !!(
       this._domElement
       && !(this._domElement.parentNode instanceof DocumentFragment)
     );
@@ -49,7 +49,7 @@ export default class AbstractComponent {
     }
 
     if (!this.isRendered()) {
-      container.append(this.getDomElement());
+      container.append(this._domElement);
       return;
     }
 
@@ -57,7 +57,7 @@ export default class AbstractComponent {
   }
 
   reRender() {
-    const oldDomElement = this.getDomElement();
+    const oldDomElement = this._domElement;
     const parentOldDomElement = oldDomElement.parentElement;
     this._domElement = null;
     const newDomElement = this.getDomElement();
@@ -70,4 +70,5 @@ export default class AbstractComponent {
       parentOldDomElement.replaceChild(newDomElement, oldDomElement);
     }
   }
+
 }

@@ -26,6 +26,7 @@ export default class LayoutController {
         this._layoutUpdateHandler
     );
     this._eventManager.on(Event.CHANGE_CUR_CATEGORY, this._navUpdateHandler);
+    this._eventManager.on(Event.FILM_CHANGE_CATEGORY_DONE, this._navUpdateHandler);
   }
 
   _renderUserRank(filmsWatched) {

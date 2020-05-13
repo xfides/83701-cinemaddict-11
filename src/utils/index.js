@@ -92,3 +92,9 @@ export const ensureArray = (data) => {
   return Array.isArray(data) ? data : [];
 };
 
+// export const hasSecondObjSameProps = (firstObj, secondObj) => {
+//   return Object.keys(secondObj).every((key)=>{
+//     return secondObj[key] === firstObj[key];
+//   });
+// };
+

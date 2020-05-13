@@ -1,9 +1,10 @@
 import {createFilmCardTemplate} from './template.js';
 import {truncateStr, formatDurationMinutes} from '../../../../utils';
-import {CssClass, FilmFilter} from '../../../../consts';
+import {FilmFilter} from '../../../../consts';
 
 export const createFilmCardComponent = (film) => {
   const shortFilm = {
+    id: film.id,
     title: film.title,
     rate: film.rate,
     pathToPosterImg: film.pathToPosterImg,
@@ -12,15 +13,10 @@ export const createFilmCardComponent = (film) => {
     duration: formatDurationMinutes(film.duration),
     genre: film.genres[0],
     description: truncateStr(film.description),
-    isScheduledActive: film[FilmFilter.SCHEDULED]
-      ? CssClass.FILM_BUTTON_ACTIVE
-      : ``,
-    isWatchedActive: film[FilmFilter.WATCHED]
-      ? CssClass.FILM_BUTTON_ACTIVE :
-      ``,
-    isFavoriteActive: film[FilmFilter.FAVORITE]
-      ? CssClass.FILM_BUTTON_ACTIVE
-      : ``
+    [FilmFilter.SCHEDULED]: film[FilmFilter.SCHEDULED],
+    [FilmFilter.WATCHED]: film[FilmFilter.WATCHED],
+    [FilmFilter.FAVORITE]: film[FilmFilter.FAVORITE],
+    awaitConfirmChangingCategory: film.awaitConfirmChangingCategory
   };
 
   return createFilmCardTemplate(shortFilm);

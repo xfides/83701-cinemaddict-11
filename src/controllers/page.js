@@ -2,7 +2,14 @@ import EventManager from '../event-manager';
 import Model from '../models';
 import ContentComponent from '../components/pages/main/content';
 import SortComponent from '../components/pages/main/sort';
-import {Event, FilmFilter, DomNode, FilmSection, SortKind} from '../consts';
+import {
+  Event,
+  FilmFilter,
+  DomNode,
+  FilmSection,
+  SortKind,
+  CssClass
+} from '../consts';
 import {sortFilmsByFieldWithClone} from '../utils';
 
 export default class PageController {
@@ -14,12 +21,6 @@ export default class PageController {
       [SortComponent.name]: new SortComponent(),
       [ContentComponent.name]: new ContentComponent()
     };
-    this._pageMainUpdateHandler = this._pageMainUpdateHandler.bind(this);
-    this._filmsUpdateHandler = this._filmsUpdateHandler.bind(this);
-    this._sortKindChangeHandler = this._sortKindChangeHandler.bind(this);
-    this._countCommonFilmsChangeHandler = this._countCommonFilmsChangeHandler.bind(this);
-    this._popUpOpenHandler = this._popUpOpenHandler.bind(this);
-
     this._interfaceToFilmsByCategory = {
       [FilmFilter.ALL]: this._modelInstance.getFilmsAll.bind(
           this._modelInstance
@@ -34,6 +35,13 @@ export default class PageController {
           this._modelInstance
       )
     };
+    this._pageMainUpdateHandler = this._pageMainUpdateHandler.bind(this);
+    this._filmsUpdateHandler = this._filmsUpdateHandler.bind(this);
+    this._sortKindChangeHandler = this._sortKindChangeHandler.bind(this);
+    this._countCommonFilmsToShowChangeHandler =
+      this._countCommonFilmsToShowChangeHandler.bind(this);
+    this._popUpOpenHandler = this._popUpOpenHandler.bind(this);
+    this._filmCategoryUpdateHandler = this._filmCategoryUpdateHandler.bind(this);
   }
 
   run() {
@@ -54,6 +62,18 @@ export default class PageController {
         this._pageMainUpdateHandler,
         {setSortKindToDefault: true}
     );
+    this._eventManager.on(
+        Event.FILM_CHANGE_CATEGORY_START,
+        this._filmsUpdateHandler
+    );
+    this._eventManager.on(
+        Event.FILM_CHANGE_CATEGORY_DONE,
+        this._filmsUpdateHandler
+    );
+    this._eventManager.on(
+        Event.FILM_DELETE_COMMENT_DONE,
+        this._filmsUpdateHandler
+    );
   }
 
   renderSort(sortInfo) {
@@ -73,9 +93,17 @@ export default class PageController {
       filmsTR: this._modelInstance.getFilmsTopRated(),
       filmsMC: this._modelInstance.getFilmsMostCommented(),
       commonFilms: this._getCommonFilms(),
-      countCommonFilms: this._modelInstance.getCountCommonFilms(),
-      countCommonFilmsChangeHandler: this._countCommonFilmsChangeHandler,
-      popUpOpenHandler: this._popUpOpenHandler
+      countCommonFilmsToShow: this._modelInstance.getCountCommonFilmsToShow(),
+      countCommonFilmsToShowChangeHandler: this._countCommonFilmsToShowChangeHandler,
+      popUpOpenHandler: this._popUpOpenHandler,
+      filmCategoryUpdateHandler: this._filmCategoryUpdateHandler,
+    };
+  }
+
+  _getSortInfo() {
+    return {
+      curSortKind: this._modelInstance.getCurSortKind(),
+      sortKindChangeHandler: this._sortKindChangeHandler
     };
   }
 
@@ -95,7 +123,7 @@ export default class PageController {
   }
 
   _pageMainUpdateHandler(evt) {
-    this._modelInstance.setCurCountCommonFilms(
+    this._modelInstance.setCurCountCommonFilmsToShow(
         FilmSection.COMMON.countFilmsToShow
     );
 
@@ -106,12 +134,7 @@ export default class PageController {
       this._modelInstance.setCurSortKind(SortKind.DEFAULT);
     }
 
-    const sortInfo = {
-      curSortKind: this._modelInstance.getCurSortKind(),
-      sortKindChangeHandler: this._sortKindChangeHandler
-    };
-
-    this.renderSort(sortInfo);
+    this.renderSort(this._getSortInfo());
     this.renderFilms(this._getFilmsInfo());
   }
 
@@ -119,11 +142,12 @@ export default class PageController {
     this.renderFilms(this._getFilmsInfo());
   }
 
-  _countCommonFilmsChangeHandler() {
-    const curCountCommonFilms = this._modelInstance.getCountCommonFilms();
-    const newCountCommonFilms =
-      curCountCommonFilms + FilmSection.COMMON.countFilmsToShow;
-    this._modelInstance.setCurCountCommonFilms(newCountCommonFilms);
+  _countCommonFilmsToShowChangeHandler() {
+    const curCountCommonFilmsToShow =
+      this._modelInstance.getCountCommonFilmsToShow();
+    const newCountCommonFilmsToShow =
+      curCountCommonFilmsToShow + FilmSection.COMMON.countFilmsToShow;
+    this._modelInstance.setCurCountCommonFilmsToShow(newCountCommonFilmsToShow);
   }
 
   _sortKindChangeHandler(newSortKind) {
@@ -132,11 +156,28 @@ export default class PageController {
     }
   }
 
-  _popUpOpenHandler(newPopUpIdentifier) {
-    if (this._modelInstance.getCurPopUpIdentifier() !== newPopUpIdentifier) {
-      this._modelInstance.setCurPopUpIdentifier(newPopUpIdentifier);
+  _popUpOpenHandler(checkedFilmId) {
+    if (this._modelInstance.getCurPopUpId() !== checkedFilmId) {
+      this._modelInstance.setCurPopUpId(checkedFilmId);
     }
   }
 
-}
+  _filmCategoryUpdateHandler(filmId, checkedClass) {
+    let checkedCategory;
 
+    switch (checkedClass) {
+      case CssClass.FILM_CARD_BUTTON_FAVORITE:
+        checkedCategory = FilmFilter.FAVORITE;
+        break;
+      case CssClass.FILM_CARD_BUTTON_SCHEDULED:
+        checkedCategory = FilmFilter.SCHEDULED;
+        break;
+      case CssClass.FILM_CARD_BUTTON_WATCHED:
+        checkedCategory = FilmFilter.WATCHED;
+        break;
+    }
+
+    this._modelInstance.setCategoryForFilm(filmId, checkedCategory);
+  }
+
+}

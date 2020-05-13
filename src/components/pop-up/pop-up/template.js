@@ -1,6 +1,6 @@
-export const createPopUpTemplate = (templates) => {
+export const createPopUpTemplate = (templates, filmId) => {
   return (`
-    <section class="film-details">
+    <section class="film-details" data-id="${filmId}">
       <form class="film-details__inner" action="" method="get">
         <div class="form-details__top-container">
           <div class="film-details__close">

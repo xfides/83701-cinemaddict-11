@@ -20,13 +20,16 @@ const createObjectByStructure = (structure, dataFactory) => {
 };
 
 const structureComment = {
+  id: `string`,
   text: `string`,
   pathToEmotion: `string`,
   author: `string`,
-  date: `number ms`
+  date: `number ms`,
+  awaitConfirmDeletingComment: `bool`
 };
 
 const structureFilm = {
+  id: `string`,
   pathToPosterImg: `string`,
   title: `string`,
   titleOrig: `string`,
@@ -43,7 +46,9 @@ const structureFilm = {
   comments: `array of objects`,
   [FilmFilter.SCHEDULED]: `bool`,
   [FilmFilter.WATCHED]: `bool`,
-  [FilmFilter.FAVORITE]: `bool`
+  [FilmFilter.FAVORITE]: `bool`,
+  awaitConfirmChangingCategory: `string | null`,
+  awaitConfirmAddingComment: `bool`,
 };
 
 const dataFactory = {
@@ -61,22 +66,34 @@ const dataFactory = {
 
 dataFactory.comment = {
   __proto__: dataFactory,
+  id() {
+    return faker.random.uuid();
+  },
   text() {
     return faker.lorem.sentences();
   },
   pathToEmotion() {
-    return this.randomPathToSmth(Emoji.RELATIVE_PATH, Emoji.IMAGES);
+    return this.randomPathToSmth(
+        Emoji.RELATIVE_PATH,
+        Object.values(Emoji.Images)
+    );
   },
   author() {
     return this.human();
   },
   date() {
     return faker.date.between(`2010-01-01`, new Date()).getTime();
+  },
+  awaitConfirmDeletingComment() {
+    return false;
   }
 };
 
 dataFactory.film = {
   __proto__: dataFactory,
+  id() {
+    return faker.random.uuid();
+  },
   pathToPosterImg() {
     return this.randomPathToSmth(Poster.RELATIVE_PATH, Poster.IMAGES);
   },
@@ -161,7 +178,7 @@ dataFactory.film = {
   },
   comments() {
     const commentsToFilm =
-      new Array(faker.random.number({min: 0, max: 17})).fill(null);
+      new Array(faker.random.number({min: 0, max: 2})).fill(null);
 
     return commentsToFilm.map(
         () => createObjectByStructure(structureComment, this.comment)
@@ -176,7 +193,13 @@ dataFactory.film = {
   },
   [FilmFilter.FAVORITE]() {
     return faker.random.boolean() && faker.random.boolean();
-  }
+  },
+  awaitConfirmChangingCategory() {
+    return null;
+  },
+  awaitConfirmAddingComment() {
+    return false;
+  },
 };
 
 export const createFakeFilms = () => {
