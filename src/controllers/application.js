@@ -25,6 +25,5 @@ export default class Application {
       this._modelInstance.loadData();
     }
   }
-
 }
 
