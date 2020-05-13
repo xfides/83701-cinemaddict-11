@@ -11,6 +11,9 @@ import {
   sortFilmsByFieldWithClone,
 } from '../utils';
 import EventManager from '../event-manager';
+import {encode} from 'he';
+import faker from 'faker';
+import {Emoji} from '../consts';
 
 const singletonKey = Symbol();
 const singletonVerification = Symbol();
@@ -20,7 +23,7 @@ export default class Model {
   constructor(verificationValue) {
     if (verificationValue !== singletonVerification) {
       throw new Error(
-        `Please use ${this.constructor.name}.getInstance() to get instance`
+          `Please use ${this.constructor.name}.getInstance() to get instance`
       );
     }
 
@@ -66,15 +69,15 @@ export default class Model {
 
   getFilmsTopRated() {
     return sortFilmsByFieldWithClone(
-      ensureArray(this._films),
-      SortKind.RATE.associatedFilmField
+        ensureArray(this._films),
+        SortKind.RATE.associatedFilmField
     ).slice(0, FilmSection.TOP_RATED.countFilmsToShow);
   }
 
   getFilmsMostCommented() {
     return sortFilmsByFieldWithClone(
-      ensureArray(this._films),
-      SortKind.COUNT_COMMENTS.associatedFilmField
+        ensureArray(this._films),
+        SortKind.COUNT_COMMENTS.associatedFilmField
     ).slice(0, FilmSection.MOST_COMMENTED.countFilmsToShow);
   }
 
@@ -102,8 +105,8 @@ export default class Model {
     this._loadingStatus = newLoadingStatus;
 
     this._eventManager.trigger(
-      Event.CHANGE_LOADING_STATUS,
-      {[Event.CHANGE_LOADING_STATUS]: newLoadingStatus}
+        Event.CHANGE_LOADING_STATUS,
+        {[Event.CHANGE_LOADING_STATUS]: newLoadingStatus}
     );
   }
 
@@ -115,8 +118,8 @@ export default class Model {
     this._curCategory = newCategory;
 
     this._eventManager.trigger(
-      Event.CHANGE_CUR_CATEGORY,
-      {[Event.CHANGE_CUR_CATEGORY]: newCategory}
+        Event.CHANGE_CUR_CATEGORY,
+        {[Event.CHANGE_CUR_CATEGORY]: newCategory}
     );
   }
 
@@ -128,8 +131,8 @@ export default class Model {
     this._curSortKind = newSortKind;
 
     this._eventManager.trigger(
-      Event.CHANGE_CUR_SORT_KIND,
-      {[Event.CHANGE_CUR_SORT_KIND]: newSortKind}
+        Event.CHANGE_CUR_SORT_KIND,
+        {[Event.CHANGE_CUR_SORT_KIND]: newSortKind}
     );
   }
 
@@ -141,8 +144,8 @@ export default class Model {
     this._popUpId = newPopUpId;
 
     this._eventManager.trigger(
-      Event.CHANGE_POP_UP_IDENTIFIER,
-      {[Event.CHANGE_POP_UP_IDENTIFIER]: newPopUpId}
+        Event.CHANGE_POP_UP_IDENTIFIER,
+        {[Event.CHANGE_POP_UP_IDENTIFIER]: newPopUpId}
     );
   }
 
@@ -154,8 +157,8 @@ export default class Model {
     this._countCommonFilmsToShow = newCountCommonFilmsToShow;
 
     this._eventManager.trigger(
-      Event.CHANGE_COUNT_COMMON_FILMS,
-      {[Event.CHANGE_COUNT_COMMON_FILMS]: newCountCommonFilmsToShow}
+        Event.CHANGE_COUNT_COMMON_FILMS,
+        {[Event.CHANGE_COUNT_COMMON_FILMS]: newCountCommonFilmsToShow}
     );
   }
 
@@ -178,9 +181,9 @@ export default class Model {
 
   deleteComment(filmId, commentId) {
     const film = this.getFilmById(filmId);
-    const indexOfCommentToDelete = this._getIndexOfComment(film, commentId);
+    const indexOfComment = this._getIndexOfComment(film, commentId);
 
-    film.comments[indexOfCommentToDelete].awaitConfirmDeletingComment = true;
+    film.comments[indexOfComment].awaitConfirmDeletingComment = true;
     this._eventManager.trigger(Event.FILM_DELETE_COMMENT_START);
 
     // async process of deleting comment
@@ -193,15 +196,44 @@ export default class Model {
     }, 5000);
   }
 
+  addNewComment(commentInfo, filmId) {
+    const film = this.getFilmById(filmId);
+    film.awaitConfirmAddingComment = true;
+
+    this._eventManager.trigger(Event.FILM_ADD_COMMENT_START);
+
+    // async process of adding comment
+
+    setTimeout(() => {
+      film.awaitConfirmAddingComment = false;
+      const newComment = this._buildComment(commentInfo);
+      film.comments.push(newComment);
+
+      this._eventManager.trigger(Event.FILM_ADD_COMMENT_DONE);
+    }, 5000);
+  }
+
+  loadData() {
+    const promiseData = Promise.resolve(createFakeFilms());
+    promiseData.then(this._handleLoadSuccess, this._handleLoadError);
+  }
+
   _getIndexOfComment(film, commentId) {
     return film.comments.findIndex((oldComment) => {
       return oldComment.id === commentId;
     });
   }
 
-  loadData() {
-    const promiseData = Promise.resolve(createFakeFilms());
-    promiseData.then(this._handleLoadSuccess, this._handleLoadError);
+  _buildComment(commentInfo) {
+    const emojiImg = Emoji.Images[commentInfo.checkedEmoji.toUpperCase()];
+    return {
+      id: faker.random.uuid(),
+      text: encode(commentInfo.commentText),
+      pathToEmotion: `${Emoji.RELATIVE_PATH}${emojiImg}`,
+      author: faker.name.findName(),
+      date: +new Date(),
+      awaitConfirmDeletingComment: false
+    };
   }
 
   _handleLoadSuccess(films) {

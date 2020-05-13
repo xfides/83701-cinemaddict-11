@@ -48,7 +48,7 @@ const structureFilm = {
   [FilmFilter.WATCHED]: `bool`,
   [FilmFilter.FAVORITE]: `bool`,
   awaitConfirmChangingCategory: `string | null`,
-  awaitConfirmAddingComment: `string | null`,
+  awaitConfirmAddingComment: `bool`,
 };
 
 const dataFactory = {
@@ -74,8 +74,8 @@ dataFactory.comment = {
   },
   pathToEmotion() {
     return this.randomPathToSmth(
-      Emoji.RELATIVE_PATH,
-      Object.values(Emoji.Images)
+        Emoji.RELATIVE_PATH,
+        Object.values(Emoji.Images)
     );
   },
   author() {
@@ -181,7 +181,7 @@ dataFactory.film = {
       new Array(faker.random.number({min: 0, max: 2})).fill(null);
 
     return commentsToFilm.map(
-      () => createObjectByStructure(structureComment, this.comment)
+        () => createObjectByStructure(structureComment, this.comment)
     );
 
   },
@@ -198,7 +198,7 @@ dataFactory.film = {
     return null;
   },
   awaitConfirmAddingComment() {
-    return null;
+    return false;
   },
 };
 

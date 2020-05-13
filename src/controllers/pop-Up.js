@@ -18,6 +18,8 @@ export default class PopUpController {
     this._commentSendHandler = this._commentSendHandler.bind(this);
     this._popUpFilmCategoryUpdateHandler =
       this._popUpFilmCategoryUpdateHandler.bind(this);
+    this._commentAddNewResponseHandler =
+      this._commentAddNewResponseHandler.bind(this);
   }
 
   run() {
@@ -26,12 +28,18 @@ export default class PopUpController {
       Event.FILM_CHANGE_CATEGORY_START,
       Event.FILM_CHANGE_CATEGORY_DONE,
       Event.FILM_DELETE_COMMENT_START,
-      Event.FILM_DELETE_COMMENT_DONE
+      Event.FILM_DELETE_COMMENT_DONE,
+      Event.FILM_ADD_COMMENT_START
     ];
 
-    eventsOfPopUp.forEach((event)=>{
-      this._eventManager.on(event,this._popUpUpdateHandler);
+    eventsOfPopUp.forEach((event) => {
+      this._eventManager.on(event, this._popUpUpdateHandler);
     });
+
+    this._eventManager.on(
+        Event.FILM_ADD_COMMENT_DONE,
+        this._commentAddNewResponseHandler
+    );
   }
 
   _renderPopUp(popUpInfo) {
@@ -54,15 +62,19 @@ export default class PopUpController {
     }
 
     const filmById = this._modelInstance.getFilmById(curPopUpId);
-    const popUpInfo = {
-      popUpFilm: filmById ? cloneObj(filmById) : undefined,
+    const popUpInfo = this._getPopUpInfo(filmById);
+
+    this._renderPopUp(popUpInfo);
+  }
+
+  _getPopUpInfo(film) {
+    return {
+      popUpFilm: film ? cloneObj(film) : undefined,
       popUpChangeHandler: this._popUpChangeHandler,
       popUpFilmCategoryUpdateHandler: this._popUpFilmCategoryUpdateHandler,
       commentDeleteHandler: this._commentDeleteHandler,
       commentSendHandler: this._commentSendHandler,
     };
-
-    this._renderPopUp(popUpInfo);
   }
 
   _popUpChangeHandler(newPopUpId) {
@@ -75,8 +87,20 @@ export default class PopUpController {
     this._modelInstance.deleteComment(filmId, commentId);
   }
 
-  _commentSendHandler(commentInfo){
+  _commentSendHandler(commentInfo, filmId) {
+    this._modelInstance.addNewComment(commentInfo, filmId);
+  }
 
+  _commentAddNewResponseHandler() {
+    this._popUpUpdateHandler();
+
+    this._components[PopUpComponent.name].clearCommentFormAddNew();
+
+    // if (true === true) {
+    //   this._components[PopUpComponent.name].clearCommentFormAddNew();
+    // } else {
+    //   this._components[PopUpComponent.name].shakeCommentFormAddNew();
+    // }
   }
 
   _popUpFilmCategoryUpdateHandler(filmId, checkedClass) {
@@ -84,7 +108,7 @@ export default class PopUpController {
 
     switch (checkedClass) {
       case CssClass.FILM_DETAILS_CONTROL_FAVORITE:
-        checkedCategory =  FilmFilter.FAVORITE;
+        checkedCategory = FilmFilter.FAVORITE;
         break;
       case CssClass.FILM_DETAILS_CONTROL_SCHEDULED:
         checkedCategory = FilmFilter.SCHEDULED;

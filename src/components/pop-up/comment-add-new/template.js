@@ -1,6 +1,13 @@
-export const createCommentAddNewTemplate = (templatesEmoji) => {
+import {CssClass} from '../../../consts';
+
+const getClassForAwaitNewComment = (awaitNewComment) => {
+  return awaitNewComment ? CssClass.FILM_DETAILS_COMMENT_LOAD_NEW : ``;
+};
+
+export const createCommentAddNewTemplate = (templatesEmoji, awaitNewComment) => {
   return (`
-    <div class="film-details__new-comment">
+    <div class="film-details__new-comment 
+              ${getClassForAwaitNewComment(awaitNewComment)}">
       <div 
         for="add-emoji" 
         class="film-details__add-emoji-label">
@@ -9,7 +16,8 @@ export const createCommentAddNewTemplate = (templatesEmoji) => {
         <textarea 
           class="film-details__comment-input" 
           placeholder="Select reaction below and write comment here" 
-          name="comment"></textarea>
+          name="comment"
+         ${awaitNewComment ? `disabled` : ``}></textarea>
       </label>
       <div class="film-details__emoji-list">
         ${templatesEmoji}

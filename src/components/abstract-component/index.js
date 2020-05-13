@@ -49,7 +49,8 @@ export default class AbstractComponent {
     }
 
     if (!this.isRendered()) {
-      container.append(this.getDomElement());
+      // container.append(this.getDomElement());
+      container.append(this._domElement);
       return;
     }
 
@@ -57,7 +58,8 @@ export default class AbstractComponent {
   }
 
   reRender() {
-    const oldDomElement = this.getDomElement();
+    // const oldDomElement = this.getDomElement();
+    const oldDomElement = this._domElement;
     const parentOldDomElement = oldDomElement.parentElement;
     this._domElement = null;
     const newDomElement = this.getDomElement();

@@ -109,19 +109,20 @@ export const CssClass = {
   FILM_DETAILS_EMOJI_LIST: `film-details__emoji-list`,
   FILM_DETAILS_EMOJI_ITEM: `film-details__emoji-item`,
   FILM_DETAILS_COMMENT: `film-details__comment`,
+  FILM_DETAILS_COMMENT_NEW: `film-details__new-comment`,
+  FILM_DETAILS_COMMENT_LOAD_NEW: `film-details__new-comment--load`,
   FILM_DETAILS_COMMENT_INPUT: `film-details__comment-input`,
   FILM_DETAILS_COMMENT_DELETE: `film-details__comment-delete`,
   FILM_DETAILS_COMMENTS_COUNT: `film-details__comments-count`,
-  ANIMATE_HEADSHAKE: `animate__headShake`,
 };
 
 export const Emoji = {
   RELATIVE_PATH: `./images/emoji/`,
   Images: {
-    ANGRY :`angry.png`,
+    ANGRY: `angry.png`,
     PUKE: `puke.png`,
     SLEEPING: `sleeping.png`,
-    SMILE:`smile.png`
+    SMILE: `smile.png`
   },
   DEFAULT_IMG_COMMENT_ZERO: `smile.png`
 };
@@ -141,7 +142,7 @@ export const Poster = {
 
 export const KeyCode = {
   ESC: `Escape`,
-  ENTER:`Enter`,
+  ENTER: `Enter`,
 };
 
 export const ShortDescParam = {
@@ -172,7 +173,8 @@ export const Event = {
   FILM_CHANGE_CATEGORY_START: `film_change_category_start`,
   FILM_DELETE_COMMENT_START: `film_delete_comment_start`,
   FILM_DELETE_COMMENT_DONE: `film_delete_comment_done`,
-  FILM_ADD_COMMENT: `film_add_comment`
+  FILM_ADD_COMMENT_START: `film_add_comment_start`,
+  FILM_ADD_COMMENT_DONE: `film_add_comment_done`
 };
 
 export const DomNode = {
@@ -185,8 +187,17 @@ export const DomNode = {
 };
 
 export const Animation = {
-  HEADSHAKE:{
+  HEAD_SHAKE: {
+    class: `animate__headShake`,
+    duration: 1000
+  },
+  ERROR_IN_FORM: {
+    class: `animate__errorBlink`,
     duration: 1000
   }
 };
 
+export const Error = {
+  FORM_EMPTY_USER_MSG: `form_empty_user_msg`,
+  FORM_NO_CHECKED_EMOJI: `form_no_checked_emoji`
+};

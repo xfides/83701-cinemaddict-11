@@ -18,18 +18,22 @@ export default class ContentComponent extends AbstractComponent {
   }
 
   getTemplate() {
-    const hasAllFilmsTRZeroRate = this._filmsTR.every((oneFilmTR)=>{
-      return oneFilmTR.rate === 0
+    const hasAllFilmsTRZeroRate = !this._filmsTR.some((oneFilmTR) => {
+      return oneFilmTR.rate !== 0;
+    });
+
+    const hasAllFilmsMCZeroComments = !this._filmsMC.some((oneFilmMC) => {
+      return oneFilmMC.comments.length !== 0;
     });
 
     const templatesOfFilmSections = {
       common: createFilmsBlockComponent(
-        FilmSection.COMMON, this._commonFilms, this._countCommonFilmsToShow
+          FilmSection.COMMON, this._commonFilms, this._countCommonFilmsToShow
       ),
       topRated: this._filmsTR.length && !hasAllFilmsTRZeroRate
         ? createFilmsBlockComponent(FilmSection.TOP_RATED, this._filmsTR)
         : ``,
-      mostCommented: this._filmsMC.length
+      mostCommented: this._filmsMC.length && !hasAllFilmsMCZeroComments
         ? createFilmsBlockComponent(FilmSection.MOST_COMMENTED, this._filmsMC)
         : ``
     };
