@@ -47,6 +47,12 @@ export default class PopUpComponent extends AbstractComponent {
     return this._domElement;
   }
 
+  reRender() {
+    const tempDataForReRender = this._saveTempDataForReRender();
+    super.reRender();
+    this._restoreTempDataAfterReRender(tempDataForReRender);
+  }
+
   executeAfterRemove() {
     document.removeEventListener(`keydown`, this._popUpKeyDownHandler);
   }
@@ -60,46 +66,79 @@ export default class PopUpComponent extends AbstractComponent {
     return this;
   }
 
-  _popUpClickHandler(evt) {
-    this._closePopUpClickHandler(evt);
-    this._popUpControlsClickHandler(evt);
-    this._selectEmojiClickHandler(evt);
-    this._commentDeleteClickHandler(evt);
+
+  clearCommentFormAddNew() {
+    this._domElement.querySelector(`.${CssClass.FILM_DETAILS_COMMENT_INPUT}`)
+      .value = ``;
+
+    this._domElement.querySelectorAll(`.${CssClass.FILM_DETAILS_EMOJI_ITEM}`)
+      .forEach((emojiInputDom) => {
+        emojiInputDom.checked = false;
+      });
+
+    this._domElement.querySelector(`.${CssClass.FILM_DETAILS_EMOJI_LABEL_ADD}`)
+      .innerHTML = ``;
+  }
+
+  shakeCommentFormAddNew() {
+    const formSelector = `.${CssClass.FILM_DETAILS_COMMENT_NEW}`;
+    this._showSmthWrong(formSelector, Animation.HEAD_SHAKE);
+  }
+
+  _validateCommentForm(formData) {
+    const errors = [];
+
+    if (!formData.commentText.length) {
+      errors.push(Error.FORM_EMPTY_USER_MSG);
+    }
+
+    if (!formData.checkedEmoji) {
+      errors.push(Error.FORM_NO_CHECKED_EMOJI);
+    }
+
+    return errors;
+  }
+
+  _findCheckedEmojiInputDom() {
+    if (!this._domElement) {
+      return undefined;
+    }
+    const emojiInputsDom = this._domElement
+      .querySelectorAll(`.${CssClass.FILM_DETAILS_EMOJI_ITEM}`);
+
+    return [...emojiInputsDom].find((emojiInput) => {
+      return emojiInput.checked;
+    });
+  }
+
+  _showErrorsInCommentForm(errors) {
+    errors.forEach((oneError) => {
+      switch (oneError) {
+        case Error.FORM_EMPTY_USER_MSG:
+          this._showSmthWrong(
+              `.${CssClass.FILM_DETAILS_COMMENT_INPUT}`,
+              Animation.ERROR_IN_FORM
+          );
+          break;
+        case Error.FORM_NO_CHECKED_EMOJI:
+          this._showSmthWrong(
+              `.${CssClass.FILM_DETAILS_EMOJI_LABEL}`,
+              Animation.ERROR_IN_FORM
+          );
+          break;
+      }
+    });
   }
 
 
-  // --= CLOSE POPUP =--
-
-  _closePopUpClickHandler(evt) {
-    const closePopUpDom =
-      evt.target.classList.contains(`${CssClass.POPUP_CLOSE}`);
-
-    if (closePopUpDom) {
-      this._popUpChangeHandler(null);
-    }
-  }
-
-  _popUpKeyDownHandler(evt) {
-    if (evt.type === `keydown` && evt.key === KeyCode.ESC) {
-      this._popUpChangeHandler(null);
-    }
-    if (
-      evt.type === `keydown`
-      && (evt.ctrlKey || evt.metaKey)
-      && evt.key === KeyCode.ENTER
-      && !this._popUpFilm.awaitConfirmAddingComment
-    ) {
-      this._commentSendKeyDownHandler();
-    }
-  }
-
-
-  // --= SPECIAL RERENDER =--
-
-  reRender() {
-    const tempDataForReRender = this._saveTempDataForReRender();
-    super.reRender();
-    this._restoreTempDataAfterReRender(tempDataForReRender);
+  _createEmojiLabelAdd(emoji) {
+    return (`
+      <img 
+        src="${Emoji.RELATIVE_PATH}${Emoji.Images[emoji.toUpperCase()]}" 
+        width="55" 
+        height="55" 
+        alt="emoji-${emoji}"/>
+    `);
   }
 
   _saveTempDataForReRender() {
@@ -175,58 +214,39 @@ export default class PopUpComponent extends AbstractComponent {
   }
 
 
-  // --= DELETE COMMENT =--
+  _showSmthWrong(selector, animationConfig) {
+    const elementsCollection = this._domElement.querySelectorAll(selector);
+    const elementsDom = [...elementsCollection];
 
-  _commentDeleteClickHandler(evt) {
-    if (
-      evt.target.classList.contains(`${CssClass.FILM_DETAILS_COMMENT_DELETE}`)
-      && !evt.target.disabled
-    ) {
-      evt.preventDefault();
+    elementsDom.forEach((elementDom) => {
+      elementDom.classList.add(animationConfig.class);
+    });
 
-      const filmId = evt.target.closest(`.${CssClass.FILM_DETAILS}`).dataset.id;
-      const commentId =
-        evt.target.closest(`.${CssClass.FILM_DETAILS_COMMENT}`).dataset.id;
-
-      this._commentDeleteHandler(filmId, commentId);
-    }
+    setTimeout(
+        () => {
+          elementsDom.forEach((elementDom) => {
+            elementDom.classList.remove(animationConfig.class);
+          });
+        },
+        animationConfig.duration
+    );
   }
 
-
-  // --= CLICKING ON EMOJI =--
-
-  _selectEmojiClickHandler(evt) {
-    if (this._popUpFilm.awaitConfirmAddingComment) {
-      evt.preventDefault();
-      return undefined;
-    }
-
-    const emojiLabelDom = evt.target
-      .closest(`.${CssClass.FILM_DETAILS_EMOJI_LABEL}`);
-
-    if (emojiLabelDom) {
-      const selectedEmotion = emojiLabelDom.htmlFor.split(`-`)[1];
-
-      this._domElement
-        .querySelector(`.${CssClass.FILM_DETAILS_EMOJI_LABEL_ADD}`)
-        .innerHTML = this._createEmojiLabelAdd(selectedEmotion);
-    }
-
-    return undefined;
+  _popUpClickHandler(evt) {
+    this._closePopUpClickHandler(evt);
+    this._popUpControlsClickHandler(evt);
+    this._selectEmojiClickHandler(evt);
+    this._commentDeleteClickHandler(evt);
   }
 
-  _createEmojiLabelAdd(emoji) {
-    return (`
-      <img 
-        src="${Emoji.RELATIVE_PATH}${Emoji.Images[emoji.toUpperCase()]}" 
-        width="55" 
-        height="55" 
-        alt="emoji-${emoji}"/>
-    `);
+  _closePopUpClickHandler(evt) {
+    const closePopUpDom =
+      evt.target.classList.contains(`${CssClass.POPUP_CLOSE}`);
+
+    if (closePopUpDom) {
+      this._popUpChangeHandler(null);
+    }
   }
-
-
-  // --= CHANGING FILM CATEGORY =--
 
   _popUpControlsClickHandler(evt) {
     const label = evt.target;
@@ -253,8 +273,55 @@ export default class PopUpComponent extends AbstractComponent {
     }
   }
 
+  _selectEmojiClickHandler(evt) {
+    if (this._popUpFilm.awaitConfirmAddingComment) {
+      evt.preventDefault();
+      return undefined;
+    }
 
-  // --= ADDING NEW COMMENT =---
+    const emojiLabelDom = evt.target
+      .closest(`.${CssClass.FILM_DETAILS_EMOJI_LABEL}`);
+
+    if (emojiLabelDom) {
+      const selectedEmotion = emojiLabelDom.htmlFor.split(`-`)[1];
+
+      this._domElement
+        .querySelector(`.${CssClass.FILM_DETAILS_EMOJI_LABEL_ADD}`)
+        .innerHTML = this._createEmojiLabelAdd(selectedEmotion);
+    }
+
+    return undefined;
+  }
+
+  _commentDeleteClickHandler(evt) {
+    if (
+      evt.target.classList.contains(`${CssClass.FILM_DETAILS_COMMENT_DELETE}`)
+      && !evt.target.disabled
+    ) {
+      evt.preventDefault();
+
+      const filmId = evt.target.closest(`.${CssClass.FILM_DETAILS}`).dataset.id;
+      const commentId =
+        evt.target.closest(`.${CssClass.FILM_DETAILS_COMMENT}`).dataset.id;
+
+      this._commentDeleteHandler(filmId, commentId);
+    }
+  }
+
+
+  _popUpKeyDownHandler(evt) {
+    if (evt.type === `keydown` && evt.key === KeyCode.ESC) {
+      this._popUpChangeHandler(null);
+    }
+    if (
+      evt.type === `keydown`
+      && (evt.ctrlKey || evt.metaKey)
+      && evt.key === KeyCode.ENTER
+      && !this._popUpFilm.awaitConfirmAddingComment
+    ) {
+      this._commentSendKeyDownHandler();
+    }
+  }
 
   _commentSendKeyDownHandler() {
     const commentInputDom = this._domElement
@@ -273,90 +340,5 @@ export default class PopUpComponent extends AbstractComponent {
       this._showErrorsInCommentForm(errors);
     }
   }
-
-  _validateCommentForm(formData) {
-    const errors = [];
-
-    if (!formData.commentText.length) {
-      errors.push(Error.FORM_EMPTY_USER_MSG);
-    }
-
-    if (!formData.checkedEmoji) {
-      errors.push(Error.FORM_NO_CHECKED_EMOJI);
-    }
-
-    return errors;
-  }
-
-  _findCheckedEmojiInputDom() {
-    if (!this._domElement) {
-      return undefined;
-    }
-    const emojiInputsDom = this._domElement
-      .querySelectorAll(`.${CssClass.FILM_DETAILS_EMOJI_ITEM}`);
-
-    return [...emojiInputsDom].find((emojiInput) => {
-      return emojiInput.checked;
-    });
-  }
-
-  _showErrorsInCommentForm(errors) {
-    errors.forEach((oneError) => {
-      switch (oneError) {
-        case Error.FORM_EMPTY_USER_MSG:
-          this._showSmthWrong(
-              `.${CssClass.FILM_DETAILS_COMMENT_INPUT}`,
-              Animation.ERROR_IN_FORM
-          );
-          break;
-        case Error.FORM_NO_CHECKED_EMOJI:
-          this._showSmthWrong(
-              `.${CssClass.FILM_DETAILS_EMOJI_LABEL}`,
-              Animation.ERROR_IN_FORM
-          );
-          break;
-      }
-    });
-  }
-
-  clearCommentFormAddNew() {
-    this._domElement.querySelector(`.${CssClass.FILM_DETAILS_COMMENT_INPUT}`)
-      .value = ``;
-
-    this._domElement.querySelectorAll(`.${CssClass.FILM_DETAILS_EMOJI_ITEM}`)
-      .forEach((emojiInputDom)=>{
-        emojiInputDom.checked = false;
-      });
-
-    this._domElement.querySelector(`.${CssClass.FILM_DETAILS_EMOJI_LABEL_ADD}`)
-      .innerHTML = ``;
-  }
-
-  shakeCommentFormAddNew() {
-    const formSelector = `.${CssClass.FILM_DETAILS_COMMENT_NEW}`;
-    this._showSmthWrong(formSelector, Animation.HEAD_SHAKE);
-  }
-
-
-  // --= SHOW REJECTING OF OPERATION WITH ANIMATION =---
-
-  _showSmthWrong(selector, animationConfig) {
-    const elementsCollection = this._domElement.querySelectorAll(selector);
-    const elementsDom = [...elementsCollection];
-
-    elementsDom.forEach((elementDom) => {
-      elementDom.classList.add(animationConfig.class);
-    });
-
-    setTimeout(
-        () => {
-          elementsDom.forEach((elementDom) => {
-            elementDom.classList.remove(animationConfig.class);
-          });
-        },
-        animationConfig.duration
-    );
-  }
-
 
 }

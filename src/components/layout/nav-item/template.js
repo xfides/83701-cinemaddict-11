@@ -16,7 +16,7 @@ export const createNavItemTemplate = (category) => {
       href="#${category.id}" 
       class="main-navigation__item ${category.activeClass}">
         ${category.name}
-      ${showCountFilmsInCategory(category)}
+        ${showCountFilmsInCategory(category)}
     </a>
   `);
 };

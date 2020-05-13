@@ -13,10 +13,6 @@ const configureButtonClasses = (film, category) => {
   return classes;
 };
 
-const getDisabledBtnAttr = (film) => {
-  return film.awaitConfirmChangingCategory ? `disabled` : ``;
-};
-
 export const createFilmCardTemplate = (film) => {
   return (`
     <article class="film-card" data-id="${film.id}">
@@ -47,7 +43,7 @@ export const createFilmCardTemplate = (film) => {
                button 
                film-card__controls-item--add-to-watchlist
                ${configureButtonClasses(film, FilmFilter.SCHEDULED)}"
-          ${getDisabledBtnAttr(film)}>
+          ${film.awaitConfirmChangingCategory ? `disabled` : ``}>
                
           Add to watchlist
         </button>
@@ -56,7 +52,7 @@ export const createFilmCardTemplate = (film) => {
                button 
                film-card__controls-item--mark-as-watched
                ${configureButtonClasses(film, FilmFilter.WATCHED)}"
-          ${getDisabledBtnAttr(film)}>
+          ${film.awaitConfirmChangingCategory ? `disabled` : ``}>
           Mark as watched
         </button>
         <button 
@@ -64,7 +60,7 @@ export const createFilmCardTemplate = (film) => {
                button 
                film-card__controls-item--favorite
                ${configureButtonClasses(film, FilmFilter.FAVORITE)}"
-          ${getDisabledBtnAttr(film)}>     
+          ${film.awaitConfirmChangingCategory ? `disabled` : ``}>     
           Mark as favorite
         </button>
        </form>

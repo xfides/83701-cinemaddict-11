@@ -95,6 +95,7 @@ export default class PopUpController {
     this._popUpUpdateHandler();
 
     this._components[PopUpComponent.name].clearCommentFormAddNew();
+    this._components[PopUpComponent.name].shakeCommentFormAddNew();
 
     // if (true === true) {
     //   this._components[PopUpComponent.name].clearCommentFormAddNew();

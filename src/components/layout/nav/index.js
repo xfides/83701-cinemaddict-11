@@ -14,13 +14,6 @@ export default class NavComponent extends AbstractComponent {
     this._navClickHandler = this._navClickHandler.bind(this);
   }
 
-  setNavInfo(navInfo) {
-    this._films = navInfo.films;
-    this._curCategory = navInfo.curCategory;
-    this._categoryChangeHandler = navInfo.categoryChangeHandler;
-    return this;
-  }
-
   getTemplate() {
     const categoriesTemplate = Object.values(FilmFilter)
       .map((oneCategory) => {
@@ -44,6 +37,13 @@ export default class NavComponent extends AbstractComponent {
     this._domElement.addEventListener(`click`, this._navClickHandler);
 
     return this._domElement;
+  }
+
+  setNavInfo(navInfo) {
+    this._films = navInfo.films;
+    this._curCategory = navInfo.curCategory;
+    this._categoryChangeHandler = navInfo.categoryChangeHandler;
+    return this;
   }
 
   _navClickHandler(evt) {
