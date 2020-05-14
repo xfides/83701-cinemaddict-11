@@ -21,14 +21,13 @@ export default class ContentComponent extends AbstractComponent {
     const hasAllFilmsTRZeroRate = !this._filmsTR.some((oneFilmTR) => {
       return oneFilmTR.rate !== 0;
     });
-
     const hasAllFilmsMCZeroComments = !this._filmsMC.some((oneFilmMC) => {
       return oneFilmMC.comments.length !== 0;
     });
 
     const templatesOfFilmSections = {
       common: createFilmsBlockComponent(
-          FilmSection.COMMON, this._commonFilms, this._countCommonFilmsToShow
+        FilmSection.COMMON, this._commonFilms, this._countCommonFilmsToShow
       ),
       topRated: this._filmsTR.length && !hasAllFilmsTRZeroRate
         ? createFilmsBlockComponent(FilmSection.TOP_RATED, this._filmsTR)

@@ -4,7 +4,8 @@ import {
   FilmFilter,
   SortKind,
   Event,
-  LoadingStatus
+  LoadingStatus,
+  AppPage
 } from '../consts';
 import {
   ensureArray,
@@ -23,7 +24,7 @@ export default class Model {
   constructor(verificationValue) {
     if (verificationValue !== singletonVerification) {
       throw new Error(
-          `Please use ${this.constructor.name}.getInstance() to get instance`
+        `Please use ${this.constructor.name}.getInstance() to get instance`
       );
     }
 
@@ -33,7 +34,7 @@ export default class Model {
     this._popUpId = null;
     this._curCategory = FilmFilter.ALL;
     this._curSortKind = SortKind.DEFAULT;
-    this._page = null;
+    this._page = AppPage.MAIN;
     this._loadingStatus = null;
     this._handleLoadSuccess = this._handleLoadSuccess.bind(this);
     this._handleLoadError = this._handleLoadError.bind(this);
@@ -69,15 +70,15 @@ export default class Model {
 
   getFilmsTopRated() {
     return sortFilmsByFieldWithClone(
-        ensureArray(this._films),
-        SortKind.RATE.associatedFilmField
+      ensureArray(this._films),
+      SortKind.RATE.associatedFilmField
     ).slice(0, FilmSection.TOP_RATED.countFilmsToShow);
   }
 
   getFilmsMostCommented() {
     return sortFilmsByFieldWithClone(
-        ensureArray(this._films),
-        SortKind.COUNT_COMMENTS.associatedFilmField
+      ensureArray(this._films),
+      SortKind.COUNT_COMMENTS.associatedFilmField
     ).slice(0, FilmSection.MOST_COMMENTED.countFilmsToShow);
   }
 
@@ -97,6 +98,19 @@ export default class Model {
     return this._popUpId;
   }
 
+  getCurPage() {
+    return this._page;
+  }
+
+  setCurPage(newPage) {
+    if (this._page === newPage) {
+      return;
+    }
+
+    this._page = newPage;
+    this._eventManager.trigger(Event.CHANGE_PAGE, {newPage});
+  }
+
   setCurLoadingStatus(newLoadingStatus) {
     if (this._loadingStatus === newLoadingStatus) {
       return;
@@ -105,8 +119,8 @@ export default class Model {
     this._loadingStatus = newLoadingStatus;
 
     this._eventManager.trigger(
-        Event.CHANGE_LOADING_STATUS,
-        {[Event.CHANGE_LOADING_STATUS]: newLoadingStatus}
+      Event.CHANGE_LOADING_STATUS,
+      {[Event.CHANGE_LOADING_STATUS]: newLoadingStatus}
     );
   }
 
@@ -118,8 +132,8 @@ export default class Model {
     this._curCategory = newCategory;
 
     this._eventManager.trigger(
-        Event.CHANGE_CUR_CATEGORY,
-        {[Event.CHANGE_CUR_CATEGORY]: newCategory}
+      Event.CHANGE_CUR_CATEGORY,
+      {[Event.CHANGE_CUR_CATEGORY]: newCategory}
     );
   }
 
@@ -131,8 +145,8 @@ export default class Model {
     this._curSortKind = newSortKind;
 
     this._eventManager.trigger(
-        Event.CHANGE_CUR_SORT_KIND,
-        {[Event.CHANGE_CUR_SORT_KIND]: newSortKind}
+      Event.CHANGE_CUR_SORT_KIND,
+      {[Event.CHANGE_CUR_SORT_KIND]: newSortKind}
     );
   }
 
@@ -144,8 +158,8 @@ export default class Model {
     this._popUpId = newPopUpId;
 
     this._eventManager.trigger(
-        Event.CHANGE_POP_UP_IDENTIFIER,
-        {[Event.CHANGE_POP_UP_IDENTIFIER]: newPopUpId}
+      Event.CHANGE_POP_UP_IDENTIFIER,
+      {[Event.CHANGE_POP_UP_IDENTIFIER]: newPopUpId}
     );
   }
 
@@ -157,8 +171,8 @@ export default class Model {
     this._countCommonFilmsToShow = newCountCommonFilmsToShow;
 
     this._eventManager.trigger(
-        Event.CHANGE_COUNT_COMMON_FILMS,
-        {[Event.CHANGE_COUNT_COMMON_FILMS]: newCountCommonFilmsToShow}
+      Event.CHANGE_COUNT_COMMON_FILMS,
+      {[Event.CHANGE_COUNT_COMMON_FILMS]: newCountCommonFilmsToShow}
     );
   }
 

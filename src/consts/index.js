@@ -83,6 +83,7 @@ export const CssClass = {
   FILM_SECTION_EXTRA: `films-list--extra`,
   SHOW_MORE: `films-list__show-more`,
   NAV_CATEGORY_ACTIVE: `main-navigation__item--active`,
+  NAV_STATISTICS: `main-navigation__additional`,
   SORT_KIND_ACTIVE: `sort__button--active`,
   FILM_CARD_TITLE: `film-card__title`,
   FILM_CARD_COMMENTS: `film-card__comments`,

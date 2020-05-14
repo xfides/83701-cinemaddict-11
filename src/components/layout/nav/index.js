@@ -1,7 +1,7 @@
 import AbstractComponent from '../../abstract-component';
 import {createNavItemTemplate} from '../nav-item';
 import {createNavTemplate} from './template.js';
-import {FilmFilter, CssClass} from '../../../consts';
+import {FilmFilter, CssClass, AppPage} from '../../../consts';
 import {ensureArray} from '../../../utils';
 
 export default class NavComponent extends AbstractComponent {
@@ -9,27 +9,22 @@ export default class NavComponent extends AbstractComponent {
   constructor() {
     super();
     this._films = {};
+    this._curPage = null;
     this._curCategory = null;
     this._categoryChangeHandler = null;
+    this._statisticsTurnOnHandler = null;
     this._navClickHandler = this._navClickHandler.bind(this);
   }
 
   getTemplate() {
+    const isStatisticsPage = this._curPage === AppPage.STATISTICS;
     const categoriesTemplate = Object.values(FilmFilter)
       .map((oneCategory) => {
-        return createNavItemTemplate({
-          name: oneCategory,
-          id: oneCategory.toLowerCase().split(` `)[0],
-          count: ensureArray(this._films[oneCategory]).length,
-          activeClass: this._curCategory === oneCategory
-            ? CssClass.NAV_CATEGORY_ACTIVE
-            : ``,
-          showCountFilms: oneCategory !== FilmFilter.ALL
-        });
+        return createNavItemTemplate(this._getNavItemInfo(oneCategory));
       })
       .join(``);
 
-    return createNavTemplate(categoriesTemplate);
+    return createNavTemplate(categoriesTemplate, isStatisticsPage);
   }
 
   getDomElement() {
@@ -41,15 +36,37 @@ export default class NavComponent extends AbstractComponent {
 
   setNavInfo(navInfo) {
     this._films = navInfo.films;
+    this._curPage = navInfo.curPage;
     this._curCategory = navInfo.curCategory;
     this._categoryChangeHandler = navInfo.categoryChangeHandler;
+    this._statisticsTurnOnHandler = navInfo.statisticsTurnOnHandler;
     return this;
+  }
+
+  _getNavItemInfo(category) {
+    const activeCategoryClass =
+      this._curCategory === category && this._curPage === AppPage.MAIN
+        ? CssClass.NAV_CATEGORY_ACTIVE
+        : ``;
+
+    return {
+      name: category,
+      id: category.toLowerCase().split(` `)[0],
+      count: ensureArray(this._films[category]).length,
+      activeClass: activeCategoryClass,
+      showCountFilms: category !== FilmFilter.ALL
+    }
   }
 
   _navClickHandler(evt) {
     let attrHrefDom = evt.target.getAttribute(`href`);
     if (!attrHrefDom) {
       return;
+    }
+
+    if (evt.target.classList.contains(CssClass.NAV_STATISTICS)) {
+      this._statisticsTurnOnHandler();
+      return undefined;
     }
 
     const categoriesAll = Object.values(FilmFilter);

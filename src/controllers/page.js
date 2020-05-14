@@ -8,7 +8,8 @@ import {
   DomNode,
   FilmSection,
   SortKind,
-  CssClass
+  CssClass,
+  AppPage
 } from '../consts';
 import {sortFilmsByFieldWithClone} from '../utils';
 
@@ -23,16 +24,16 @@ export default class PageController {
     };
     this._interfaceToFilmsByCategory = {
       [FilmFilter.ALL]: this._modelInstance.getFilmsAll.bind(
-          this._modelInstance
+        this._modelInstance
       ),
       [FilmFilter.WATCHED]: this._modelInstance.getFilmsWatched.bind(
-          this._modelInstance
+        this._modelInstance
       ),
       [FilmFilter.FAVORITE]: this._modelInstance.getFilmsFavorite.bind(
-          this._modelInstance
+        this._modelInstance
       ),
       [FilmFilter.SCHEDULED]: this._modelInstance.getFilmsScheduled.bind(
-          this._modelInstance
+        this._modelInstance
       )
     };
     this._pageMainUpdateHandler = this._pageMainUpdateHandler.bind(this);
@@ -42,37 +43,43 @@ export default class PageController {
       this._countCommonFilmsToShowChangeHandler.bind(this);
     this._popUpOpenHandler = this._popUpOpenHandler.bind(this);
     this._filmCategoryUpdateHandler = this._filmCategoryUpdateHandler.bind(this);
+    this._pageChangeHandler = this._pageChangeHandler.bind(this);
   }
 
   run() {
     this._eventManager.on(
-        Event.CHANGE_LOADING_STATUS,
-        this._pageMainUpdateHandler
+      Event.CHANGE_LOADING_STATUS,
+      this._pageMainUpdateHandler
     );
     this._eventManager.on(
-        Event.CHANGE_COUNT_COMMON_FILMS,
-        this._filmsUpdateHandler
+      Event.CHANGE_COUNT_COMMON_FILMS,
+      this._filmsUpdateHandler
     );
     this._eventManager.on(
-        Event.CHANGE_CUR_SORT_KIND,
-        this._pageMainUpdateHandler
+      Event.CHANGE_CUR_SORT_KIND,
+      this._pageMainUpdateHandler
     );
     this._eventManager.on(
-        Event.CHANGE_CUR_CATEGORY,
-        this._pageMainUpdateHandler,
-        {setSortKindToDefault: true}
+      Event.CHANGE_CUR_CATEGORY,
+      this._pageMainUpdateHandler,
+      {setSortKindToDefault: true}
     );
     this._eventManager.on(
-        Event.FILM_CHANGE_CATEGORY_START,
-        this._filmsUpdateHandler
+      Event.FILM_CHANGE_CATEGORY_START,
+      this._filmsUpdateHandler
     );
     this._eventManager.on(
-        Event.FILM_CHANGE_CATEGORY_DONE,
-        this._filmsUpdateHandler
+      Event.FILM_CHANGE_CATEGORY_DONE,
+      this._filmsUpdateHandler
     );
     this._eventManager.on(
-        Event.FILM_DELETE_COMMENT_DONE,
-        this._filmsUpdateHandler
+      Event.FILM_DELETE_COMMENT_DONE,
+      this._filmsUpdateHandler
+    );
+    this._eventManager.on(
+      Event.CHANGE_PAGE,
+      this._pageChangeHandler,
+      {setSortKindToDefault: true}
     );
   }
 
@@ -114,8 +121,8 @@ export default class PageController {
 
     if (curSortKind.associatedFilmField) {
       commonFilms = sortFilmsByFieldWithClone(
-          commonFilms,
-          curSortKind.associatedFilmField
+        commonFilms,
+        curSortKind.associatedFilmField
       );
     }
 
@@ -124,7 +131,7 @@ export default class PageController {
 
   _pageMainUpdateHandler(evt) {
     this._modelInstance.setCurCountCommonFilmsToShow(
-        FilmSection.COMMON.countFilmsToShow
+      FilmSection.COMMON.countFilmsToShow
     );
 
     if (
@@ -178,6 +185,15 @@ export default class PageController {
     }
 
     this._modelInstance.setCategoryForFilm(filmId, checkedCategory);
+  }
+
+  _pageChangeHandler(evt) {
+    if (evt.triggerData.newPage === AppPage.MAIN) {
+      this._pageMainUpdateHandler(evt);
+    } else {
+      this._components[SortComponent.name].removeDomElement();
+      this._components[ContentComponent.name].removeDomElement();
+    }
   }
 
 }
