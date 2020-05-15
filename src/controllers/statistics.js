@@ -4,7 +4,7 @@ import EventManager from '../event-manager';
 import StatisticsComponent from '../components/pages/statistics/content';
 import {AppPage, DomNode} from '../consts';
 
-export default class StatisticsController{
+export default class StatisticsController {
 
   constructor() {
     this._modelInstance = Model.getInstance();
@@ -12,21 +12,39 @@ export default class StatisticsController{
     this._components = {
       [StatisticsComponent.name]: new StatisticsComponent(),
     };
-    this._pageChangeHandler = this._pageChangeHandler.bind(this);
-
   }
 
   run() {
-    this._eventManager.on(Event.CHANGE_PAGE, this._pageChangeHandler);
+    this._eventManager.on(
+      Event.CHANGE_PAGE,
+      this._decorateCheckAppPage(this._renderStatistics).bind(this)
+    );
   }
 
-  _pageChangeHandler(evt){
-    if (evt.triggerData.newPage === AppPage.STATISTICS){
-      this._components[StatisticsComponent.name].render(DomNode.blockMain);
-      return undefined;
-    }
+  _renderStatistics() {
+    this._components[StatisticsComponent.name]
+      .setStatisticsInfo(this._getStatisticsInfo())
+      .render(DomNode.blockMain);
+  }
 
-    this._components[StatisticsComponent.name].removeDomElement();
+  _getStatisticsInfo() {
+    return {
+      filmsWatched: this._modelInstance.getFilmsWatched(),
+      curStatsTimeFilter: this._modelInstance.getCurStatsTimeFilter()
+    };
+  }
+
+  _decorateCheckAppPage(innerFunc) {
+    return (...args) => {
+      const curPage = this._modelInstance.getCurPage();
+
+      if (curPage === AppPage.STATISTICS) {
+        innerFunc.apply(this, args);
+        return;
+      }
+
+      this._components[StatisticsComponent.name].removeDomElement();
+    };
   }
 
 }

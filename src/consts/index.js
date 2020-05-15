@@ -170,6 +170,7 @@ export const Event = {
   CHANGE_CUR_SORT_KIND: `change_cur_sort_kind`,
   CHANGE_COUNT_COMMON_FILMS: `change_count_common_films`,
   CHANGE_POP_UP_IDENTIFIER: `change_pop_up_identifier`,
+  CHANGE_STATISTICS_TIME_FILTER: `change_statistics_time_filter`,
   FILM_CHANGE_CATEGORY_DONE: `film_change_category_done`,
   FILM_CHANGE_CATEGORY_START: `film_change_category_start`,
   FILM_DELETE_COMMENT_START: `film_delete_comment_start`,
@@ -201,4 +202,12 @@ export const Animation = {
 export const Error = {
   FORM_EMPTY_USER_MSG: `form_empty_user_msg`,
   FORM_NO_CHECKED_EMOJI: `form_no_checked_emoji`
+};
+
+export const StatisticsTime =  {
+  All_TIME: `All time`,
+  TODAY: `Today`,
+  WEAK: `Weak`,
+  MONTH: `Month`,
+  YEAR: `Year`,
 };

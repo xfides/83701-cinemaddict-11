@@ -1,4 +1,6 @@
-export const createStatisticsUserRank = () => {
+import {getUserRank} from '../../../../utils';
+
+export const createStatisticsTitleRankTemplate = (countFilms) => {
   return (`
     <p class="statistic__rank">
       Your rank
@@ -8,7 +10,7 @@ export const createStatisticsUserRank = () => {
         width="35" 
         height="35">
       <span class="statistic__rank-label">
-        Sci-Fighter
+        ${getUserRank(countFilms)}
       </span>
     </p>    
   `);

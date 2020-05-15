@@ -59,8 +59,9 @@ export default class NavComponent extends AbstractComponent {
   }
 
   _navClickHandler(evt) {
-    let attrHrefDom = evt.target.getAttribute(`href`);
-    if (!attrHrefDom) {
+    let hrefOfDom = evt.target.href || evt.target.parentElement.href;
+
+    if (!hrefOfDom) {
       return;
     }
 
@@ -71,7 +72,7 @@ export default class NavComponent extends AbstractComponent {
 
     const categoriesAll = Object.values(FilmFilter);
     const categoryChecked = categoriesAll.find((oneCategory) => {
-      return attrHrefDom.slice(1) === oneCategory.split(` `)[0].toLowerCase();
+      return hrefOfDom.split(`#`)[1] === oneCategory.split(` `)[0].toLowerCase();
     });
 
     if (categoryChecked) {

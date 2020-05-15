@@ -5,7 +5,8 @@ import {
   SortKind,
   Event,
   LoadingStatus,
-  AppPage
+  AppPage,
+  StatisticsTime
 } from '../consts';
 import {
   ensureArray,
@@ -34,6 +35,7 @@ export default class Model {
     this._popUpId = null;
     this._curCategory = FilmFilter.ALL;
     this._curSortKind = SortKind.DEFAULT;
+    this._curStatsTimeFilter = StatisticsTime.All_TIME;
     this._page = AppPage.MAIN;
     this._loadingStatus = null;
     this._handleLoadSuccess = this._handleLoadSuccess.bind(this);
@@ -100,6 +102,22 @@ export default class Model {
 
   getCurPage() {
     return this._page;
+  }
+
+  getCurStatsTimeFilter() {
+    return this._curStatsTimeFilter;
+  }
+
+  setCurStatsTimeFilter(newStatsTimeFilter) {
+    if (this._curStatsTimeFilter === newStatsTimeFilter) {
+      return;
+    }
+
+    this._curStatsTimeFilter = newStatsTimeFilter;
+    this._eventManager.trigger(
+      Event.CHANGE_STATISTICS_TIME_FILTER,
+      {newStatsTimeFilter}
+    );
   }
 
   setCurPage(newPage) {
@@ -189,7 +207,7 @@ export default class Model {
     setTimeout(() => {
       filmToChange[checkedCategory] = !filmToChange[checkedCategory];
       filmToChange.awaitConfirmChangingCategory = null;
-      this._eventManager.trigger(Event.FILM_CHANGE_CATEGORY_DONE);
+      this._eventManager.trigger(Event.FILM_CHANGE_CATEGORY_DONE, {checkedCategory});
     }, 2000);
   }
 
