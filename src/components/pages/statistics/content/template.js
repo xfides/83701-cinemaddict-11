@@ -3,6 +3,8 @@ export const createStatisticsTemplate = (templatesOfSections = `templatesOfSecti
     <section class="statistic">
       ${templatesOfSections.templateTitleRank}
       ${templatesOfSections.templateTimeControls}
+      ${templatesOfSections.templateStatInfo}
+      ${templatesOfSections.templateChart}
     </section>
   `);
 };

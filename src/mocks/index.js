@@ -49,6 +49,7 @@ const structureFilm = {
   [FilmFilter.FAVORITE]: `bool`,
   awaitConfirmChangingCategory: `string | null`,
   awaitConfirmAddingComment: `bool`,
+  watchingDate: `number ms`
 };
 
 const dataFactory = {
@@ -200,10 +201,13 @@ dataFactory.film = {
   awaitConfirmAddingComment() {
     return false;
   },
+  watchingDate() {
+    return faker.date.between(`2018-01-01`, `2020-05-15`).getTime()
+  }
 };
 
 export const createFakeFilms = () => {
-  const fakeFilms = new Array(faker.random.number({min: 7, max: 27}))
+  const fakeFilms = new Array(faker.random.number({min: 2, max: 5}))
     .fill(null)
     .map(() => {
       return createObjectByStructure(structureFilm, dataFactory.film);

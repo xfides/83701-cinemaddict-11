@@ -93,6 +93,7 @@ export const CssClass = {
   POPUP_CLOSE: `film-details__close-btn`,
   HEADER: `header`,
   MAIN: `main`,
+  CHART: `statistic__chart`,
   FOOTER_STATISTICS: `footer__statistics`,
   FILM_CARD_BUTTON: `film-card__controls-item`,
   FILM_CARD_BUTTON_LOAD: `film-card__controls-item--load`,
@@ -185,7 +186,8 @@ export const DomNode = {
   blockMain: document.querySelector(`.${CssClass.MAIN}`),
   blockFooterStatistics: document.querySelector(
       `.${CssClass.FOOTER_STATISTICS}`
-  )
+  ),
+  blockChart: document.querySelector(`.${CssClass.CHART}`)
 };
 
 export const Animation = {
