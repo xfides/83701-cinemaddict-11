@@ -75,8 +75,8 @@ export default class LayoutController {
     this._renderFooterStatistics(filmsInterface[FilmFilter.ALL]);
   }
 
-  _userRankUpdateHandler(evt){
-    if(evt.triggerData.checkedCategory === FilmFilter.WATCHED){
+  _userRankUpdateHandler(evt) {
+    if (evt.triggerData.checkedCategory === FilmFilter.WATCHED) {
       const filmsInterface = this._getFilmsByCategory();
       this._renderUserRank(filmsInterface[FilmFilter.WATCHED]);
     }

@@ -27,7 +27,7 @@ export default class ContentComponent extends AbstractComponent {
 
     const templatesOfFilmSections = {
       common: createFilmsBlockComponent(
-        FilmSection.COMMON, this._commonFilms, this._countCommonFilmsToShow
+          FilmSection.COMMON, this._commonFilms, this._countCommonFilmsToShow
       ),
       topRated: this._filmsTR.length && !hasAllFilmsTRZeroRate
         ? createFilmsBlockComponent(FilmSection.TOP_RATED, this._filmsTR)

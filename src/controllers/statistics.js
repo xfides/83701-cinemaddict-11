@@ -17,12 +17,12 @@ export default class StatisticsController {
 
   run() {
     this._eventManager.on(
-      Event.CHANGE_PAGE,
-      this._decorateCheckAppPage(this._renderStatistics).bind(this)
+        Event.CHANGE_PAGE,
+        this._decorateCheckAppPage(this._renderStatistics).bind(this)
     );
     this._eventManager.on(
-      Event.CHANGE_STATISTICS_TIME_FILTER,
-      this._decorateCheckAppPage(this._renderStatistics).bind(this)
+        Event.CHANGE_STATISTICS_TIME_FILTER,
+        this._decorateCheckAppPage(this._renderStatistics).bind(this)
     );
   }
 

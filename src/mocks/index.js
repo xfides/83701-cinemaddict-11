@@ -202,7 +202,7 @@ dataFactory.film = {
     return false;
   },
   watchingDate() {
-    return faker.date.between(`2018-01-01`, `2020-05-15`).getTime()
+    return faker.date.between(`2018-01-01`, `2020-05-15`).getTime();
   }
 };
 

@@ -75,9 +75,9 @@ export default class StatisticsComponent extends AbstractComponent {
       numberFilms: this._getFilmsByFilterPeriod().length,
       totalDurationHours: Math.trunc(this._getTotalDurationInMinutes() / 60),
       totalDurationMinutes: this._getTotalDurationInMinutes() % 60,
-      mapGenreToNumberFilms: mapGenreToNumberFilms,
+      mapGenreToNumberFilms,
       topGenre: this._getTopGenre(mapGenreToNumberFilms)
-    }
+    };
   }
 
   _getTotalDurationInMinutes() {
@@ -129,9 +129,9 @@ export default class StatisticsComponent extends AbstractComponent {
 
   _getTopGenre(mapGenreCount = {}) {
     const sortedListOfGenresCount = Object.entries(mapGenreCount).sort(
-      (propOfMap1, propOfMap2) => {
-        return propOfMap2[1] - propOfMap1[1];
-      }
+        (propOfMap1, propOfMap2) => {
+          return propOfMap2[1] - propOfMap1[1];
+        }
     );
 
     if (sortedListOfGenresCount.length) {
@@ -156,12 +156,12 @@ export default class StatisticsComponent extends AbstractComponent {
     });
 
     if (!chartInfo.length) {
-      return;
+      return undefined;
     }
 
     statisticCtx.height = BAR_HEIGHT * chartInfo.length;
 
-    new Chart(statisticCtx, {
+    return new Chart(statisticCtx, {
       plugins: [ChartDataLabels],
       type: `horizontalBar`,
       data: {
@@ -180,8 +180,8 @@ export default class StatisticsComponent extends AbstractComponent {
               size: 20
             },
             color: `#ffffff`,
-            anchor: 'start',
-            align: 'start',
+            anchor: `start`,
+            align: `start`,
             offset: 40,
           }
         },
@@ -217,7 +217,7 @@ export default class StatisticsComponent extends AbstractComponent {
         }
       }
     });
-  };
+  }
 
   _timeFilterClickHandler(evt) {
     const curHtmlFor =

@@ -1,5 +1,5 @@
 export const createTimeControlItem = (timeItemInfo) =>{
-  return(`
+  return (`
     <input 
       type="radio" 
       class="statistic__filters-input visually-hidden" 

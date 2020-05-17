@@ -7,7 +7,7 @@ const getTimeItemInfo = (oneItem, timeFilter) => {
     id: `statistics-${oneItem.toLowerCase().split(` `).join(`-`)}`,
     label: oneItem,
     checked: oneItem === timeFilter
-  }
+  };
 };
 
 export const createTimeControlsComponent = (timeFilter) => {

@@ -55,7 +55,7 @@ export default class NavComponent extends AbstractComponent {
       count: ensureArray(this._films[category]).length,
       activeClass: activeCategoryClass,
       showCountFilms: category !== FilmFilter.ALL
-    }
+    };
   }
 
   _navClickHandler(evt) {
@@ -67,7 +67,7 @@ export default class NavComponent extends AbstractComponent {
 
     if (evt.target.classList.contains(CssClass.NAV_STATISTICS)) {
       this._statisticsTurnOnHandler();
-      return undefined;
+      return;
     }
 
     const categoriesAll = Object.values(FilmFilter);

@@ -207,8 +207,8 @@ export const Error = {
   FORM_NO_CHECKED_EMOJI: `form_no_checked_emoji`
 };
 
-export const StatisticsTime =  {
-  All_TIME: `All time`,
+export const StatisticsTime = {
+  ALL_TIME: `All time`,
   TODAY: `Today`,
   WEAK: `Weak`,
   MONTH: `Month`,
