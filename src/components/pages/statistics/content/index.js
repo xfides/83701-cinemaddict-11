@@ -119,7 +119,7 @@ export default class StatisticsComponent extends AbstractComponent {
       case StatisticsTime.YEAR:
         timePast = timeNow - durationYear;
         break;
-      case StatisticsTime.All_TIME:
+      case StatisticsTime.ALL_TIME:
         timePast = 0;
         break;
     }

@@ -78,7 +78,7 @@ export const formatDurationMinutes = (numberOfMinutes) => {
 
 export const formatMsToCommentDate = (milliseconds) => {
   const dateToDisplay = moment(milliseconds);
-  const absoluteDate = dateToDisplay.format(`YYYY/MM/DD HH:MM`);
+  const absoluteDate = dateToDisplay.format(`YYYY/MM/DD HH:mm`);
   const relativeDate = dateToDisplay.fromNow();
 
   return `${absoluteDate}  ( ${relativeDate} )`;

@@ -35,7 +35,7 @@ export default class Model {
     this._popUpId = null;
     this._curCategory = FilmFilter.ALL;
     this._curSortKind = SortKind.DEFAULT;
-    this._curStatsTimeFilter = StatisticsTime.All_TIME;
+    this._curStatsTimeFilter = StatisticsTime.ALL_TIME;
     this._page = AppPage.MAIN;
     this._loadingStatus = null;
     this._handleLoadSuccess = this._handleLoadSuccess.bind(this);
