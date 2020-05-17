@@ -12,11 +12,16 @@ export default class StatisticsController {
     this._components = {
       [StatisticsComponent.name]: new StatisticsComponent(),
     };
+    this._timeFilterChangeHandler = this._timeFilterChangeHandler.bind(this);
   }
 
   run() {
     this._eventManager.on(
       Event.CHANGE_PAGE,
+      this._decorateCheckAppPage(this._renderStatistics).bind(this)
+    );
+    this._eventManager.on(
+      Event.CHANGE_STATISTICS_TIME_FILTER,
       this._decorateCheckAppPage(this._renderStatistics).bind(this)
     );
   }
@@ -30,7 +35,8 @@ export default class StatisticsController {
   _getStatisticsInfo() {
     return {
       filmsWatched: this._modelInstance.getFilmsWatched(),
-      curStatsTimeFilter: this._modelInstance.getCurStatsTimeFilter()
+      curStatsTimeFilter: this._modelInstance.getCurStatsTimeFilter(),
+      timeFilterChangeHandler: this._timeFilterChangeHandler
     };
   }
 
@@ -45,6 +51,10 @@ export default class StatisticsController {
 
       this._components[StatisticsComponent.name].removeDomElement();
     };
+  }
+
+  _timeFilterChangeHandler(newTimeFilter) {
+    this._modelInstance.setCurStatsTimeFilter(newTimeFilter);
   }
 
 }

@@ -1,3 +1,1 @@
-export const createStatsInfoComponent = (statisticsInfo)=>{
-
-};
+export * from './template.js';

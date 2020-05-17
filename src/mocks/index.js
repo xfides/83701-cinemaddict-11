@@ -207,7 +207,7 @@ dataFactory.film = {
 };
 
 export const createFakeFilms = () => {
-  const fakeFilms = new Array(faker.random.number({min: 2, max: 5}))
+  const fakeFilms = new Array(faker.random.number({min: 7, max: 27}))
     .fill(null)
     .map(() => {
       return createObjectByStructure(structureFilm, dataFactory.film);

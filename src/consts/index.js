@@ -116,6 +116,7 @@ export const CssClass = {
   FILM_DETAILS_COMMENT_INPUT: `film-details__comment-input`,
   FILM_DETAILS_COMMENT_DELETE: `film-details__comment-delete`,
   FILM_DETAILS_COMMENTS_COUNT: `film-details__comments-count`,
+  STATISTICS_FILTER_LABEL: `statistic__filters-label`,
 };
 
 export const Emoji = {

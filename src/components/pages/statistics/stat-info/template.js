@@ -1,4 +1,4 @@
-export const createStatInfo = () => {
+export const createStatInfoTemplate = (statisticsInfo) => {
   return (`
     <ul class="statistic__text-list">
     
@@ -7,7 +7,7 @@ export const createStatInfo = () => {
           You watched
         </h4>
         <p class="statistic__item-text">
-          22 
+          ${statisticsInfo.numberFilms}
           <span class="statistic__item-description">
             movies
           </span>
@@ -19,9 +19,9 @@ export const createStatInfo = () => {
           Total duration
         </h4>
         <p class="statistic__item-text">
-          130 
+          ${statisticsInfo.totalDurationHours}
           <span class="statistic__item-description">h</span> 
-          22 
+          ${statisticsInfo.totalDurationMinutes}
           <span class="statistic__item-description">m</span>
         </p>
       </li>
@@ -31,7 +31,7 @@ export const createStatInfo = () => {
           Top genre
         </h4>
         <p class="statistic__item-text">
-          Sci-Fi
+        ${statisticsInfo.topGenre}
         </p>
       </li>
       
