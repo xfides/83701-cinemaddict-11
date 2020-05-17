@@ -3,7 +3,7 @@ import Model from '../models';
 import UserRankComponent from '../components/layout/user-rank';
 import FooterStatisticsComponent from '../components/layout/footer-statistics';
 import NavComponent from '../components/layout/nav';
-import {Event, FilmFilter, DomNode} from '../consts';
+import {Event, FilmFilter, DomNode, AppPage} from '../consts';
 
 export default class LayoutController {
 
@@ -16,17 +16,18 @@ export default class LayoutController {
       [NavComponent.name]: new NavComponent(),
     };
     this._layoutUpdateHandler = this._layoutUpdateHandler.bind(this);
+    this._userRankUpdateHandler = this._userRankUpdateHandler.bind(this);
     this._categoryChangeHandler = this._categoryChangeHandler.bind(this);
+    this._statisticsTurnOnHandler = this._statisticsTurnOnHandler.bind(this);
     this._navUpdateHandler = this._navUpdateHandler.bind(this);
   }
 
   run() {
-    this._eventManager.on(
-        Event.CHANGE_LOADING_STATUS,
-        this._layoutUpdateHandler
-    );
+    this._eventManager.on(Event.CHANGE_LOADING_STATUS, this._layoutUpdateHandler);
     this._eventManager.on(Event.CHANGE_CUR_CATEGORY, this._navUpdateHandler);
     this._eventManager.on(Event.FILM_CHANGE_CATEGORY_DONE, this._navUpdateHandler);
+    this._eventManager.on(Event.CHANGE_PAGE, this._navUpdateHandler);
+    this._eventManager.on(Event.FILM_CHANGE_CATEGORY_DONE, this._userRankUpdateHandler);
   }
 
   _renderUserRank(filmsWatched) {
@@ -47,6 +48,16 @@ export default class LayoutController {
       .render(DomNode.blockFooterStatistics);
   }
 
+  _getNavInfo() {
+    return {
+      films: this._getFilmsByCategory(),
+      curPage: this._modelInstance.getCurPage(),
+      curCategory: this._modelInstance.getCurCategory(),
+      categoryChangeHandler: this._categoryChangeHandler,
+      statisticsTurnOnHandler: this._statisticsTurnOnHandler,
+    };
+  }
+
   _getFilmsByCategory() {
     return {
       [FilmFilter.ALL]: this._modelInstance.getFilmsAll(),
@@ -57,27 +68,39 @@ export default class LayoutController {
   }
 
   _layoutUpdateHandler() {
-    const films = this._getFilmsByCategory();
+    const filmsInterface = this._getFilmsByCategory();
 
     this._navUpdateHandler();
-    this._renderUserRank(films[FilmFilter.WATCHED]);
-    this._renderFooterStatistics(films[FilmFilter.ALL]);
+    this._renderUserRank(filmsInterface[FilmFilter.WATCHED]);
+    this._renderFooterStatistics(filmsInterface[FilmFilter.ALL]);
+  }
+
+  _userRankUpdateHandler(evt) {
+    if (evt.triggerData.checkedCategory === FilmFilter.WATCHED) {
+      const filmsInterface = this._getFilmsByCategory();
+      this._renderUserRank(filmsInterface[FilmFilter.WATCHED]);
+    }
   }
 
   _navUpdateHandler() {
-    const navInfo = {
-      films: this._getFilmsByCategory(),
-      curCategory: this._modelInstance.getCurCategory(),
-      categoryChangeHandler: this._categoryChangeHandler,
-    };
-
-    this._renderNav(navInfo);
+    this._renderNav(this._getNavInfo());
   }
 
   _categoryChangeHandler(newCategory) {
+    if (this._modelInstance.getCurPage() !== AppPage.MAIN) {
+      this._modelInstance.setCurPage(AppPage.MAIN);
+    }
+
     if (this._modelInstance.getCurCategory() !== newCategory) {
       this._modelInstance.setCurCategory(newCategory);
     }
+  }
+
+  _statisticsTurnOnHandler() {
+    if (this._modelInstance.getCurPage() !== AppPage.STATISTICS) {
+      this._modelInstance.setCurPage(AppPage.STATISTICS);
+    }
+
   }
 
 }

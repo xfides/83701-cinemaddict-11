@@ -25,6 +25,10 @@ export default class AbstractComponent {
   }
 
   removeDomElement() {
+    if (!this.isRendered()) {
+      return;
+    }
+
     this.getDomElement().remove();
     this._domElement = null;
 

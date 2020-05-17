@@ -78,7 +78,7 @@ export const formatDurationMinutes = (numberOfMinutes) => {
 
 export const formatMsToCommentDate = (milliseconds) => {
   const dateToDisplay = moment(milliseconds);
-  const absoluteDate = dateToDisplay.format(`YYYY/MM/DD HH:MM`);
+  const absoluteDate = dateToDisplay.format(`YYYY/MM/DD HH:mm`);
   const relativeDate = dateToDisplay.fromNow();
 
   return `${absoluteDate}  ( ${relativeDate} )`;
@@ -91,10 +91,3 @@ export const formatMsToFilmFullDate = (milliseconds) => {
 export const ensureArray = (data) => {
   return Array.isArray(data) ? data : [];
 };
-
-// export const hasSecondObjSameProps = (firstObj, secondObj) => {
-//   return Object.keys(secondObj).every((key)=>{
-//     return secondObj[key] === firstObj[key];
-//   });
-// };
-

@@ -21,7 +21,6 @@ export default class ContentComponent extends AbstractComponent {
     const hasAllFilmsTRZeroRate = !this._filmsTR.some((oneFilmTR) => {
       return oneFilmTR.rate !== 0;
     });
-
     const hasAllFilmsMCZeroComments = !this._filmsMC.some((oneFilmMC) => {
       return oneFilmMC.comments.length !== 0;
     });

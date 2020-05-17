@@ -11,7 +11,7 @@ export default class UserRankComponent extends AbstractComponent {
 
   getTemplate() {
     if (this._filmsWatched.length <= 0) {
-      return ``;
+      return `<section class="header__profile profile"></section>`;
     }
 
     return createUserRankTemplate(getUserRank(this._filmsWatched.length));

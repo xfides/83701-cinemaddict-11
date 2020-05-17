@@ -8,7 +8,8 @@ import {
   DomNode,
   FilmSection,
   SortKind,
-  CssClass
+  CssClass,
+  AppPage
 } from '../consts';
 import {sortFilmsByFieldWithClone} from '../utils';
 
@@ -35,8 +36,6 @@ export default class PageController {
           this._modelInstance
       )
     };
-    this._pageMainUpdateHandler = this._pageMainUpdateHandler.bind(this);
-    this._filmsUpdateHandler = this._filmsUpdateHandler.bind(this);
     this._sortKindChangeHandler = this._sortKindChangeHandler.bind(this);
     this._countCommonFilmsToShowChangeHandler =
       this._countCommonFilmsToShowChangeHandler.bind(this);
@@ -47,32 +46,37 @@ export default class PageController {
   run() {
     this._eventManager.on(
         Event.CHANGE_LOADING_STATUS,
-        this._pageMainUpdateHandler
+        this._decorateCheckAppPage(this._pageMainUpdateHandler).bind(this)
     );
     this._eventManager.on(
         Event.CHANGE_COUNT_COMMON_FILMS,
-        this._filmsUpdateHandler
+        this._decorateCheckAppPage(this._filmsUpdateHandler).bind(this)
     );
     this._eventManager.on(
         Event.CHANGE_CUR_SORT_KIND,
-        this._pageMainUpdateHandler
-    );
-    this._eventManager.on(
-        Event.CHANGE_CUR_CATEGORY,
-        this._pageMainUpdateHandler,
-        {setSortKindToDefault: true}
+        this._decorateCheckAppPage(this._pageMainUpdateHandler).bind(this)
     );
     this._eventManager.on(
         Event.FILM_CHANGE_CATEGORY_START,
-        this._filmsUpdateHandler
+        this._decorateCheckAppPage(this._filmsUpdateHandler).bind(this)
     );
     this._eventManager.on(
         Event.FILM_CHANGE_CATEGORY_DONE,
-        this._filmsUpdateHandler
+        this._decorateCheckAppPage(this._filmsUpdateHandler).bind(this)
     );
     this._eventManager.on(
         Event.FILM_DELETE_COMMENT_DONE,
-        this._filmsUpdateHandler
+        this._decorateCheckAppPage(this._filmsUpdateHandler).bind(this)
+    );
+    this._eventManager.on(
+        Event.CHANGE_PAGE,
+        this._decorateCheckAppPage(this._pageMainUpdateHandler).bind(this),
+        {setSortKindToDefault: true}
+    );
+    this._eventManager.on(
+        Event.CHANGE_CUR_CATEGORY,
+        this._decorateCheckAppPage(this._pageMainUpdateHandler).bind(this),
+        {setSortKindToDefault: true}
     );
   }
 
@@ -120,6 +124,20 @@ export default class PageController {
     }
 
     return commonFilms;
+  }
+
+  _decorateCheckAppPage(innerFunc) {
+    return (...args) => {
+      const curPage = this._modelInstance.getCurPage();
+
+      if (curPage === AppPage.MAIN) {
+        innerFunc.apply(this, args);
+        return;
+      }
+
+      this._components[SortComponent.name].removeDomElement();
+      this._components[ContentComponent.name].removeDomElement();
+    };
   }
 
   _pageMainUpdateHandler(evt) {
