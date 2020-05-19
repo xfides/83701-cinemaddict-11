@@ -1,4 +1,3 @@
-import {createFakeFilms} from '../mocks';
 import {
   FilmSection,
   FilmFilter,
@@ -6,7 +5,9 @@ import {
   Event,
   LoadingStatus,
   AppPage,
-  StatisticsTime
+  StatisticsTime,
+  Backend,
+  ScreenMsg
 } from '../consts';
 import {
   ensureArray,
@@ -16,6 +17,7 @@ import EventManager from '../event-manager';
 import {encode} from 'he';
 import faker from 'faker';
 import {Emoji} from '../consts';
+import API from '../backend/api';
 
 const singletonKey = Symbol();
 const singletonVerification = Symbol();
@@ -29,6 +31,7 @@ export default class Model {
       );
     }
 
+    this._api = new API(Backend.END_POINT, Backend.BASIC_AUTH);
     this._eventManager = EventManager.getInstance();
     this._films = null;
     this._countCommonFilmsToShow = FilmSection.COMMON.countFilmsToShow;
@@ -246,7 +249,7 @@ export default class Model {
   }
 
   loadData() {
-    const promiseData = Promise.resolve(createFakeFilms());
+    const promiseData = Promise.resolve(this._api.getFilms());
     promiseData.then(this._handleLoadSuccess, this._handleLoadError);
   }
 
@@ -274,7 +277,7 @@ export default class Model {
   }
 
   _handleLoadError() {
-    this._films = null;
+    this._films = ScreenMsg.FETCH_ABORTED;
     this.setCurLoadingStatus(LoadingStatus.LOADING_ERROR);
   }
 

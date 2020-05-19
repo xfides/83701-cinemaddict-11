@@ -22,11 +22,15 @@ export const createFilmsBlockComponent = (typeSection, films, countCommonFilms) 
       ? CssClass.FILM_SECTION_EXTRA : CssClass.FILM_SECTION
   };
 
-  if (films && films.length === 0) {
+  if (typeof films === `string`) {
+    configCardBlock.titleText = films;
+  }
+
+  if (Array.isArray(films) && films.length === 0) {
     configCardBlock.titleText = ScreenMsg.NO_FILMS;
   }
 
-  if (films && films.length > 0) {
+  if (Array.isArray(films) && films.length > 0) {
     configCardBlock.titleText = text;
     configCardBlock.classHiddenTitle = isHidden ? CssClass.HIDDEN_BLOCK : ``;
     configCardBlock.templateFilmCards = films
@@ -35,7 +39,7 @@ export const createFilmsBlockComponent = (typeSection, films, countCommonFilms) 
       .join(``);
   }
 
-  if (!isExtraBlock && films && films.length > countCommonFilms) {
+  if (!isExtraBlock && Array.isArray(films) && films.length > countCommonFilms) {
     configCardBlock.templateShowMoreBlock = createShowMoreTemplate();
   }
 

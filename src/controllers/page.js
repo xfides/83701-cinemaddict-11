@@ -24,16 +24,16 @@ export default class PageController {
     };
     this._interfaceToFilmsByCategory = {
       [FilmFilter.ALL]: this._modelInstance.getFilmsAll.bind(
-          this._modelInstance
+        this._modelInstance
       ),
       [FilmFilter.WATCHED]: this._modelInstance.getFilmsWatched.bind(
-          this._modelInstance
+        this._modelInstance
       ),
       [FilmFilter.FAVORITE]: this._modelInstance.getFilmsFavorite.bind(
-          this._modelInstance
+        this._modelInstance
       ),
       [FilmFilter.SCHEDULED]: this._modelInstance.getFilmsScheduled.bind(
-          this._modelInstance
+        this._modelInstance
       )
     };
     this._sortKindChangeHandler = this._sortKindChangeHandler.bind(this);
@@ -45,38 +45,40 @@ export default class PageController {
 
   run() {
     this._eventManager.on(
-        Event.CHANGE_LOADING_STATUS,
-        this._decorateCheckAppPage(this._pageMainUpdateHandler).bind(this)
+      Event.CHANGE_LOADING_STATUS,
+      this._decorateCheckAppPage(this._pageMainUpdateHandler).bind(this)
     );
     this._eventManager.on(
-        Event.CHANGE_COUNT_COMMON_FILMS,
-        this._decorateCheckAppPage(this._filmsUpdateHandler).bind(this)
+      Event.CHANGE_CUR_SORT_KIND,
+      this._decorateCheckAppPage(this._pageMainUpdateHandler).bind(this)
     );
     this._eventManager.on(
-        Event.CHANGE_CUR_SORT_KIND,
-        this._decorateCheckAppPage(this._pageMainUpdateHandler).bind(this)
+      Event.CHANGE_PAGE,
+      this._decorateCheckAppPage(this._pageMainUpdateHandler).bind(this),
+      {setSortKindToDefault: true}
     );
     this._eventManager.on(
-        Event.FILM_CHANGE_CATEGORY_START,
-        this._decorateCheckAppPage(this._filmsUpdateHandler).bind(this)
+      Event.CHANGE_CUR_CATEGORY,
+      this._decorateCheckAppPage(this._pageMainUpdateHandler).bind(this),
+      {setSortKindToDefault: true}
+    );
+
+
+    this._eventManager.on(
+      Event.CHANGE_COUNT_COMMON_FILMS,
+      this._decorateCheckAppPage(this._filmsUpdateHandler).bind(this)
     );
     this._eventManager.on(
-        Event.FILM_CHANGE_CATEGORY_DONE,
-        this._decorateCheckAppPage(this._filmsUpdateHandler).bind(this)
+      Event.FILM_CHANGE_CATEGORY_START,
+      this._decorateCheckAppPage(this._filmsUpdateHandler).bind(this)
     );
     this._eventManager.on(
-        Event.FILM_DELETE_COMMENT_DONE,
-        this._decorateCheckAppPage(this._filmsUpdateHandler).bind(this)
+      Event.FILM_CHANGE_CATEGORY_DONE,
+      this._decorateCheckAppPage(this._filmsUpdateHandler).bind(this)
     );
     this._eventManager.on(
-        Event.CHANGE_PAGE,
-        this._decorateCheckAppPage(this._pageMainUpdateHandler).bind(this),
-        {setSortKindToDefault: true}
-    );
-    this._eventManager.on(
-        Event.CHANGE_CUR_CATEGORY,
-        this._decorateCheckAppPage(this._pageMainUpdateHandler).bind(this),
-        {setSortKindToDefault: true}
+      Event.FILM_DELETE_COMMENT_DONE,
+      this._decorateCheckAppPage(this._filmsUpdateHandler).bind(this)
     );
   }
 
@@ -118,8 +120,8 @@ export default class PageController {
 
     if (curSortKind.associatedFilmField) {
       commonFilms = sortFilmsByFieldWithClone(
-          commonFilms,
-          curSortKind.associatedFilmField
+        commonFilms,
+        curSortKind.associatedFilmField
       );
     }
 
@@ -142,7 +144,7 @@ export default class PageController {
 
   _pageMainUpdateHandler(evt) {
     this._modelInstance.setCurCountCommonFilmsToShow(
-        FilmSection.COMMON.countFilmsToShow
+      FilmSection.COMMON.countFilmsToShow
     );
 
     if (

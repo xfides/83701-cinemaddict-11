@@ -1,5 +1,5 @@
 import faker from 'faker';
-import {FilmFilter, Emoji, Poster} from '../consts/index.js';
+import {FilmFilter, Emoji, Poster} from '../consts';
 
 const createObjectByStructure = (structure, dataFactory) => {
   const structureKeys = Object.getOwnPropertyNames(structure);
@@ -222,5 +222,3 @@ export const createFakeFilms = () => {
 
   return fakeFilms;
 };
-
-
