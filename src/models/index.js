@@ -1,4 +1,3 @@
-import {createFakeFilms} from '../mocks';
 import {
   FilmSection,
   FilmFilter,
@@ -6,7 +5,9 @@ import {
   Event,
   LoadingStatus,
   AppPage,
-  StatisticsTime
+  StatisticsTime,
+  Backend,
+  ScreenMsg
 } from '../consts';
 import {
   ensureArray,
@@ -16,6 +17,7 @@ import EventManager from '../event-manager';
 import {encode} from 'he';
 import faker from 'faker';
 import {Emoji} from '../consts';
+import API from '../backend/api';
 
 const singletonKey = Symbol();
 const singletonVerification = Symbol();
@@ -29,6 +31,7 @@ export default class Model {
       );
     }
 
+    this._api = new API(Backend.END_POINT, Backend.BASIC_AUTH);
     this._eventManager = EventManager.getInstance();
     this._films = null;
     this._countCommonFilmsToShow = FilmSection.COMMON.countFilmsToShow;
@@ -199,16 +202,35 @@ export default class Model {
       return film.id === filmId;
     });
 
-    filmToChange.awaitConfirmChangingCategory = checkedCategory;
     this._eventManager.trigger(Event.FILM_CHANGE_CATEGORY_START);
 
-    // async process of changing Category for film
+    filmToChange.awaitConfirmChangingCategory = checkedCategory;
+    filmToChange[checkedCategory] = !filmToChange[checkedCategory];
 
-    setTimeout(() => {
-      filmToChange[checkedCategory] = !filmToChange[checkedCategory];
-      filmToChange.awaitConfirmChangingCategory = null;
-      this._eventManager.trigger(Event.FILM_CHANGE_CATEGORY_DONE, {checkedCategory});
-    }, 2000);
+    this._api.updateFilm(filmToChange)
+      .then(
+          (newClientFilm) => {
+            filmToChange.awaitConfirmChangingCategory = null;
+            filmToChange[checkedCategory] = newClientFilm[checkedCategory];
+            this._eventManager.trigger(
+                Event.FILM_CHANGE_CATEGORY_DONE,
+                {checkedCategory}
+            );
+          },
+          () => {
+            filmToChange[checkedCategory] = !filmToChange[checkedCategory];
+            filmToChange.awaitConfirmChangingCategory = null;
+            this._eventManager.trigger(
+                Event.FILM_CHANGE_CATEGORY_DONE,
+                {checkedCategory}
+            );
+          }
+      )
+      .catch(
+          (error) => {
+            throw error;
+          }
+      );
   }
 
   deleteComment(filmId, commentId) {
@@ -246,8 +268,12 @@ export default class Model {
   }
 
   loadData() {
-    const promiseData = Promise.resolve(createFakeFilms());
-    promiseData.then(this._handleLoadSuccess, this._handleLoadError);
+    const promiseData = Promise.resolve(this._api.getFilms());
+    promiseData
+      .then(this._handleLoadSuccess, this._handleLoadError)
+      .catch((error) => {
+        throw error;
+      });
   }
 
   _getIndexOfComment(film, commentId) {
@@ -274,7 +300,7 @@ export default class Model {
   }
 
   _handleLoadError() {
-    this._films = null;
+    this._films = ScreenMsg.FETCH_ABORTED;
     this.setCurLoadingStatus(LoadingStatus.LOADING_ERROR);
   }
 

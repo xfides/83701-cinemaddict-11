@@ -49,12 +49,24 @@ export default class PageController {
         this._decorateCheckAppPage(this._pageMainUpdateHandler).bind(this)
     );
     this._eventManager.on(
-        Event.CHANGE_COUNT_COMMON_FILMS,
-        this._decorateCheckAppPage(this._filmsUpdateHandler).bind(this)
-    );
-    this._eventManager.on(
         Event.CHANGE_CUR_SORT_KIND,
         this._decorateCheckAppPage(this._pageMainUpdateHandler).bind(this)
+    );
+    this._eventManager.on(
+        Event.CHANGE_PAGE,
+        this._decorateCheckAppPage(this._pageMainUpdateHandler).bind(this),
+        {setSortKindToDefault: true}
+    );
+    this._eventManager.on(
+        Event.CHANGE_CUR_CATEGORY,
+        this._decorateCheckAppPage(this._pageMainUpdateHandler).bind(this),
+        {setSortKindToDefault: true}
+    );
+
+
+    this._eventManager.on(
+        Event.CHANGE_COUNT_COMMON_FILMS,
+        this._decorateCheckAppPage(this._filmsUpdateHandler).bind(this)
     );
     this._eventManager.on(
         Event.FILM_CHANGE_CATEGORY_START,
@@ -68,28 +80,18 @@ export default class PageController {
         Event.FILM_DELETE_COMMENT_DONE,
         this._decorateCheckAppPage(this._filmsUpdateHandler).bind(this)
     );
-    this._eventManager.on(
-        Event.CHANGE_PAGE,
-        this._decorateCheckAppPage(this._pageMainUpdateHandler).bind(this),
-        {setSortKindToDefault: true}
-    );
-    this._eventManager.on(
-        Event.CHANGE_CUR_CATEGORY,
-        this._decorateCheckAppPage(this._pageMainUpdateHandler).bind(this),
-        {setSortKindToDefault: true}
-    );
   }
 
   renderSort(sortInfo) {
     this._components[SortComponent.name]
       .setSortKind(sortInfo)
-      .render(DomNode.blockMain);
+      .render(DomNode.BLOCK_MAIN);
   }
 
   renderFilms(filmsInfo) {
     this._components[ContentComponent.name]
       .setFilmsInfo(filmsInfo)
-      .render(DomNode.blockMain);
+      .render(DomNode.BLOCK_MAIN);
   }
 
   _getFilmsInfo() {

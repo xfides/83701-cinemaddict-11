@@ -3,7 +3,8 @@ export const ScreenMsg = {
   LOADING: `Loading...`,
   NO_FILM_FULL_INFO: `Sorry. Not found such movie`,
   STUB_ADD_COMMENT: `Select reaction below and write comment here`,
-  STUB_ADD_COMMENT_ZERO: `Great movie!`
+  STUB_ADD_COMMENT_ZERO: `Great movie!`,
+  FETCH_ABORTED: `OOOPS! Something went wrong. Please try later...`
 };
 
 export const FilmFilter = {
@@ -182,13 +183,12 @@ export const Event = {
 };
 
 export const DomNode = {
-  body: document.body,
-  blockHeader: document.querySelector(`.${CssClass.HEADER}`),
-  blockMain: document.querySelector(`.${CssClass.MAIN}`),
-  blockFooterStatistics: document.querySelector(
+  BODY: document.body,
+  BLOCK_HEADER: document.querySelector(`.${CssClass.HEADER}`),
+  BLOCK_MAIN: document.querySelector(`.${CssClass.MAIN}`),
+  BLOCK_FOOTER_STATISTICS: document.querySelector(
       `.${CssClass.FOOTER_STATISTICS}`
-  ),
-  blockChart: document.querySelector(`.${CssClass.CHART}`)
+  )
 };
 
 export const Animation = {
@@ -213,4 +213,18 @@ export const StatisticsTime = {
   WEAK: `Weak`,
   MONTH: `Month`,
   YEAR: `Year`,
+};
+
+export const Backend = {
+  END_POINT: `https://11.ecmascript.pages.academy/cinemaddict/`,
+  RESOURCE_MOVIES: `movies`,
+  RESOURCE_COMMENTS: `comments`,
+  REQUEST_METHOD_GET: `GET`,
+  REQUEST_METHOD_POST: `POST`,
+  REQUEST_METHOD_PUT: `PUT`,
+  REQUEST_METHOD_DELETE: `DELETE`,
+  Headers: {
+    CONTENT_TYPE_JSON: [`Content-Type`, `application/json`],
+    BASIC_AUTH: [`Authorization`, `Basic g2i3b4b5e6r7i8s9h`]
+  }
 };

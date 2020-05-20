@@ -45,7 +45,7 @@ export default class PopUpController {
   _renderPopUp(popUpInfo) {
     this._components[PopUpComponent.name]
       .setPopUpInfo(popUpInfo)
-      .render(DomNode.body);
+      .render(DomNode.BODY);
   }
 
   _popUpUpdateHandler() {
