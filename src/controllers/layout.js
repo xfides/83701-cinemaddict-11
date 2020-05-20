@@ -33,19 +33,19 @@ export default class LayoutController {
   _renderUserRank(filmsWatched) {
     this._components[UserRankComponent.name]
       .setFilmsWatched(filmsWatched)
-      .render(DomNode.blockHeader);
+      .render(DomNode.BLOCK_HEADER);
   }
 
   _renderNav(navInfo) {
     this._components[NavComponent.name]
       .setNavInfo(navInfo)
-      .render(DomNode.blockMain);
+      .render(DomNode.BLOCK_MAIN);
   }
 
   _renderFooterStatistics(filmsAll) {
     this._components[FooterStatisticsComponent.name]
       .setFilmsAll(filmsAll)
-      .render(DomNode.blockFooterStatistics);
+      .render(DomNode.BLOCK_FOOTER_STATISTICS);
   }
 
   _getNavInfo() {

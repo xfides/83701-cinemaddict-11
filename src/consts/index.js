@@ -183,13 +183,12 @@ export const Event = {
 };
 
 export const DomNode = {
-  body: document.body,
-  blockHeader: document.querySelector(`.${CssClass.HEADER}`),
-  blockMain: document.querySelector(`.${CssClass.MAIN}`),
-  blockFooterStatistics: document.querySelector(
-    `.${CssClass.FOOTER_STATISTICS}`
-  ),
-  blockChart: document.querySelector(`.${CssClass.CHART}`)
+  BODY: document.body,
+  BLOCK_HEADER: document.querySelector(`.${CssClass.HEADER}`),
+  BLOCK_MAIN: document.querySelector(`.${CssClass.MAIN}`),
+  BLOCK_FOOTER_STATISTICS: document.querySelector(
+      `.${CssClass.FOOTER_STATISTICS}`
+  )
 };
 
 export const Animation = {
@@ -218,11 +217,14 @@ export const StatisticsTime = {
 
 export const Backend = {
   END_POINT: `https://11.ecmascript.pages.academy/cinemaddict/`,
-  BASIC_AUTH: `Basic g2i3b4b5e6r7i8s9h`,
   RESOURCE_MOVIES: `movies`,
   RESOURCE_COMMENTS: `comments`,
   REQUEST_METHOD_GET: `GET`,
   REQUEST_METHOD_POST: `POST`,
   REQUEST_METHOD_PUT: `PUT`,
-  REQUEST_METHOD_DELETE: `DELETE`
+  REQUEST_METHOD_DELETE: `DELETE`,
+  Headers: {
+    CONTENT_TYPE_JSON: [`Content-Type`, `application/json`],
+    BASIC_AUTH: [`Authorization`, `Basic g2i3b4b5e6r7i8s9h`]
+  }
 };

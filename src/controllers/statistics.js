@@ -29,7 +29,7 @@ export default class StatisticsController {
   _renderStatistics() {
     this._components[StatisticsComponent.name]
       .setStatisticsInfo(this._getStatisticsInfo())
-      .render(DomNode.blockMain);
+      .render(DomNode.BLOCK_MAIN);
   }
 
   _getStatisticsInfo() {

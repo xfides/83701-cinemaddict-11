@@ -1,13 +1,15 @@
 import {Backend} from '../consts';
-import {checkStatusCode} from '../utils';
 import {dataAdapter} from './data-adapter';
 
 export default class API {
 
-  constructor(endPoint, authorization) {
+  constructor(endPoint) {
     this._endPoint = endPoint;
     this._headers = new Headers();
-    this._headers.set(`Authorization`, authorization);
+    this._headers.append(
+        Backend.Headers.BASIC_AUTH[0],
+        Backend.Headers.BASIC_AUTH[1]
+    );
   }
 
   getFilms() {
@@ -17,7 +19,7 @@ export default class API {
     return new Promise((res, rej) => {
       this._load(pathToResource)
         .then((response) => {
-          return response.json()
+          return response.json();
         })
         .then((serverFilms) => {
           return this._parseServerFilms(serverFilms);
@@ -35,19 +37,56 @@ export default class API {
         })
         .catch((error) => {
           rej(error);
-          console.log(error);
+          throw error;
         });
     });
   }
 
-  getCommentsForFittingFilmId(filmId) {
+  updateFilm(clientFilm) {
+    const requestMethod = Backend.REQUEST_METHOD_PUT;
+    const pathToResource =
+      `${this._endPoint}${Backend.RESOURCE_MOVIES}/${clientFilm.id}`;
+    const requestBody =
+      JSON.stringify(dataAdapter.createServerFilm(clientFilm));
+
+    if (!this._headers.has(Backend.Headers.CONTENT_TYPE_JSON[0])) {
+      this._headers.append(
+          Backend.Headers.CONTENT_TYPE_JSON[0],
+          Backend.Headers.CONTENT_TYPE_JSON[1]
+      );
+    }
+
+    return new Promise((res, rej) => {
+      this._load(
+          pathToResource,
+          requestMethod,
+          this._headers,
+          requestBody
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((serverFilm) => {
+          const clientFilmUpdated = dataAdapter.createClientFilm(serverFilm);
+          res(clientFilmUpdated);
+          return clientFilmUpdated;
+        })
+        .catch((error) => {
+          rej(error);
+          throw error;
+        });
+
+    });
+  }
+
+  _getCommentsForFittingFilmId(filmId) {
     const pathToResource =
       `${this._endPoint}${Backend.RESOURCE_COMMENTS}/${filmId}`;
 
     return new Promise((res, rej) => {
       this._load(pathToResource)
         .then((response) => {
-          return response.json()
+          return response.json();
         })
         .then((serverComments) => {
           const clientComments = this._parseServerComments(serverComments);
@@ -56,14 +95,14 @@ export default class API {
         })
         .catch((error) => {
           rej(error);
-          console.log(error);
+          throw error;
         });
     });
   }
 
   _getAllCommentsToAllFilms(clientFilms) {
     const clientFilmCommentsPromises = clientFilms.map((oneClientFilm) => {
-      return this.getCommentsForFittingFilmId(oneClientFilm.id);
+      return this._getCommentsForFittingFilmId(oneClientFilm.id);
     });
 
     return Promise.all(clientFilmCommentsPromises);
@@ -98,9 +137,15 @@ export default class API {
   }
 
   _load(pathToResource,
-        requestMethod = Backend.REQUEST_METHOD_GET,
-        requestHeaders = this._headers,
-        requestBody) {
+      requestMethod = Backend.REQUEST_METHOD_GET,
+      requestHeaders = this._headers,
+      requestBody) {
+
+    // console.log(pathToResource);
+    // console.log(requestMethod);
+    // console.log(requestHeaders);
+    // console.log(requestBody);
+    // console.log(`-----------------------`);
 
     const serverResponsePromise = fetch(pathToResource, {
       method: requestMethod,
@@ -109,24 +154,22 @@ export default class API {
     });
 
     return serverResponsePromise.then(
-      (response) => {
-        if (response.status >= 200 && response.status < 300) {
-          return response;
-        } else {
-          throw new Error(`${response.status}: ${response.statusText}`);
+        (response) => {
+          if (response.status >= 200 && response.status < 300) {
+            return response;
+          } else {
+            throw new Error(`${response.status}: ${response.statusText}`);
+          }
+        },
+        (error) => {
+          throw error;
         }
-      },
-      (error) => {
-        throw error;
-      }
-    );
+    ).catch((error) => {
+      throw error;
+    });
 
   }
 
 }
-
-
-
-
 
 
