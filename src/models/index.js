@@ -198,27 +198,41 @@ export default class Model {
   }
 
   setCategoryForFilm(filmId, checkedCategory) {
+    this._eventManager.trigger(Event.FILM_CHANGE_CATEGORY_START);
+
     const filmToChange = this._films.find((film) => {
       return film.id === filmId;
     });
-
-    this._eventManager.trigger(Event.FILM_CHANGE_CATEGORY_START);
+    const tempFilmData = {
+      categoryStatus: filmToChange[checkedCategory],
+      watchingDate: filmToChange.watchingDate
+    };
 
     filmToChange.awaitConfirmChangingCategory = checkedCategory;
     filmToChange[checkedCategory] = !filmToChange[checkedCategory];
+
+    if (checkedCategory === FilmFilter.WATCHED) {
+      if (filmToChange[checkedCategory]) {
+        filmToChange.watchingDate = +new Date();
+      } else {
+        filmToChange.watchingDate = null;
+      }
+    }
 
     this._api.updateFilm(filmToChange)
       .then(
           (newClientFilm) => {
             filmToChange.awaitConfirmChangingCategory = null;
             filmToChange[checkedCategory] = newClientFilm[checkedCategory];
+            filmToChange.watchingDate = newClientFilm.watchingDate;
             this._eventManager.trigger(
                 Event.FILM_CHANGE_CATEGORY_DONE,
                 {checkedCategory}
             );
           },
           () => {
-            filmToChange[checkedCategory] = !filmToChange[checkedCategory];
+            filmToChange[checkedCategory] = tempFilmData.categoryStatus;
+            filmToChange.watchingDate = tempFilmData.watchingDate;
             filmToChange.awaitConfirmChangingCategory = null;
             this._eventManager.trigger(
                 Event.FILM_CHANGE_CATEGORY_DONE,
@@ -236,35 +250,56 @@ export default class Model {
   deleteComment(filmId, commentId) {
     const film = this.getFilmById(filmId);
     const indexOfComment = this._getIndexOfComment(film, commentId);
-
-    film.comments[indexOfComment].awaitConfirmDeletingComment = true;
+    const commentToDel = film.comments[indexOfComment];
+    commentToDel.awaitConfirmDeletingComment = true;
     this._eventManager.trigger(Event.FILM_DELETE_COMMENT_START);
 
-    // async process of deleting comment
-
-    setTimeout(() => {
-      const indexOfCommentToDelete = this._getIndexOfComment(film, commentId);
-      film.comments[indexOfCommentToDelete].awaitConfirmDeletingComment = false;
-      film.comments.splice(indexOfCommentToDelete, 1);
-      this._eventManager.trigger(Event.FILM_DELETE_COMMENT_DONE);
-    }, 5000);
+    this._api.deleteComment(commentToDel)
+      .then(() => {
+        const indexOfCommentToDel = this._getIndexOfComment(film, commentId);
+        film.comments.splice(indexOfCommentToDel, 1);
+        this._eventManager.trigger(
+            Event.FILM_DELETE_COMMENT_DONE,
+            {delCommentId: null}
+        );
+      })
+      .catch((error) => {
+        commentToDel.awaitConfirmDeletingComment = false;
+        this._eventManager.trigger(
+            Event.FILM_DELETE_COMMENT_DONE,
+            {delCommentId: commentId}
+        );
+        throw error;
+      });
   }
 
   addNewComment(commentInfo, filmId) {
     const film = this.getFilmById(filmId);
+    const newComment = this._buildComment(commentInfo);
     film.awaitConfirmAddingComment = true;
 
     this._eventManager.trigger(Event.FILM_ADD_COMMENT_START);
-
-    // async process of adding comment
-
-    setTimeout(() => {
-      film.awaitConfirmAddingComment = false;
-      const newComment = this._buildComment(commentInfo);
-      film.comments.push(newComment);
-
-      this._eventManager.trigger(Event.FILM_ADD_COMMENT_DONE);
-    }, 5000);
+    this._api.sendCommentToFilm(newComment, film)
+      .then(
+          (newComments) => {
+            film.comments = newComments;
+            film.awaitConfirmAddingComment = false;
+            this._eventManager.trigger(
+                Event.FILM_ADD_COMMENT_DONE,
+                {commentSendSuccess: true}
+            );
+          },
+          () => {
+            film.awaitConfirmAddingComment = false;
+            this._eventManager.trigger(
+                Event.FILM_ADD_COMMENT_DONE,
+                {commentSendSuccess: false}
+            );
+          }
+      )
+      .catch((error) => {
+        throw error;
+      });
   }
 
   loadData() {

@@ -5,11 +5,6 @@ export default class API {
 
   constructor(endPoint) {
     this._endPoint = endPoint;
-    this._headers = new Headers();
-    this._headers.append(
-        Backend.Headers.BASIC_AUTH[0],
-        Backend.Headers.BASIC_AUTH[1]
-    );
   }
 
   getFilms() {
@@ -17,7 +12,7 @@ export default class API {
     let films;
 
     return new Promise((res, rej) => {
-      this._load(pathToResource)
+      this._load({pathToResource})
         .then((response) => {
           return response.json();
         })
@@ -30,13 +25,14 @@ export default class API {
         })
         .then((allCommentsByFilmId) => {
           const clientFilmsWithComments =
-            this._addCommentsToFilms(films, allCommentsByFilmId);
+            this._mergeCommentsToFilms(films, allCommentsByFilmId);
 
           res(clientFilmsWithComments);
           return clientFilmsWithComments;
         })
         .catch((error) => {
           rej(error);
+          // console.log(error);
           throw error;
         });
     });
@@ -48,21 +44,17 @@ export default class API {
       `${this._endPoint}${Backend.RESOURCE_MOVIES}/${clientFilm.id}`;
     const requestBody =
       JSON.stringify(dataAdapter.createServerFilm(clientFilm));
-
-    if (!this._headers.has(Backend.Headers.CONTENT_TYPE_JSON[0])) {
-      this._headers.append(
-          Backend.Headers.CONTENT_TYPE_JSON[0],
-          Backend.Headers.CONTENT_TYPE_JSON[1]
-      );
-    }
+    const requestHeaders = new Headers({
+      [Backend.Headers.CONTENT_TYPE_JSON[0]]: Backend.Headers.CONTENT_TYPE_JSON[1]
+    });
 
     return new Promise((res, rej) => {
-      this._load(
-          pathToResource,
-          requestMethod,
-          this._headers,
-          requestBody
-      )
+      this._load({
+        pathToResource,
+        requestMethod,
+        requestHeaders,
+        requestBody
+      })
         .then((response) => {
           return response.json();
         })
@@ -73,10 +65,59 @@ export default class API {
         })
         .catch((error) => {
           rej(error);
+          // console.log(error);
           throw error;
         });
-
     });
+  }
+
+  sendCommentToFilm(newComment, clientFilm) {
+    const pathToResource =
+      `${this._endPoint}${Backend.RESOURCE_COMMENTS}/${clientFilm.id}`;
+    const requestMethod = Backend.REQUEST_METHOD_POST;
+    const requestHeaders = new Headers({
+      [Backend.Headers.CONTENT_TYPE_JSON[0]]: Backend.Headers.CONTENT_TYPE_JSON[1]
+    });
+    const requestBody =
+      JSON.stringify(dataAdapter.createServerComment(newComment));
+
+    return new Promise((res, rej) => {
+      this._load({
+        pathToResource,
+        requestMethod,
+        requestHeaders,
+        requestBody
+      })
+        .then((response) => {
+          return response.json();
+        })
+        .then((serverFilm) => {
+          const clientComments =
+            this._parseServerComments(serverFilm.comments);
+          res(clientComments);
+          return clientComments;
+        })
+        .catch((error) => {
+          rej(error);
+          // console.log(error);
+          throw error;
+        });
+    });
+  }
+
+  deleteComment(clientComment) {
+    const pathToResource =
+      `${this._endPoint}${Backend.RESOURCE_COMMENTS}/${clientComment.id}`;
+    const requestMethod = Backend.REQUEST_METHOD_DELETE;
+
+    return this._load({
+      pathToResource,
+      requestMethod
+    })
+      .catch((error) => {
+        // console.log(error);
+        throw error;
+      });
   }
 
   _getCommentsForFittingFilmId(filmId) {
@@ -84,7 +125,7 @@ export default class API {
       `${this._endPoint}${Backend.RESOURCE_COMMENTS}/${filmId}`;
 
     return new Promise((res, rej) => {
-      this._load(pathToResource)
+      this._load({pathToResource})
         .then((response) => {
           return response.json();
         })
@@ -95,6 +136,7 @@ export default class API {
         })
         .catch((error) => {
           rej(error);
+          // console.log(error);
           throw error;
         });
     });
@@ -120,7 +162,7 @@ export default class API {
     });
   }
 
-  _addCommentsToFilms(films, allCommentsByFilmId) {
+  _mergeCommentsToFilms(films, allCommentsByFilmId) {
     films.forEach((oneFilm) => {
       const commentsForFilmId = allCommentsByFilmId.find((commentsOneFilm) => {
         return commentsOneFilm.filmId === oneFilm.id;
@@ -132,20 +174,15 @@ export default class API {
     return films;
   }
 
-  deleteComment() {
-
-  }
-
-  _load(pathToResource,
-      requestMethod = Backend.REQUEST_METHOD_GET,
-      requestHeaders = this._headers,
-      requestBody) {
-
-    // console.log(pathToResource);
-    // console.log(requestMethod);
-    // console.log(requestHeaders);
-    // console.log(requestBody);
-    // console.log(`-----------------------`);
+  _load({
+    pathToResource,
+    requestMethod = Backend.REQUEST_METHOD_GET,
+    requestHeaders = new Headers(),
+    requestBody
+  }) {
+    requestHeaders.append(
+        Backend.Headers.BASIC_AUTH[0], Backend.Headers.BASIC_AUTH[1]
+    );
 
     const serverResponsePromise = fetch(pathToResource, {
       method: requestMethod,
@@ -162,12 +199,13 @@ export default class API {
           }
         },
         (error) => {
+        // console.log(error);
           throw error;
         }
     ).catch((error) => {
+      // console.log(error);
       throw error;
     });
-
   }
 
 }

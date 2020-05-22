@@ -64,7 +64,7 @@ export default class StatisticsComponent extends AbstractComponent {
     const pastTime = this._getPastDate();
 
     return films.filter((oneFilm) => {
-      return oneFilm.watchingDate >= pastTime;
+      return oneFilm.watchingDate !== null && oneFilm.watchingDate >= pastTime;
     });
   }
 

@@ -20,6 +20,8 @@ export default class PopUpController {
       this._popUpFilmCategoryUpdateHandler.bind(this);
     this._commentAddNewResponseHandler =
       this._commentAddNewResponseHandler.bind(this);
+    this._commentDeleteResponseHandler =
+      this._commentDeleteResponseHandler.bind(this);
   }
 
   run() {
@@ -28,7 +30,6 @@ export default class PopUpController {
       Event.FILM_CHANGE_CATEGORY_START,
       Event.FILM_CHANGE_CATEGORY_DONE,
       Event.FILM_DELETE_COMMENT_START,
-      Event.FILM_DELETE_COMMENT_DONE,
       Event.FILM_ADD_COMMENT_START
     ];
 
@@ -39,6 +40,11 @@ export default class PopUpController {
     this._eventManager.on(
         Event.FILM_ADD_COMMENT_DONE,
         this._commentAddNewResponseHandler
+    );
+
+    this._eventManager.on(
+        Event.FILM_DELETE_COMMENT_DONE,
+        this._commentDeleteResponseHandler
     );
   }
 
@@ -91,17 +97,24 @@ export default class PopUpController {
     this._modelInstance.addNewComment(commentInfo, filmId);
   }
 
-  _commentAddNewResponseHandler() {
+  _commentAddNewResponseHandler(evt) {
     this._popUpUpdateHandler();
 
-    this._components[PopUpComponent.name].clearCommentFormAddNew();
-    this._components[PopUpComponent.name].shakeCommentFormAddNew();
+    if (evt.triggerData.commentSendSuccess) {
+      this._components[PopUpComponent.name].clearCommentFormAddNew();
+    } else {
+      this._components[PopUpComponent.name].shakeCommentFormAddNew();
+    }
+  }
 
-    // if (true === true) {
-    //   this._components[PopUpComponent.name].clearCommentFormAddNew();
-    // } else {
-    //   this._components[PopUpComponent.name].shakeCommentFormAddNew();
-    // }
+  _commentDeleteResponseHandler(evt) {
+    this._popUpUpdateHandler();
+
+    if (evt.triggerData.delCommentId) {
+      this._components[PopUpComponent.name].shakeComment(
+          evt.triggerData.delCommentId
+      );
+    }
   }
 
   _popUpFilmCategoryUpdateHandler(filmId, checkedClass) {

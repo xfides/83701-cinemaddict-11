@@ -82,7 +82,24 @@ export default class PopUpComponent extends AbstractComponent {
 
   shakeCommentFormAddNew() {
     const formSelector = `.${CssClass.FILM_DETAILS_COMMENT_NEW}`;
-    this._showSmthWrong(formSelector, Animation.HEAD_SHAKE);
+    const textAreaSelector = `.${CssClass.FILM_DETAILS_COMMENT_INPUT}`;
+    this._showSmthWrong(formSelector, Animation.HEAD_SHAKE)
+      .then(() => {
+        this._showSmthWrong(textAreaSelector, Animation.ERROR_IN_FORM);
+      })
+      .catch((error) => {
+        // console.log(error);
+        throw error;
+      });
+  }
+
+  shakeComment(commentId) {
+    const commentSelector = `[data-id = "${commentId}"]`;
+    this._showSmthWrong(commentSelector, Animation.HEAD_SHAKE)
+      .catch((error) => {
+        // console.log(error);
+        throw error;
+      });
   }
 
   _validateCommentForm(formData) {
@@ -222,14 +239,17 @@ export default class PopUpComponent extends AbstractComponent {
       elementDom.classList.add(animationConfig.class);
     });
 
-    setTimeout(
-        () => {
-          elementsDom.forEach((elementDom) => {
-            elementDom.classList.remove(animationConfig.class);
-          });
-        },
-        animationConfig.duration
-    );
+    return new Promise((res) => {
+      setTimeout(
+          () => {
+            elementsDom.forEach((elementDom) => {
+              elementDom.classList.remove(animationConfig.class);
+            });
+            res();
+          },
+          animationConfig.duration
+      );
+    });
   }
 
   _popUpClickHandler(evt) {

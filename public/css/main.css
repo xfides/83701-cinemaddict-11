@@ -1158,7 +1158,7 @@ button {
 .film-card__controls-item--load,
 .film-details__new-comment--load,
 [data-load] + label {
-  animation: changingBoxShadow 1.5s linear infinite;
+  animation: changingBoxShadow 0.2s linear infinite;
   cursor: wait;
 }
 

@@ -4,7 +4,9 @@ export const dataAdapter = {
 
   createServerFilm(clientFilm) {
     const dateFilm = new Date(clientFilm.prodDate).toISOString();
-    const watchingDateFilm = new Date(clientFilm.watchingDate).toISOString();
+    const watchingDateFilm = clientFilm.watchingDate
+      ? new Date(clientFilm.watchingDate).toISOString()
+      : null;
     const comments = clientFilm.comments.map((oneComment) => {
       return oneComment.id;
     });
@@ -46,8 +48,6 @@ export const dataAdapter = {
     const emotion = lastPartOfFullPath.split(`.`)[0];
 
     return {
-      id: clientComment.id,
-      author: clientComment.author,
       comment: clientComment.text,
       date: new Date(clientComment.date).toISOString(),
       emotion
