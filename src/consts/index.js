@@ -121,7 +121,7 @@ export const CssClass = {
 };
 
 export const Emoji = {
-  RELATIVE_PATH: `./images/emoji/`,
+  RELATIVE_PATH: `images/emoji/`,
   Images: {
     ANGRY: `angry.png`,
     PUKE: `puke.png`,
@@ -132,7 +132,7 @@ export const Emoji = {
 };
 
 export const Poster = {
-  RELATIVE_PATH: `./images/posters/`,
+  RELATIVE_PATH: `images/posters/`,
   IMAGES: [
     `made-for-each-other.png`,
     `popeye-meets-sinbad.png`,
@@ -225,6 +225,6 @@ export const Backend = {
   REQUEST_METHOD_DELETE: `DELETE`,
   Headers: {
     CONTENT_TYPE_JSON: [`Content-Type`, `application/json`],
-    BASIC_AUTH: [`Authorization`, `Basic g2i3b4b5e6r7i8s9h`]
+    BASIC_AUTH: [`Authorization`, `Basic g2i3b4b5e6r7i8s9hh`]
   }
 };
