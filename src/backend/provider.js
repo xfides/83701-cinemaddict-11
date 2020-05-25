@@ -1,4 +1,4 @@
-import {Backend, Event} from '../consts';
+import {Backend, Event, Error} from '../consts';
 import API from '../backend/api.js';
 import StoreLS from '../backend/store-LS';
 import EventManager from '../event-manager';
@@ -6,10 +6,11 @@ import EventManager from '../event-manager';
 const isOnline = () => {
   return window.navigator.onLine;
 };
-
 const currentAPI = new API(Backend.END_POINT);
 const currentStore =
   new StoreLS(`${Backend.STORE_PREFIX}-${Backend.STORE_VERSION}`);
+
+let filmsOutOfSync = [];
 
 export default class Provider {
 
@@ -25,6 +26,7 @@ export default class Provider {
     if (isOnline()) {
       return this._api.getFilms()
         .then((clientFilms) => {
+          this._store.remove();
           this._store.set(clientFilms);
           return clientFilms;
         })
@@ -49,6 +51,7 @@ export default class Provider {
         });
     }
 
+    this._addFilmToOutOfSync(filmToUpdate);
     return Promise.resolve(this._updateFilmInStore(filmToUpdate));
   }
 
@@ -86,10 +89,19 @@ export default class Provider {
   }
 
   sync() {
-    const filmsFromStore = this._store.get();
+    if (filmsOutOfSync.length > 0) {
+      return this._api.sync(filmsOutOfSync)
+        .then((updatedClientFilms) => {
+          filmsOutOfSync = [];
+          this._mergeUpdatedFilmsInStore(updatedClientFilms);
+        })
+        .catch((error) => {
+          console.log(error);
+          throw error
+        });
+    }
 
-    this._api.sync(filmsFromStore);
-
+    return Promise.resolve(Error.NO_DATA_FOR_SYNC);
   }
 
   _updateFilmInStore(filmToUpdate) {
@@ -142,14 +154,47 @@ export default class Provider {
     this._store.set(filmsFromStore);
   }
 
+  _mergeUpdatedFilmsInStore(updatedClientFilms) {
+    const filmsFromStore = this._store.get();
+
+    updatedClientFilms.forEach((oneUpdatedClientFilm) => {
+      const filmOverlap = filmsFromStore.find((oneFilmFromStore) => {
+        return oneFilmFromStore.id === oneUpdatedClientFilm.id;
+      });
+
+      delete oneUpdatedClientFilm.comments;
+      Object.assign(filmOverlap, oneUpdatedClientFilm);
+    });
+
+    this._store.remove();
+    this._store.set(filmsFromStore);
+  }
+
+  _addFilmToOutOfSync(filmToUpdate) {
+    const filmAlreadyInOutOfSync = filmsOutOfSync.findIndex(
+      (oneFilmOutOfSync) => {
+        return oneFilmOutOfSync.id === filmToUpdate.id;
+      }
+    );
+
+    if (filmAlreadyInOutOfSync === -1) {
+      filmsOutOfSync.push(filmToUpdate);
+    }
+  }
+
   _documentOnlineHandler() {
     window.addEventListener(`online`, () => {
       document.title = document.title.replace(Backend.OFFLINE_MODE, ``);
-      this.sync();
-      this._eventManager.trigger(
-        Event.OFFLINE_MODE,
-        {offline: false}
-      );
+      this.sync()
+        .then(() => {
+          console.log(`SYNC SUCCESSFIUL`);
+          this._eventManager.trigger(Event.OFFLINE_MODE,{offline: false});
+        })
+        .catch((error) => {
+          console.log(error);
+          this._eventManager.trigger(Event.OFFLINE_MODE,{offline: false});
+          throw error;
+        });
     });
 
     window.addEventListener(`offline`, () => {

@@ -9,12 +9,14 @@ export default class PopUpController {
   constructor() {
     this._modelInstance = Model.getInstance();
     this._eventManager = EventManager.getInstance();
+    this._offlineMode = false;
     this._components = {
       [PopUpComponent.name]: new PopUpComponent()
     };
     this._popUpChangeHandler = this._popUpChangeHandler.bind(this);
     this._popUpUpdateHandler = this._popUpUpdateHandler.bind(this);
     this._commentDeleteHandler = this._commentDeleteHandler.bind(this);
+    this._offlineModeHandler = this._offlineModeHandler.bind(this);
     this._commentSendHandler = this._commentSendHandler.bind(this);
     this._popUpFilmCategoryUpdateHandler =
       this._popUpFilmCategoryUpdateHandler.bind(this);
@@ -46,6 +48,12 @@ export default class PopUpController {
         Event.FILM_DELETE_COMMENT_DONE,
         this._commentDeleteResponseHandler
     );
+
+    this._eventManager.on(
+      Event.OFFLINE_MODE,
+      this._offlineModeHandler
+    );
+
   }
 
   _renderPopUp(popUpInfo) {
@@ -80,6 +88,7 @@ export default class PopUpController {
       popUpFilmCategoryUpdateHandler: this._popUpFilmCategoryUpdateHandler,
       commentDeleteHandler: this._commentDeleteHandler,
       commentSendHandler: this._commentSendHandler,
+      offlineMode: this._offlineMode
     };
   }
 
@@ -133,6 +142,11 @@ export default class PopUpController {
     }
 
     this._modelInstance.setCategoryForFilm(filmId, checkedCategory);
+  }
+
+  _offlineModeHandler(evt){
+    this._offlineMode = evt.triggerData.offline;
+    this._popUpUpdateHandler();
   }
 
 }

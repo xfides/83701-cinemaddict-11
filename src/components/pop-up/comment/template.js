@@ -6,7 +6,7 @@ const getAbilityDeletingComment = (comment) => {
     : `<button class="film-details__comment-delete">Delete</button>`;
 };
 
-export const createCommentTemplate = (comment) => {
+export const createCommentTemplate = (comment, offlineMode) => {
   return (`
     <li class="film-details__comment" data-id=${comment.id}>
       <span class="film-details__comment-emoji">
@@ -27,7 +27,7 @@ export const createCommentTemplate = (comment) => {
           <span class="film-details__comment-day">
             ${comment.date}
           </span>
-          ${getAbilityDeletingComment(comment)}
+          ${offlineMode ? `` : getAbilityDeletingComment(comment)}
         </p>
       </div>
     </li>

@@ -206,7 +206,8 @@ export const Animation = {
 export const Error = {
   FORM_EMPTY_USER_MSG: `form_empty_user_msg`,
   FORM_NO_CHECKED_EMOJI: `form_no_checked_emoji`,
-  NO_INSTANTIATE: `Can't instantiate AbstractComponent, only concrete one.`
+  NO_INSTANTIATE: `Can't instantiate AbstractComponent, only concrete one.`,
+  NO_DATA_FOR_SYNC: `no_data_for_sync`
 };
 
 export const StatisticsTime = {
@@ -221,7 +222,7 @@ export const Backend = {
   END_POINT: `https://11.ecmascript.pages.academy/cinemaddict/`,
   RESOURCE_MOVIES: `movies`,
   RESOURCE_COMMENTS: `comments`,
-  RESOURCE_SYNC: `movies/sync`,
+  RESOURCE_SYNC: `movies/sync0`,
   REQUEST_METHOD_GET: `GET`,
   REQUEST_METHOD_POST: `POST`,
   REQUEST_METHOD_PUT: `PUT`,

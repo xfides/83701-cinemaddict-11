@@ -121,22 +121,15 @@ export default class API {
   }
 
 
-
-
-
-
   sync(dataFromStore) {
     const pathToResource = `${this._endPoint}${Backend.RESOURCE_SYNC}`;
     const requestMethod = Backend.REQUEST_METHOD_POST;
 
-    const newDataFromStore = dataFromStore.map((film)=>{
+    const newDataFromStore = dataFromStore.map((film) => {
       return dataAdapter.createServerFilm(film);
     });
 
-
-    console.log(newDataFromStore);
-
-    const requestBody = JSON.stringify([newDataFromStore[1]]);
+    const requestBody = JSON.stringify(newDataFromStore);
     const requestHeaders = new Headers({
       [Backend.Headers.CONTENT_TYPE_JSON[0]]: Backend.Headers.CONTENT_TYPE_JSON[1]
     });
@@ -150,24 +143,20 @@ export default class API {
       .then((response) => {
         return response.json()
       })
-      .then((answerFromServer)=>{
-        console.log(`answerFromServer`, answerFromServer);
+      .then((updatedServerFilms) => {
+        const updatedClientFilms = updatedServerFilms.updated.map(
+          (oneUpdatedServerFilm) => {
+            return dataAdapter.createClientFilm(oneUpdatedServerFilm);
+          }
+        );
+
+        return updatedClientFilms;
       })
       .catch((error) => {
         console.log(error);
         throw error;
       });
   }
-
-
-
-
-
-
-
-
-
-
 
 
   _getCommentsForFittingFilmId(filmId) {
