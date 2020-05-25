@@ -120,6 +120,56 @@ export default class API {
       });
   }
 
+
+
+
+
+
+  sync(dataFromStore) {
+    const pathToResource = `${this._endPoint}${Backend.RESOURCE_SYNC}`;
+    const requestMethod = Backend.REQUEST_METHOD_POST;
+
+    const newDataFromStore = dataFromStore.map((film)=>{
+      return dataAdapter.createServerFilm(film);
+    });
+
+
+    console.log(newDataFromStore);
+
+    const requestBody = JSON.stringify([newDataFromStore[1]]);
+    const requestHeaders = new Headers({
+      [Backend.Headers.CONTENT_TYPE_JSON[0]]: Backend.Headers.CONTENT_TYPE_JSON[1]
+    });
+
+    return this._load({
+      pathToResource,
+      requestMethod,
+      requestBody,
+      requestHeaders
+    })
+      .then((response) => {
+        return response.json()
+      })
+      .then((answerFromServer)=>{
+        console.log(`answerFromServer`, answerFromServer);
+      })
+      .catch((error) => {
+        console.log(error);
+        throw error;
+      });
+  }
+
+
+
+
+
+
+
+
+
+
+
+
   _getCommentsForFittingFilmId(filmId) {
     const pathToResource =
       `${this._endPoint}${Backend.RESOURCE_COMMENTS}/${filmId}`;
@@ -181,7 +231,7 @@ export default class API {
     requestBody
   }) {
     requestHeaders.append(
-        Backend.Headers.BASIC_AUTH[0], Backend.Headers.BASIC_AUTH[1]
+      Backend.Headers.BASIC_AUTH[0], Backend.Headers.BASIC_AUTH[1]
     );
 
     const serverResponsePromise = fetch(pathToResource, {
@@ -191,17 +241,17 @@ export default class API {
     });
 
     return serverResponsePromise.then(
-        (response) => {
-          if (response.status >= 200 && response.status < 300) {
-            return response;
-          } else {
-            throw new Error(`${response.status}: ${response.statusText}`);
-          }
-        },
-        (error) => {
-        // console.log(error);
-          throw error;
+      (response) => {
+        if (response.status >= 200 && response.status < 300) {
+          return response;
+        } else {
+          throw new Error(`${response.status}: ${response.statusText}`);
         }
+      },
+      (error) => {
+        // console.log(error);
+        throw error;
+      }
     ).catch((error) => {
       // console.log(error);
       throw error;

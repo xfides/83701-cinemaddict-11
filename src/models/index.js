@@ -6,7 +6,6 @@ import {
   LoadingStatus,
   AppPage,
   StatisticsTime,
-  Backend,
   ScreenMsg
 } from '../consts';
 import {
@@ -17,7 +16,6 @@ import EventManager from '../event-manager';
 import {encode} from 'he';
 import faker from 'faker';
 import {Emoji} from '../consts';
-import API from '../backend/api.js';
 import Provider from '../backend/provider.js';
 
 const singletonKey = Symbol();
@@ -32,8 +30,7 @@ export default class Model {
       );
     }
 
-    const api = new API(Backend.END_POINT, Backend.BASIC_AUTH);
-    this._apiWithProvider = new Provider(api);
+    this._apiWithProvider = new Provider();
     this._eventManager = EventManager.getInstance();
     this._films = null;
     this._countCommonFilmsToShow = FilmSection.COMMON.countFilmsToShow;

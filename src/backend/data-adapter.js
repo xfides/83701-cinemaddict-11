@@ -55,6 +55,10 @@ export const dataAdapter = {
   },
 
   createClientFilm(serverFilm) {
+    let watchingDate = serverFilm.user_details.watching_date
+      ? +new Date(serverFilm.user_details.watching_date)
+      : null;
+
     return {
       id: serverFilm.id,
       pathToPosterImg: serverFilm.film_info.poster,
@@ -76,7 +80,7 @@ export const dataAdapter = {
       [FilmFilter.FAVORITE]: serverFilm.user_details.favorite,
       awaitConfirmChangingCategory: false,
       awaitConfirmAddingComment: false,
-      watchingDate: +new Date(serverFilm.user_details.watching_date)
+      watchingDate: watchingDate
     };
   },
 
