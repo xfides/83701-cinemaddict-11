@@ -80,6 +80,10 @@ export default class PageController {
         Event.FILM_DELETE_COMMENT_DONE,
         this._decorateCheckAppPage(this._filmsUpdateHandler).bind(this)
     );
+    this._eventManager.on(
+        Event.FILM_ADD_COMMENT_DONE,
+        this._decorateCheckAppPage(this._filmsUpdateHandler).bind(this)
+    );
   }
 
   renderSort(sortInfo) {
