@@ -222,7 +222,7 @@ export const Backend = {
   END_POINT: `https://11.ecmascript.pages.academy/cinemaddict/`,
   RESOURCE_MOVIES: `movies`,
   RESOURCE_COMMENTS: `comments`,
-  RESOURCE_SYNC: `movies/sync0`,
+  RESOURCE_SYNC: `movies/sync`,
   REQUEST_METHOD_GET: `GET`,
   REQUEST_METHOD_POST: `POST`,
   REQUEST_METHOD_PUT: `PUT`,
