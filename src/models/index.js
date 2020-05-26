@@ -6,7 +6,6 @@ import {
   LoadingStatus,
   AppPage,
   StatisticsTime,
-  Backend,
   ScreenMsg
 } from '../consts';
 import {
@@ -17,7 +16,7 @@ import EventManager from '../event-manager';
 import {encode} from 'he';
 import faker from 'faker';
 import {Emoji} from '../consts';
-import API from '../backend/api';
+import Provider from '../backend/provider.js';
 
 const singletonKey = Symbol();
 const singletonVerification = Symbol();
@@ -31,7 +30,7 @@ export default class Model {
       );
     }
 
-    this._api = new API(Backend.END_POINT, Backend.BASIC_AUTH);
+    this._apiWithProvider = new Provider();
     this._eventManager = EventManager.getInstance();
     this._films = null;
     this._countCommonFilmsToShow = FilmSection.COMMON.countFilmsToShow;
@@ -219,7 +218,7 @@ export default class Model {
       }
     }
 
-    this._api.updateFilm(filmToChange)
+    this._apiWithProvider.updateFilm(filmToChange)
       .then(
           (newClientFilm) => {
             filmToChange.awaitConfirmChangingCategory = null;
@@ -240,11 +239,9 @@ export default class Model {
             );
           }
       )
-      .catch(
-          (error) => {
-            throw error;
-          }
-      );
+      .catch(() => {
+        // throw error;
+      });
   }
 
   deleteComment(filmId, commentId) {
@@ -254,7 +251,7 @@ export default class Model {
     commentToDel.awaitConfirmDeletingComment = true;
     this._eventManager.trigger(Event.FILM_DELETE_COMMENT_START);
 
-    this._api.deleteComment(commentToDel)
+    this._apiWithProvider.deleteComment(commentToDel)
       .then(() => {
         const indexOfCommentToDel = this._getIndexOfComment(film, commentId);
         film.comments.splice(indexOfCommentToDel, 1);
@@ -263,13 +260,13 @@ export default class Model {
             {delCommentId: null}
         );
       })
-      .catch((error) => {
+      .catch(() => {
         commentToDel.awaitConfirmDeletingComment = false;
         this._eventManager.trigger(
             Event.FILM_DELETE_COMMENT_DONE,
             {delCommentId: commentId}
         );
-        throw error;
+        // throw error;
       });
   }
 
@@ -279,7 +276,7 @@ export default class Model {
     film.awaitConfirmAddingComment = true;
 
     this._eventManager.trigger(Event.FILM_ADD_COMMENT_START);
-    this._api.sendCommentToFilm(newComment, film)
+    this._apiWithProvider.sendCommentToFilm(newComment, film)
       .then(
           (newComments) => {
             film.comments = newComments;
@@ -297,17 +294,17 @@ export default class Model {
             );
           }
       )
-      .catch((error) => {
-        throw error;
+      .catch(() => {
+        // throw error;
       });
   }
 
   loadData() {
-    const promiseData = Promise.resolve(this._api.getFilms());
+    const promiseData = Promise.resolve(this._apiWithProvider.getFilms());
     promiseData
       .then(this._handleLoadSuccess, this._handleLoadError)
-      .catch((error) => {
-        throw error;
+      .catch(() => {
+        // throw error;
       });
   }
 

@@ -9,7 +9,7 @@ const createObjectByStructure = (structure, dataFactory) => {
     structureKeys.forEach((structureKey) => {
       newObj[structureKey] = dataFactory[structureKey]();
     });
-  } catch (err) {
+  } catch (error) {
     throw new Error(`
       Structure is not corresponds to dataFactory. Please check if
       object fields are strictly equal dataFactory fields!

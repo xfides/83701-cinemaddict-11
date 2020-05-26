@@ -19,6 +19,7 @@ export default class PopUpComponent extends AbstractComponent {
     this._popUpFilm = null;
     this._popUpChangeHandler = null;
     this._popUpFilmCategoryUpdateHandler = null;
+    this._offlineMode = false;
     this._popUpClickHandler = this._popUpClickHandler.bind(this);
     this._popUpKeyDownHandler = this._popUpKeyDownHandler.bind(this);
   }
@@ -27,7 +28,7 @@ export default class PopUpComponent extends AbstractComponent {
     const templates = {
       filmFullInfo: createFilmFullInfoComponent(this._popUpFilm),
       commentsBlock: this._popUpFilm
-        ? createCommentsBlockComponent(this._popUpFilm)
+        ? createCommentsBlockComponent(this._popUpFilm, this._offlineMode)
         : ``,
       filmFullInfoControl: this._popUpFilm
         ? createFilmFullInfoControlTemplate(this._popUpFilm)
@@ -63,6 +64,7 @@ export default class PopUpComponent extends AbstractComponent {
     this._popUpFilmCategoryUpdateHandler = popUpInfo.popUpFilmCategoryUpdateHandler;
     this._commentDeleteHandler = popUpInfo.commentDeleteHandler;
     this._commentSendHandler = popUpInfo.commentSendHandler;
+    this._offlineMode = popUpInfo.offlineMode;
     return this;
   }
 
@@ -87,18 +89,16 @@ export default class PopUpComponent extends AbstractComponent {
       .then(() => {
         this._showSmthWrong(textAreaSelector, Animation.ERROR_IN_FORM);
       })
-      .catch((error) => {
-        // console.log(error);
-        throw error;
+      .catch(() => {
+        // throw error;
       });
   }
 
   shakeComment(commentId) {
     const commentSelector = `[data-id = "${commentId}"]`;
     this._showSmthWrong(commentSelector, Animation.HEAD_SHAKE)
-      .catch((error) => {
-        // console.log(error);
-        throw error;
+      .catch(() => {
+        // throw error;
       });
   }
 
@@ -316,6 +316,7 @@ export default class PopUpComponent extends AbstractComponent {
   _commentDeleteClickHandler(evt) {
     if (
       evt.target.classList.contains(`${CssClass.FILM_DETAILS_COMMENT_DELETE}`)
+      && !this._offlineMode
       && !evt.target.disabled
     ) {
       evt.preventDefault();
@@ -344,6 +345,10 @@ export default class PopUpComponent extends AbstractComponent {
   }
 
   _commentSendKeyDownHandler() {
+    if (this._offlineMode) {
+      return;
+    }
+
     const commentInputDom = this._domElement
       .querySelector(`.${CssClass.FILM_DETAILS_COMMENT_INPUT}`);
     const checkedEmojiDom = this._findCheckedEmojiInputDom();

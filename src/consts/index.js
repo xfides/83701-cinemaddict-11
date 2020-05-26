@@ -4,7 +4,7 @@ export const ScreenMsg = {
   NO_FILM_FULL_INFO: `Sorry. Not found such movie`,
   STUB_ADD_COMMENT: `Select reaction below and write comment here`,
   STUB_ADD_COMMENT_ZERO: `Great movie!`,
-  FETCH_ABORTED: `OOOPS! Something went wrong. Please try later...`
+  FETCH_ABORTED: `OOOPS! Something went wrong. Please try later...`,
 };
 
 export const FilmFilter = {
@@ -179,7 +179,8 @@ export const Event = {
   FILM_DELETE_COMMENT_START: `film_delete_comment_start`,
   FILM_DELETE_COMMENT_DONE: `film_delete_comment_done`,
   FILM_ADD_COMMENT_START: `film_add_comment_start`,
-  FILM_ADD_COMMENT_DONE: `film_add_comment_done`
+  FILM_ADD_COMMENT_DONE: `film_add_comment_done`,
+  OFFLINE_MODE: `offline_mode`
 };
 
 export const DomNode = {
@@ -204,7 +205,9 @@ export const Animation = {
 
 export const Error = {
   FORM_EMPTY_USER_MSG: `form_empty_user_msg`,
-  FORM_NO_CHECKED_EMOJI: `form_no_checked_emoji`
+  FORM_NO_CHECKED_EMOJI: `form_no_checked_emoji`,
+  NO_INSTANTIATE: `Can't instantiate AbstractComponent, only concrete one.`,
+  NO_DATA_FOR_SYNC: `no_data_for_sync`
 };
 
 export const StatisticsTime = {
@@ -219,6 +222,7 @@ export const Backend = {
   END_POINT: `https://11.ecmascript.pages.academy/cinemaddict/`,
   RESOURCE_MOVIES: `movies`,
   RESOURCE_COMMENTS: `comments`,
+  RESOURCE_SYNC: `movies/sync`,
   REQUEST_METHOD_GET: `GET`,
   REQUEST_METHOD_POST: `POST`,
   REQUEST_METHOD_PUT: `PUT`,
@@ -226,5 +230,8 @@ export const Backend = {
   Headers: {
     CONTENT_TYPE_JSON: [`Content-Type`, `application/json`],
     BASIC_AUTH: [`Authorization`, `Basic g2i3b4b5e6r7i8s9hh`]
-  }
+  },
+  STORE_PREFIX: `cinemaddict`,
+  STORE_VERSION: `v1`,
+  OFFLINE_MODE_SUFFIX: ` [OFFLINE]`
 };

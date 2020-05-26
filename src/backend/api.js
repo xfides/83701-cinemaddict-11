@@ -32,8 +32,7 @@ export default class API {
         })
         .catch((error) => {
           rej(error);
-          // console.log(error);
-          throw error;
+          // throw error;
         });
     });
   }
@@ -65,8 +64,7 @@ export default class API {
         })
         .catch((error) => {
           rej(error);
-          // console.log(error);
-          throw error;
+          // throw error;
         });
     });
   }
@@ -99,8 +97,7 @@ export default class API {
         })
         .catch((error) => {
           rej(error);
-          // console.log(error);
-          throw error;
+          // throw error;
         });
     });
   }
@@ -114,9 +111,42 @@ export default class API {
       pathToResource,
       requestMethod
     })
-      .catch((error) => {
-        // console.log(error);
-        throw error;
+      .catch(() => {
+        // throw error;
+      });
+  }
+
+  sync(dataFromStore) {
+    const pathToResource = `${this._endPoint}${Backend.RESOURCE_SYNC}`;
+    const requestMethod = Backend.REQUEST_METHOD_POST;
+
+    const newDataFromStore = dataFromStore.map((film) => {
+      return dataAdapter.createServerFilm(film);
+    });
+
+    const requestBody = JSON.stringify(newDataFromStore);
+    const requestHeaders = new Headers({
+      [Backend.Headers.CONTENT_TYPE_JSON[0]]: Backend.Headers.CONTENT_TYPE_JSON[1]
+    });
+
+    return this._load({
+      pathToResource,
+      requestMethod,
+      requestBody,
+      requestHeaders
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((updatedServerFilms) => {
+        return updatedServerFilms.updated.map(
+            (oneUpdatedServerFilm) => {
+              return dataAdapter.createClientFilm(oneUpdatedServerFilm);
+            }
+        );
+      })
+      .catch(() => {
+        // throw error;
       });
   }
 
@@ -136,8 +166,7 @@ export default class API {
         })
         .catch((error) => {
           rej(error);
-          // console.log(error);
-          throw error;
+          // throw error;
         });
     });
   }
@@ -197,14 +226,9 @@ export default class API {
           } else {
             throw new Error(`${response.status}: ${response.statusText}`);
           }
-        },
-        (error) => {
-        // console.log(error);
-          throw error;
         }
-    ).catch((error) => {
-      // console.log(error);
-      throw error;
+    ).catch(() => {
+      // throw error;
     });
   }
 
