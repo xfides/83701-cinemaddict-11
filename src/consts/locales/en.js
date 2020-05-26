@@ -1,3 +1,3 @@
 export const wordsPlural = {
-  Genre: `Genres`
+  genre: `Genres`
 };

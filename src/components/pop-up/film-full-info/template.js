@@ -9,7 +9,7 @@ const getGenresTemplate = (genres) => {
 };
 
 const getGenreTitleWord = (genres) => {
-  return genres.length === 1 ? `Genre` : wordsPlural.Genre;
+  return genres.length === 1 ? `Genre` : wordsPlural.genre;
 };
 
 export const createFilmFullInfoTemplate = (filmFull) => {

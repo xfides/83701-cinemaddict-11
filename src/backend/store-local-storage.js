@@ -1,6 +1,6 @@
 import AbstractStore from './abstract-store.js';
 
-export default class StoreLS extends AbstractStore {
+export default class StoreLocalStorage extends AbstractStore {
 
   get() {
     try {

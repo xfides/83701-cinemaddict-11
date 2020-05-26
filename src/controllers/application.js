@@ -1,7 +1,7 @@
 import Model from '../models';
 import LayoutController from './layout';
 import PageController from './page';
-import PopUpController from './pop-Up';
+import PopUpController from './pop-up';
 import StatisticsController from './statistics';
 import {LoadingStatus} from '../consts';
 

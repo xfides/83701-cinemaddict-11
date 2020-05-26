@@ -1,6 +1,6 @@
 import {Backend, Event, Error} from '../consts';
 import API from '../backend/api.js';
-import StoreLS from '../backend/store-LS';
+import StoreLocalStorage from '../backend/store-local-storage.js';
 import EventManager from '../event-manager';
 
 const isOnline = () => {
@@ -8,7 +8,7 @@ const isOnline = () => {
 };
 const currentAPI = new API(Backend.END_POINT);
 const currentStore =
-  new StoreLS(`${Backend.STORE_PREFIX}-${Backend.STORE_VERSION}`);
+  new StoreLocalStorage(`${Backend.STORE_PREFIX}-${Backend.STORE_VERSION}`);
 
 let filmsOutOfSync = [];
 
@@ -139,9 +139,9 @@ export default class Provider {
       if (indexToDel > -1) {
         indexOfCommentToDel = indexToDel;
         return true;
-      } else {
-        return false;
       }
+
+      return false;
     });
 
     filmFromStore.comments.splice(indexOfCommentToDel, 1);
