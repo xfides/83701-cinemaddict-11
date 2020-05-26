@@ -5,7 +5,7 @@ import {createCommentComponent} from '../comment/index.js';
 export const createCommentsBlockComponent = (film, offlineMode) => {
 
   const templateComments = film.comments.map((commentOfFilm) => {
-    return createCommentComponent(commentOfFilm, offlineMode)
+    return createCommentComponent(commentOfFilm, offlineMode);
   })
     .join(``);
 

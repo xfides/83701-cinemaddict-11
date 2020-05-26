@@ -133,14 +133,14 @@ export default class PopUpComponent extends AbstractComponent {
       switch (oneError) {
         case Error.FORM_EMPTY_USER_MSG:
           this._showSmthWrong(
-            `.${CssClass.FILM_DETAILS_COMMENT_INPUT}`,
-            Animation.ERROR_IN_FORM
+              `.${CssClass.FILM_DETAILS_COMMENT_INPUT}`,
+              Animation.ERROR_IN_FORM
           );
           break;
         case Error.FORM_NO_CHECKED_EMOJI:
           this._showSmthWrong(
-            `.${CssClass.FILM_DETAILS_EMOJI_LABEL}`,
-            Animation.ERROR_IN_FORM
+              `.${CssClass.FILM_DETAILS_EMOJI_LABEL}`,
+              Animation.ERROR_IN_FORM
           );
           break;
       }
@@ -184,8 +184,8 @@ export default class PopUpComponent extends AbstractComponent {
 
   _restoreTempDataAfterReRender(tempDataForReRender) {
     window.scroll(
-      tempDataForReRender.pageXOffset,
-      tempDataForReRender.pageYOffset
+        tempDataForReRender.pageXOffset,
+        tempDataForReRender.pageYOffset
     );
 
     this._domElement.scrollTop = tempDataForReRender.popUpYOffset;
@@ -241,13 +241,13 @@ export default class PopUpComponent extends AbstractComponent {
 
     return new Promise((res) => {
       setTimeout(
-        () => {
-          elementsDom.forEach((elementDom) => {
-            elementDom.classList.remove(animationConfig.class);
-          });
-          res();
-        },
-        animationConfig.duration
+          () => {
+            elementsDom.forEach((elementDom) => {
+              elementDom.classList.remove(animationConfig.class);
+            });
+            res();
+          },
+          animationConfig.duration
       );
     });
   }

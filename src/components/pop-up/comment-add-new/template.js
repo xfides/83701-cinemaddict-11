@@ -5,8 +5,8 @@ const getClassForAwaitNewComment = (awaitNewComment) => {
 };
 
 export const createCommentAddNewTemplate = (templatesEmoji,
-                                            awaitNewComment,
-                                            offlineMode) => {
+    awaitNewComment,
+    offlineMode) => {
   return (`
     <div class="film-details__new-comment 
               ${getClassForAwaitNewComment(awaitNewComment)}

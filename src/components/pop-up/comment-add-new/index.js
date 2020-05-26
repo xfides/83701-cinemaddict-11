@@ -8,8 +8,8 @@ export const createCommentAddNewComponent = (film, offlineMode) => {
     .join(``);
 
   return createCommentAddNewTemplate(
-    templatesEmoji,
-    film.awaitConfirmAddingComment,
-    offlineMode
+      templatesEmoji,
+      film.awaitConfirmAddingComment,
+      offlineMode
   );
 };

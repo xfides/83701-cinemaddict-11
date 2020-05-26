@@ -136,13 +136,13 @@ export default class API {
       requestHeaders
     })
       .then((response) => {
-        return response.json()
+        return response.json();
       })
       .then((updatedServerFilms) => {
         return updatedServerFilms.updated.map(
-          (oneUpdatedServerFilm) => {
-            return dataAdapter.createClientFilm(oneUpdatedServerFilm);
-          }
+            (oneUpdatedServerFilm) => {
+              return dataAdapter.createClientFilm(oneUpdatedServerFilm);
+            }
         );
       })
       .catch(() => {
@@ -210,7 +210,7 @@ export default class API {
     requestBody
   }) {
     requestHeaders.append(
-      Backend.Headers.BASIC_AUTH[0], Backend.Headers.BASIC_AUTH[1]
+        Backend.Headers.BASIC_AUTH[0], Backend.Headers.BASIC_AUTH[1]
     );
 
     const serverResponsePromise = fetch(pathToResource, {
@@ -220,13 +220,13 @@ export default class API {
     });
 
     return serverResponsePromise.then(
-      (response) => {
-        if (response.status >= 200 && response.status < 300) {
-          return response;
-        } else {
-          throw new Error(`${response.status}: ${response.statusText}`);
+        (response) => {
+          if (response.status >= 200 && response.status < 300) {
+            return response;
+          } else {
+            throw new Error(`${response.status}: ${response.statusText}`);
+          }
         }
-      }
     ).catch(() => {
       // throw error;
     });

@@ -80,7 +80,7 @@ export const dataAdapter = {
       [FilmFilter.FAVORITE]: serverFilm.user_details.favorite,
       awaitConfirmChangingCategory: false,
       awaitConfirmAddingComment: false,
-      watchingDate: watchingDate
+      watchingDate
     };
   },
 

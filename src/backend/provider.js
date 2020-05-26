@@ -19,7 +19,7 @@ export default class Provider {
     this._store = store;
     this._eventManager = EventManager.getInstance();
     this.sync = this.sync.bind(this);
-    this._documentOnlineHandler()
+    this._documentOnlineHandler();
   }
 
   getFilms() {
@@ -167,9 +167,9 @@ export default class Provider {
 
   _addFilmToOutOfSync(filmToUpdate) {
     const filmAlreadyInOutOfSync = filmsOutOfSync.findIndex(
-      (oneFilmOutOfSync) => {
-        return oneFilmOutOfSync.id === filmToUpdate.id;
-      }
+        (oneFilmOutOfSync) => {
+          return oneFilmOutOfSync.id === filmToUpdate.id;
+        }
     );
 
     if (filmAlreadyInOutOfSync === -1) {
@@ -193,8 +193,8 @@ export default class Provider {
     window.addEventListener(`offline`, () => {
       document.title += Backend.OFFLINE_MODE_SUFFIX;
       this._eventManager.trigger(
-        Event.OFFLINE_MODE,
-        {offline: true}
+          Event.OFFLINE_MODE,
+          {offline: true}
       );
     });
   }

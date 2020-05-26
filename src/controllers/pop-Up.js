@@ -50,8 +50,8 @@ export default class PopUpController {
     );
 
     this._eventManager.on(
-      Event.OFFLINE_MODE,
-      this._offlineModeHandler
+        Event.OFFLINE_MODE,
+        this._offlineModeHandler
     );
 
   }
@@ -144,7 +144,7 @@ export default class PopUpController {
     this._modelInstance.setCategoryForFilm(filmId, checkedCategory);
   }
 
-  _offlineModeHandler(evt){
+  _offlineModeHandler(evt) {
     this._offlineMode = evt.triggerData.offline;
     this._popUpUpdateHandler();
   }
