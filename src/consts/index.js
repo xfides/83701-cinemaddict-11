@@ -233,5 +233,5 @@ export const Backend = {
   },
   STORE_PREFIX: `cinemaddict`,
   STORE_VERSION: `v1`,
-  OFFLINE_MODE: ` [OFFLINE]`
+  OFFLINE_MODE_SUFFIX: ` [OFFLINE]`
 };

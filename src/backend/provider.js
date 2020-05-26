@@ -30,9 +30,8 @@ export default class Provider {
           this._store.set(clientFilms);
           return clientFilms;
         })
-        .catch((error) => {
-          console.log(error);
-          throw error;
+        .catch(() => {
+          // throw error;
         });
     }
 
@@ -45,9 +44,8 @@ export default class Provider {
         .then((clientFilmUpdated) => {
           return this._updateFilmInStore(clientFilmUpdated);
         })
-        .catch((error) => {
-          console.log(error);
-          throw error;
+        .catch(() => {
+          // throw error;
         });
     }
 
@@ -61,9 +59,8 @@ export default class Provider {
         .then((newComments) => {
           return this._updateCommentsInStore(newComments, clientFilm);
         })
-        .catch((error) => {
-          console.log(error);
-          throw error;
+        .catch(() => {
+          // throw error;
         });
     }
 
@@ -79,9 +76,8 @@ export default class Provider {
         .then(() => {
           this._deleteCommentInStore(commentToDel);
         })
-        .catch((error) => {
-          console.log(error);
-          throw error;
+        .catch(() => {
+          // throw error;
         });
     }
 
@@ -95,9 +91,8 @@ export default class Provider {
           filmsOutOfSync = [];
           this._mergeUpdatedFilmsInStore(updatedClientFilms);
         })
-        .catch((error) => {
-          console.log(error);
-          throw error
+        .catch(() => {
+          // throw error
         });
     }
 
@@ -184,21 +179,19 @@ export default class Provider {
 
   _documentOnlineHandler() {
     window.addEventListener(`online`, () => {
-      document.title = document.title.replace(Backend.OFFLINE_MODE, ``);
+      document.title = document.title.replace(Backend.OFFLINE_MODE_SUFFIX, ``);
       this.sync()
         .then(() => {
-          console.log(`SYNC SUCCESSFIUL`);
-          this._eventManager.trigger(Event.OFFLINE_MODE,{offline: false});
+          this._eventManager.trigger(Event.OFFLINE_MODE, {offline: false});
         })
-        .catch((error) => {
-          console.log(error);
-          this._eventManager.trigger(Event.OFFLINE_MODE,{offline: false});
-          throw error;
+        .catch(() => {
+          this._eventManager.trigger(Event.OFFLINE_MODE, {offline: false});
+          // throw error;
         });
     });
 
     window.addEventListener(`offline`, () => {
-      document.title += Backend.OFFLINE_MODE;
+      document.title += Backend.OFFLINE_MODE_SUFFIX;
       this._eventManager.trigger(
         Event.OFFLINE_MODE,
         {offline: true}

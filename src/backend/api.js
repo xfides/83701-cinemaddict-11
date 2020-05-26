@@ -32,8 +32,7 @@ export default class API {
         })
         .catch((error) => {
           rej(error);
-          // console.log(error);
-          throw error;
+          // throw error;
         });
     });
   }
@@ -65,8 +64,7 @@ export default class API {
         })
         .catch((error) => {
           rej(error);
-          // console.log(error);
-          throw error;
+          // throw error;
         });
     });
   }
@@ -99,8 +97,7 @@ export default class API {
         })
         .catch((error) => {
           rej(error);
-          // console.log(error);
-          throw error;
+          // throw error;
         });
     });
   }
@@ -114,12 +111,10 @@ export default class API {
       pathToResource,
       requestMethod
     })
-      .catch((error) => {
-        // console.log(error);
-        throw error;
+      .catch(() => {
+        // throw error;
       });
   }
-
 
   sync(dataFromStore) {
     const pathToResource = `${this._endPoint}${Backend.RESOURCE_SYNC}`;
@@ -144,20 +139,16 @@ export default class API {
         return response.json()
       })
       .then((updatedServerFilms) => {
-        const updatedClientFilms = updatedServerFilms.updated.map(
+        return updatedServerFilms.updated.map(
           (oneUpdatedServerFilm) => {
             return dataAdapter.createClientFilm(oneUpdatedServerFilm);
           }
         );
-
-        return updatedClientFilms;
       })
-      .catch((error) => {
-        console.log(error);
-        throw error;
+      .catch(() => {
+        // throw error;
       });
   }
-
 
   _getCommentsForFittingFilmId(filmId) {
     const pathToResource =
@@ -175,8 +166,7 @@ export default class API {
         })
         .catch((error) => {
           rej(error);
-          // console.log(error);
-          throw error;
+          // throw error;
         });
     });
   }
@@ -236,14 +226,9 @@ export default class API {
         } else {
           throw new Error(`${response.status}: ${response.statusText}`);
         }
-      },
-      (error) => {
-        // console.log(error);
-        throw error;
       }
-    ).catch((error) => {
-      // console.log(error);
-      throw error;
+    ).catch(() => {
+      // throw error;
     });
   }
 

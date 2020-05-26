@@ -239,11 +239,9 @@ export default class Model {
             );
           }
       )
-      .catch(
-          (error) => {
-            throw error;
-          }
-      );
+      .catch(() => {
+        // throw error;
+      });
   }
 
   deleteComment(filmId, commentId) {
@@ -262,13 +260,13 @@ export default class Model {
             {delCommentId: null}
         );
       })
-      .catch((error) => {
+      .catch(() => {
         commentToDel.awaitConfirmDeletingComment = false;
         this._eventManager.trigger(
             Event.FILM_DELETE_COMMENT_DONE,
             {delCommentId: commentId}
         );
-        throw error;
+        // throw error;
       });
   }
 
@@ -296,8 +294,8 @@ export default class Model {
             );
           }
       )
-      .catch((error) => {
-        throw error;
+      .catch(() => {
+        // throw error;
       });
   }
 
@@ -305,8 +303,8 @@ export default class Model {
     const promiseData = Promise.resolve(this._apiWithProvider.getFilms());
     promiseData
       .then(this._handleLoadSuccess, this._handleLoadError)
-      .catch((error) => {
-        throw error;
+      .catch(() => {
+        // throw error;
       });
   }
 

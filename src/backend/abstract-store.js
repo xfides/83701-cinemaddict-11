@@ -15,17 +15,9 @@ export default class AbstractStore {
     throw new Error(Error.NO_INSTANTIATE);
   }
 
-  remove(){
+  remove() {
     throw new Error(Error.NO_INSTANTIATE);
   }
-
-  // clearAllStorage() {
-  //   if (this._store.clear && typeof this._store.clear === `function`) {
-  //     this._store.clear();
-  //   } else {
-  //     this._store.setData(this._key, null);
-  //   }
-  // }
 
 }
 

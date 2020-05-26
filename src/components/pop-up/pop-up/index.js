@@ -89,18 +89,16 @@ export default class PopUpComponent extends AbstractComponent {
       .then(() => {
         this._showSmthWrong(textAreaSelector, Animation.ERROR_IN_FORM);
       })
-      .catch((error) => {
-        // console.log(error);
-        throw error;
+      .catch(() => {
+        // throw error;
       });
   }
 
   shakeComment(commentId) {
     const commentSelector = `[data-id = "${commentId}"]`;
     this._showSmthWrong(commentSelector, Animation.HEAD_SHAKE)
-      .catch((error) => {
-        // console.log(error);
-        throw error;
+      .catch(() => {
+        // throw error;
       });
   }
 
@@ -347,7 +345,7 @@ export default class PopUpComponent extends AbstractComponent {
   }
 
   _commentSendKeyDownHandler() {
-    if(this._offlineMode){
+    if (this._offlineMode) {
       return;
     }
 
