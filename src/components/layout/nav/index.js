@@ -59,7 +59,7 @@ export default class NavComponent extends AbstractComponent {
   }
 
   _navClickHandler(evt) {
-    let hrefOfDom = evt.target.href || evt.target.parentElement.href;
+    const hrefOfDom = evt.target.href || evt.target.parentElement.href;
 
     if (!hrefOfDom) {
       return;
