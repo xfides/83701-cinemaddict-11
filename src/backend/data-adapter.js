@@ -55,7 +55,7 @@ export const dataAdapter = {
   },
 
   createClientFilm(serverFilm) {
-    let watchingDate = serverFilm.user_details.watching_date
+    const watchingDate = serverFilm.user_details.watching_date
       ? +new Date(serverFilm.user_details.watching_date)
       : null;
 
